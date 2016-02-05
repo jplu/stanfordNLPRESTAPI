@@ -6,8 +6,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +39,17 @@ import fr.eurecom.stanfordnlptonif.nullobjects.NullSentence;
  */
 public class StanfordNlpTest {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlpTest.class);
-  
+
+  private static StanfordNlp stanfordNlp;
+
   public StanfordNlpTest() {
+  }
+
+  @BeforeClass
+  public static void setUpBeforeClass() {
+    Properties props = new Properties();
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
+    stanfordNlp = new StanfordNlp(props);
   }
 
   /**
@@ -50,14 +58,14 @@ public class StanfordNlpTest {
   @Test
   public final void testRunWithPos() throws Exception {
     final Model fileModel = ModelFactory.createDefaultModel();
-    final StanfordNlp stanfordNlp = new StanfordNlp("My favorite actress is: Natalie Portman. She "
-        + "is very stunning.");
+
+    final String text = "My favorite actress is: Natalie Portman. She is very stunning.";
 
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "pos.ttl"), Lang.TURTLE);
 
     Assert.assertTrue("Issue to get the proper full RDF model of a context for POS",
-        fileModel.isIsomorphicWith(stanfordNlp.run().rdfModel("stanfordnlp", NlpProcess.POS)));
+        fileModel.isIsomorphicWith(stanfordNlp.run(text).rdfModel("stanfordnlp", NlpProcess.POS)));
   }
 
   /**
@@ -66,14 +74,14 @@ public class StanfordNlpTest {
   @Test
   public final void testRunWithNer() throws Exception {
     final Model fileModel = ModelFactory.createDefaultModel();
-    final StanfordNlp stanfordNlp = new StanfordNlp("My favorite actress is: Natalie Portman. She "
-        + "is very stunning.");
+    final String text = "My favorite actress is: Natalie Portman. She "
+        + "is very stunning.";
 
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "ner.ttl"), Lang.TURTLE);
 
     Assert.assertTrue("Issue to get the proper full RDF model of a context for NER",
-        fileModel.isIsomorphicWith(stanfordNlp.run().rdfModel("stanfordnlp", NlpProcess.NER)));
+        fileModel.isIsomorphicWith(stanfordNlp.run(text).rdfModel("stanfordnlp", NlpProcess.NER)));
   }
 
   /**
@@ -96,7 +104,7 @@ public class StanfordNlpTest {
 
     final Class[] cArg = {CoreMap.class, Context.class, Sentence.class};
     final Method method = StanfordNlp.class.getDeclaredMethod("buildEntitiesFromSentence", cArg);
-    final StanfordNlp stanfordNlp = new StanfordNlp("");
+    //final StanfordNlp stanfordNlp = new StanfordNlp("");
     final Context context = new Context("I like Paris", 0, 12);
     final Context context2 = new Context("Paris is a nice city.", 0, 21);
     final Context context3 = new Context("I like Natalie Portman", 0, 22);

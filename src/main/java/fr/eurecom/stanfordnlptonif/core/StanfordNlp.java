@@ -1,5 +1,6 @@
 package fr.eurecom.stanfordnlptonif.core;
 
+import fr.eurecom.stanfordnlptonif.configuration.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,23 +36,52 @@ import fr.eurecom.stanfordnlptonif.nullobjects.NullToken;
  */
 public class StanfordNlp {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlp.class);
-  private final String text;
+  private String text;
+  private final StanfordCoreNLP pipeline;
 
-  public StanfordNlp(final String newText) {
-    this.text = newText;
+
+  public StanfordNlp(Properties props) {
+    this.pipeline = new StanfordCoreNLP(props);
   }
 
+  public static Properties confToProp(PipelineConfiguration p_conf) {
+    Properties props = new Properties();
+    props.setProperty("annotators",p_conf.getAnnotators());
+    props.setProperty("pos.model",p_conf.getPos().getModel());
+    props.setProperty("ner.model",p_conf.getNer().getModel());
+    props.setProperty("ner.useSUTime",p_conf.getNer().getUseSUTime()?"true":"false");
+    props.setProperty("ner.applyNumericClassifiers",p_conf.getNer().getApplyNumericClassifiers()?"true":"false");
+    props.setProperty("pos.model",p_conf.getPos().getModel());
+    return props;
+  }
+
+  public Context run(String text) {
+    this.text = text; // pas beau !
+    final Annotation document = new Annotation(text);
+    this.pipeline.annotate(document);
+    return this.buildContext(document.get(CoreAnnotations.SentencesAnnotation.class));
+  }
+
+
+  /*
+  @Deprecated
+  private StanfordNlp(final String newText) {
+    this.text = newText;
+  }
+  */
   /**
    * Create the context corresponding to the processed text by using StanfordNLP.
    *
    * @return Proper context
-   */
-  public final Context run() {
+   *
+  @Deprecated
+  private final Context run() {
     final Annotation document = this.initStanfordNlp();
 
     return this.buildContext(document.get(CoreAnnotations.SentencesAnnotation.class));
   }
 
+  @Deprecated
   private Annotation initStanfordNlp() {
     final Properties props = new Properties();
 
@@ -64,6 +94,7 @@ public class StanfordNlp {
 
     return document;
   }
+  // */
 
   private Context buildContext(final List<CoreMap> sentences) {
     final Context tmpContext = new Context(this.text, 0, this.text.length());

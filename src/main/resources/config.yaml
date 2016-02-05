@@ -1,22 +1,5 @@
-# stanfordNLPWebAPI
-Stanford NLP framework wrapped with a REST API.
-
-# Usage
-
-The output is in **text/turtle** format on both CLI and Web Service modes
-
-## CLI :
-java -jar StanfordNLP2NIF-X.Y.jar [pos|ner] -t "text to analyse"
-
-## Web Service :
-jar -jar StanfordNLP2NIF-X.Y.jar server <path/to/config.yaml>
-
-# Configuration :
-
-File in *src/main/resources/config.yaml*
-
-```yaml
 pipeline:
+  #annotators: "tokenize, ssplit, pos, lemma, ner, parse, dcoref"
   annotators: "tokenize, ssplit, pos, lemma, ner"
 
   pos:
@@ -31,7 +14,7 @@ pipeline:
 logging:
   level: INFO
 #  loggers:
-#    "fr.eurecom.stanfordnlptonif.PosResource": DEBUG
+#    "edu.stanford.nlp.ws.RequestResource": DEBUG
 
 server:
   applicationConnectors:
@@ -40,4 +23,3 @@ server:
   adminConnectors:
     - type: http
       port: 7001
-```
