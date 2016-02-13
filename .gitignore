@@ -1,5 +1,7 @@
 target/
 dependency-reduced-pom.xml
+.idea/
+*.iml
 *.class
 
 # Mobile Tools for Java (J2ME)
