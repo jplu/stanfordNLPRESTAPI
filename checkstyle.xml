@@ -69,7 +69,7 @@
         </module>
         <module name="ImportOrder">
             <!-- Checks for out of order import statements. -->
-            <property name="groups" value="junit,net,org,java,javax,edu,com,fr"/>
+            <property name="groups" value="junit,net,org,java,javax,edu,com,fr,io"/>
             <!-- This ensures that static imports go first. -->
             <property name="option" value="top"/>
             <property name="tokens" value="STATIC_IMPORT, IMPORT"/>
