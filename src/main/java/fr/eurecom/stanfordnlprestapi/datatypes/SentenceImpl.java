@@ -1,3 +1,19 @@
+/**
+ * This file is part of StanfordNLPRESTAPI.
+ *
+ * StanfordNLPRESTAPI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * StanfordNLPRESTAPI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -15,10 +31,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import fr.eurecom.stanfordnlprestapi.annotations.CoberturaIgnore;
-
 import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 
+import fr.eurecom.stanfordnlprestapi.exceptions.InexistentNlpProcessException;
 import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
 import fr.eurecom.stanfordnlprestapi.interfaces.Token;
 
@@ -56,7 +71,6 @@ public class SentenceImpl implements Sentence {
    * @param newPreviousSentence Previous sentence in the context. Null sentence object if none
    *                            exists.
    */
-  @CoberturaIgnore
   public SentenceImpl(final String newText, final Context newContext, final int newStart,
                       final int newEnd, final int newIndex, final Sentence newPreviousSentence) {
     this.tokens = new ArrayList<>();
@@ -73,7 +87,6 @@ public class SentenceImpl implements Sentence {
   }
 
   @Override
-  @CoberturaIgnore
   public final void addToken(final Token newToken) {
     if (this.tokens.isEmpty()) {
       this.firstToken = newToken;
@@ -84,13 +97,11 @@ public class SentenceImpl implements Sentence {
   }
 
   @Override
-  @CoberturaIgnore
   public final void addEntity(final Entity newEntity) {
     this.entities.add(newEntity);
   }
 
   @Override
-  @CoberturaIgnore
   public final void nextSentence(final Sentence newNextSentence) {
     if (this.nextSentence.index() == -1) {
       this.nextSentence = newNextSentence;
@@ -98,31 +109,28 @@ public class SentenceImpl implements Sentence {
   }
 
   @Override
-  @CoberturaIgnore
   public final List<Entity> entities() {
     return Collections.unmodifiableList(this.entities);
   }
 
   @Override
-  @CoberturaIgnore
   public final int index() {
     return this.index;
   }
 
   @Override
-  @CoberturaIgnore
   public final int start() {
     return this.start;
   }
 
   @Override
-  @CoberturaIgnore
   public final int end() {
     return this.end;
   }
 
   @Override
-  public final Model rdfModel(final String tool, final NlpProcess process) {
+  public final Model rdfModel(final String tool, final NlpProcess process) throws
+      InexistentNlpProcessException{
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
     final String base = "http://127.0.0.1/" + tool + '#';
     final Model model = ModelFactory.createDefaultModel();
@@ -163,6 +171,8 @@ public class SentenceImpl implements Sentence {
                 + "char=" + entity.start() + ',' + entity.end()));
         model.add(entity.rdfModel(tool));
       }
+    } else {
+      throw new InexistentNlpProcessException(process + " is not a valid NLP Process");
     }
 
     if (this.nextSentence.index() != -1) {
@@ -196,7 +206,6 @@ public class SentenceImpl implements Sentence {
   }
 
   @Override
-  @CoberturaIgnore
   public final String toString() {
     return "SentenceImpl{"
         + "text='" + this.text + '\''

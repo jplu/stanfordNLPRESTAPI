@@ -1,3 +1,19 @@
+/**
+ * This file is part of StanfordNLPRESTAPI.
+ *
+ * StanfordNLPRESTAPI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * StanfordNLPRESTAPI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -28,7 +44,7 @@ public class EntityTest {
   }
 
   /**
-   * Test RDF model of an Entity.
+   * Test {@link Entity#rdfModel(String)} method of an {@link Entity}.
    */
   @Test
   public final void testRdfModel() {
@@ -70,5 +86,69 @@ public class EntityTest {
 
     Assert.assertTrue("Issue to create the model for an Entity",
         model.isIsomorphicWith(entity.rdfModel("stanfordnlp")));
+  }
+
+  /**
+   * Test {@link Entity#equals(Object)} method.
+   */
+  @Test
+  public final void testEquals() {
+    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Context context2 = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 60);
+    final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Sentence sentence2 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 2, NullSentence.getInstance());
+    final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 24, 39);
+    final Entity entity2 = new Entity("Natalie Portman", "PERSON", sentence2, context, 24, 39);
+    final Entity entity3 = new Entity("Natalie Portman", "PERSON", sentence, context2, 24, 39);
+    final Entity entity4 = new Entity("Natalie Porman", "PERSON", sentence, context, 24, 39);
+    final Entity entity5 = new Entity("Natalie Portman", "PERSN", sentence, context, 24, 39);
+    final Entity entity6 = new Entity("Natalie Portman", "PERSON", sentence, context, 2, 39);
+    final Entity entity7 = new Entity("Natalie Portman", "PERSON", sentence, context, 24, 3);
+
+    Assert.assertFalse("Issue with equals on the property sentence", entity.equals(entity2));
+    Assert.assertFalse("Issue with equals on the property context", entity.equals(entity3));
+    Assert.assertFalse("Issue with equals on the property text", entity.equals(entity4));
+    Assert.assertFalse("Issue with equals on the property type", entity.equals(entity5));
+    Assert.assertFalse("Issue with equals on the property start", entity.equals(entity6));
+    Assert.assertFalse("Issue with equals on the property end", entity.equals(entity7));
+    Assert.assertEquals("Issue with equals on the same object", entity, entity);
+    Assert.assertFalse("Issue with equals on null", entity.equals(null));
+    Assert.assertFalse("Issue with equals on different object", entity.equals(sentence));
+  }
+
+  /**
+   * Test {@link Entity#hashCode()} method.
+   */
+  @Test
+  public final void testHashCode() {
+    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 24, 39);
+    final Entity entity2 = new Entity("Natalie Portman", "PERSON", sentence, context, 24, 39);
+
+    Assert.assertNotSame("The two entities are the same", entity, entity2);
+    Assert.assertEquals("Issue to compute the hascode of an entity", (long) entity.hashCode(),
+        (long) entity2.hashCode());
+  }
+
+  /**
+   * Test {@link Entity#toString()} method.
+   */
+  @Test
+  public final void testToString() {
+    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 24, 39);
+
+    Assert.assertEquals("Issue to get the proper toString value", "Entity{text='Natalie Portman',"
+        + " type='PERSON', sentence=1, context=[0,62], start=24, end=39}", entity.toString());
   }
 }

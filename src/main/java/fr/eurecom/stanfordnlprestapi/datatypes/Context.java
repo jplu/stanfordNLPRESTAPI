@@ -1,3 +1,19 @@
+/**
+ * This file is part of StanfordNLPRESTAPI.
+ *
+ * StanfordNLPRESTAPI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * StanfordNLPRESTAPI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -20,8 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import fr.eurecom.stanfordnlprestapi.annotations.CoberturaIgnore;
 
 import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 
@@ -47,7 +61,6 @@ public class Context {
    * @param newStart Start offset of the context.
    * @param newEnd   End offset of the context.
    */
-  @CoberturaIgnore
   public Context(final String newText, final int newStart, final int newEnd) {
     this.sentences = new ArrayList<>();
     this.text = newText;
@@ -55,22 +68,18 @@ public class Context {
     this.end = newEnd;
   }
 
-  @CoberturaIgnore
   public final int start() {
     return this.start;
   }
 
-  @CoberturaIgnore
   public final int end() {
     return this.end;
   }
 
-  @CoberturaIgnore
   public final void addSentence(final Sentence newSentence) {
     this.sentences.add(newSentence);
   }
 
-  @CoberturaIgnore
   public final String text() {
     return this.text;
   }
@@ -129,7 +138,6 @@ public class Context {
    *
    * @return RDF string in NIF following the given format.
    */
-  @CoberturaIgnore
   public final String rdfString(final String tool, final RDFFormat format,
                                 final NlpProcess process) {
     final StringWriter rdf = new StringWriter();
@@ -140,7 +148,6 @@ public class Context {
   }
 
   @Override
-  @CoberturaIgnore
   public final String toString() {
     return "Context{"
         + "text='" + this.text + '\''

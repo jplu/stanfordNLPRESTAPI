@@ -1,3 +1,19 @@
+/**
+ * This file is part of StanfordNLPRESTAPI.
+ *
+ * StanfordNLPRESTAPI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * StanfordNLPRESTAPI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package fr.eurecom.stanfordnlprestapi.core;
 
 import org.slf4j.Logger;
@@ -15,7 +31,7 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 import edu.stanford.nlp.util.CoreMap;
 
-import fr.eurecom.stanfordnlprestapi.configuration.PipelineConfiguration;
+import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfiguration;
 
 import fr.eurecom.stanfordnlprestapi.datatypes.Context;
 import fr.eurecom.stanfordnlprestapi.datatypes.Entity;
@@ -35,21 +51,23 @@ import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
  */
 public class StanfordNlp {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlp.class);
-  private String text;
   private final StanfordCoreNLP pipeline;
 
+  /**
+   * StanfordNlp constructor.
+   *
+   * @param props properties to configure the pipeline.
+   */
   public StanfordNlp(final Properties props) {
     this.pipeline = new StanfordCoreNLP(props);
   }
 
   /**
-   * Turn a pipeline configuration into Stanford Core NLP properties.
+   * StanfordNlp constructor.
    *
    * @param conf a pipeline configuration.
-   *
-   * @return Stanford Core NLP properties from a pipeline configuration.
    */
-  public static Properties confToProp(final PipelineConfiguration conf) {
+  public StanfordNlp(final PipelineConfiguration conf) {
     final Properties props = new Properties();
 
     props.setProperty("annotators", conf.getAnnotators());
@@ -58,9 +76,8 @@ public class StanfordNlp {
     props.setProperty("ner.useSUTime", conf.getNer().getUseSuTime() ? "true" : "false");
     props.setProperty("ner.applyNumericClassifiers",
         conf.getNer().getApplyNumericClassifiers() ? "true" : "false");
-    props.setProperty("pos.model", conf.getPos().getModel());
 
-    return props;
+    this.pipeline = new StanfordCoreNLP(props);
   }
 
   /**
@@ -71,16 +88,15 @@ public class StanfordNlp {
    * @return The corresponding context of the text.
    */
   public final Context run(final String newText) {
-    this.text = newText; // pas beau !
     final Annotation document = new Annotation(newText);
 
     this.pipeline.annotate(document);
 
-    return this.buildContext(document.get(CoreAnnotations.SentencesAnnotation.class));
+    return this.buildContext(document.get(CoreAnnotations.SentencesAnnotation.class), newText);
   }
 
-  private Context buildContext(final List<CoreMap> sentences) {
-    final Context tmpContext = new Context(this.text, 0, this.text.length());
+  private Context buildContext(final List<CoreMap> sentences, final String newText) {
+    final Context tmpContext = new Context(newText, 0, newText.length());
 
     this.buildSentencesFromContext(sentences, tmpContext);
 
@@ -175,8 +191,7 @@ public class StanfordNlp {
           sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start,
               token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
         }
-      } else if (!"O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))
-          && !sb.toString().isEmpty()) {
+      } else if (!"O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))) {
         sb.append(' ');
         sb.append(token.get(CoreAnnotations.TextAnnotation.class));
 
@@ -185,8 +200,7 @@ public class StanfordNlp {
           sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start,
               token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
         }
-      } else if ("O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))
-          && !sb.toString().isEmpty()) {
+      } else if (!sb.toString().isEmpty()) {
 
         final int index = stanfordSentence.get(
             CoreAnnotations.TokensAnnotation.class).indexOf(token);
@@ -203,9 +217,6 @@ public class StanfordNlp {
 
   @Override
   public final String toString() {
-    return "StanfordNlp{"
-        + "text='" + this.text + '\''
-        + ", pipeline=" + this.pipeline
-        + '}';
+    return "StanfordNlp{}";
   }
 }

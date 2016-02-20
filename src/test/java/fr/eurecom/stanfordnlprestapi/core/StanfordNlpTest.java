@@ -1,3 +1,19 @@
+/**
+ * This file is part of StanfordNLPRESTAPI.
+ *
+ * StanfordNLPRESTAPI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * StanfordNLPRESTAPI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package fr.eurecom.stanfordnlprestapi.core;
 
 import org.apache.jena.rdf.model.Model;
@@ -26,6 +42,9 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 import edu.stanford.nlp.util.CoreMap;
 
+import fr.eurecom.stanfordnlprestapi.configurations.NerConfiguration;
+import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfiguration;
+import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfigurationTest;
 import fr.eurecom.stanfordnlprestapi.datatypes.Context;
 import fr.eurecom.stanfordnlprestapi.datatypes.Entity;
 import fr.eurecom.stanfordnlprestapi.datatypes.SentenceImpl;
@@ -37,7 +56,7 @@ import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
 import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
 
 /**
- * @author Julien Plu on 08/01/2016.
+ * @author Julien Plu
  */
 public class StanfordNlpTest {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlpTest.class);
@@ -56,7 +75,7 @@ public class StanfordNlpTest {
   }
 
   /**
-   * Test the full application for POS process.
+   * Test {@link StanfordNlp} for the POS process.
    */
   @Test
   public final void testRunWithPos() throws Exception {
@@ -73,7 +92,7 @@ public class StanfordNlpTest {
   }
 
   /**
-   * Test the full application for the NER process.
+   * Test {@link StanfordNlp} for the NER process.
    */
   @Test
   public final void testRunWithNer() throws Exception {
@@ -91,38 +110,26 @@ public class StanfordNlpTest {
   }
 
   /**
-   * Test Entity building.
+   * Test {@link StanfordNlp#buildEntitiesFromSentence(CoreMap, Context, Sentence)} method with
+   * an entity at the end of a sentence.
    */
   @Test
-  public final void testBuildEntities() throws Exception {
+  public final void testBuildEntitiesEnd() throws Exception {
     final Properties props = new Properties();
 
     props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
 
     final StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
     final Annotation document = new Annotation("I like Paris");
-    final Annotation document2 = new Annotation("Paris is a nice city.");
-    final Annotation document3 = new Annotation("I like Natalie Portman");
 
     pipeline.annotate(document);
-    pipeline.annotate(document2);
-    pipeline.annotate(document3);
 
     final Class[] cArg = {CoreMap.class, Context.class, Sentence.class};
     final Method method = StanfordNlp.class.getDeclaredMethod("buildEntitiesFromSentence", cArg);
-    //final StanfordNlp stanfordNlp = new StanfordNlp("");
     final Context context = new Context("I like Paris", 0, 12);
-    final Context context2 = new Context("Paris is a nice city.", 0, 21);
-    final Context context3 = new Context("I like Natalie Portman", 0, 22);
     final Sentence sentence = new SentenceImpl("I like Paris", context, 0, 12, 1,
         NullSentence.getInstance());
-    final Sentence sentence2 = new SentenceImpl("Paris is a nice city.", context2, 0, 21, 1,
-        NullSentence.getInstance());
-    final Sentence sentence3 = new SentenceImpl("I like Natalie Portman", context2, 0, 22, 1,
-        NullSentence.getInstance());
     final Entity entity = new Entity("Paris", "LOCATION", sentence, context, 7, 12);
-    final Entity entity2 = new Entity("Paris", "LOCATION", sentence2, context2, 0, 5);
-    final Entity entity3 = new Entity("Natalie Portman", "PERSON", sentence3, context3, 7, 22);
 
     method.setAccessible(true);
 
@@ -130,19 +137,185 @@ public class StanfordNlpTest {
       method.invoke(StanfordNlpTest.stanfordNlp, map, context, sentence);
     }
 
-    for (final CoreMap map : document2.get(CoreAnnotations.SentencesAnnotation.class)) {
-      method.invoke(StanfordNlpTest.stanfordNlp, map, context2, sentence2);
-    }
-
-    for (final CoreMap map : document3.get(CoreAnnotations.SentencesAnnotation.class)) {
-      method.invoke(StanfordNlpTest.stanfordNlp, map, context3, sentence3);
-    }
-
     Assert.assertTrue("Issue to build a one token entity at the end of a sentence",
         sentence.entities().contains(entity));
-    Assert.assertTrue("Issue to build a one token entity at the beginning of a sentence",
-        sentence2.entities().contains(entity2));
+  }
+
+  /**
+   * Test {@link StanfordNlp#buildEntitiesFromSentence(CoreMap, Context, Sentence)} method with
+   * a multiple token entity at the end of a sentence.
+   */
+  @Test
+  public final void testBuildEntitiesMultipleEnd() throws Exception {
+    final Properties props = new Properties();
+
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
+
+    final StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+    final Annotation document = new Annotation("I like Natalie Portman");
+
+    pipeline.annotate(document);
+
+    final Class[] cArg = {CoreMap.class, Context.class, Sentence.class};
+    final Method method = StanfordNlp.class.getDeclaredMethod("buildEntitiesFromSentence", cArg);
+    final Context context = new Context("I like Natalie Portman", 0, 22);
+    final Sentence sentence = new SentenceImpl("I like Natalie Portman", context, 0, 22, 1,
+        NullSentence.getInstance());
+    final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 7, 22);
+
+    method.setAccessible(true);
+
+    for (final CoreMap map : document.get(CoreAnnotations.SentencesAnnotation.class)) {
+      method.invoke(StanfordNlpTest.stanfordNlp, map, context, sentence);
+    }
+
     Assert.assertTrue("Issue to build a multiple token entity at the end of a sentence",
-        sentence3.entities().contains(entity3));
+        sentence.entities().contains(entity));
+  }
+
+  /**
+   * Test {@link StanfordNlp#buildEntitiesFromSentence(CoreMap, Context, Sentence)} method with
+   * an entity at the beginning of a sentence.
+   */
+  @Test
+  public final void testBuildEntitiesStart() throws Exception {
+    final Properties props = new Properties();
+
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
+
+    final StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+    final Annotation document = new Annotation("Paris is a nice city.");
+
+    pipeline.annotate(document);
+
+    final Class[] cArg = {CoreMap.class, Context.class, Sentence.class};
+    final Method method = StanfordNlp.class.getDeclaredMethod("buildEntitiesFromSentence", cArg);
+    final Context context = new Context("Paris is a nice city.", 0, 21);
+    final Sentence sentence = new SentenceImpl("Paris is a nice city.", context, 0, 21, 1,
+        NullSentence.getInstance());
+    final Entity entity = new Entity("Paris", "LOCATION", sentence, context, 0, 5);
+
+    method.setAccessible(true);
+
+    for (final CoreMap map : document.get(CoreAnnotations.SentencesAnnotation.class)) {
+      method.invoke(StanfordNlpTest.stanfordNlp, map, context, sentence);
+    }
+
+    Assert.assertTrue("Issue to build a one token entity at the beginning of a sentence",
+        sentence.entities().contains(entity));
+  }
+
+  /**
+   * Test {@link StanfordNlp#buildEntitiesFromSentence(CoreMap, Context, Sentence)} method with
+   * a multiple token entity at the beginning of a sentence.
+   */
+  @Test
+  public final void testBuildEntitiesMultipleStart() throws Exception {
+    final Properties props = new Properties();
+
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
+
+    final StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+    final Annotation document = new Annotation("Natalie Portman is a beautiful girl.");
+
+    pipeline.annotate(document);
+
+    final Class[] cArg = {CoreMap.class, Context.class, Sentence.class};
+    final Method method = StanfordNlp.class.getDeclaredMethod("buildEntitiesFromSentence", cArg);
+    final Context context = new Context("Natalie Portman is a beautiful girl.", 0, 36);
+    final Sentence sentence = new SentenceImpl("Natalie Portman is a beautiful girl.", context, 0,
+        36, 1, NullSentence.getInstance());
+    final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 0, 15);
+
+    method.setAccessible(true);
+
+    for (final CoreMap map : document.get(CoreAnnotations.SentencesAnnotation.class)) {
+      method.invoke(StanfordNlpTest.stanfordNlp, map, context, sentence);
+    }
+
+    Assert.assertTrue("Issue to build a multiple token entity at the beginning of a sentence",
+        sentence.entities().contains(entity));
+  }
+
+  /**
+   * Test {@link StanfordNlp#buildEntitiesFromSentence(CoreMap, Context, Sentence)} method with
+   * an entity in the middle of a sentence.
+   */
+  @Test
+  public final void testBuildEntitiesMiddle() throws Exception {
+    final Properties props = new Properties();
+
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
+
+    final StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+    final Annotation document = new Annotation("I like Paris very much.");
+
+    pipeline.annotate(document);
+
+    final Class[] cArg = {CoreMap.class, Context.class, Sentence.class};
+    final Method method = StanfordNlp.class.getDeclaredMethod("buildEntitiesFromSentence", cArg);
+    final Context context = new Context("I like Paris very much.", 0, 23);
+    final Sentence sentence = new SentenceImpl("I like Paris very much.", context, 0, 23, 1,
+        NullSentence.getInstance());
+    final Entity entity = new Entity("Paris", "LOCATION", sentence, context, 7, 12);
+
+    method.setAccessible(true);
+
+    for (final CoreMap map : document.get(CoreAnnotations.SentencesAnnotation.class)) {
+      method.invoke(StanfordNlpTest.stanfordNlp, map, context, sentence);
+    }
+
+    Assert.assertTrue("Issue to build a one token entity in the middle of a sentence",
+        sentence.entities().contains(entity));
+  }
+
+  /**
+   * Test {@link StanfordNlp#buildEntitiesFromSentence(CoreMap, Context, Sentence)} method with
+   * a multiple token entity in the middle of a sentence.
+   */
+  @Test
+  public final void testBuildEntitiesMultipleMiddle() throws Exception {
+    final Properties props = new Properties();
+
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
+
+    final StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+    final Annotation document = new Annotation("I love Natalie Portman a lot.");
+
+    pipeline.annotate(document);
+
+    final Class[] cArg = {CoreMap.class, Context.class, Sentence.class};
+    final Method method = StanfordNlp.class.getDeclaredMethod("buildEntitiesFromSentence", cArg);
+    final Context context = new Context("I love Natalie Portman a lot.", 0, 29);
+    final Sentence sentence = new SentenceImpl("I love Natalie Portman a lot.", context, 0, 29, 1,
+        NullSentence.getInstance());
+    final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 7, 22);
+
+    method.setAccessible(true);
+
+    for (final CoreMap map : document.get(CoreAnnotations.SentencesAnnotation.class)) {
+      method.invoke(StanfordNlpTest.stanfordNlp, map, context, sentence);
+    }
+
+    Assert.assertTrue("Issue to build a multiple token entity in the middle of a sentence",
+        sentence.entities().contains(entity));
+  }
+
+  /**
+   * Test{@link StanfordNlp#toString()} method with
+   * {@link StanfordNlp#StanfordNlp(PipelineConfiguration) constructor.
+   */
+  @Test
+  public final void testToStringWithFalse() {
+    final PipelineConfiguration pipeline = new PipelineConfiguration();
+    final StanfordNlp stanford = new StanfordNlp(pipeline);
+
+    pipeline.getNer().setApplyNumericClassifiers(true);
+    pipeline.getNer().setUseSuTime(true);
+
+    Assert.assertEquals("Issue to get the proper toString value", "StanfordNlp{}",
+        stanford.toString());
+    Assert.assertEquals("Issue to get the proper toString value", "StanfordNlp{}",
+        new StanfordNlp(pipeline).toString());
   }
 }
