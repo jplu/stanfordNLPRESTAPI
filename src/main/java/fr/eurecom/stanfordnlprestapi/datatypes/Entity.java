@@ -16,6 +16,8 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
+
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 
 import org.apache.jena.rdf.model.Model;
@@ -26,8 +28,6 @@ import org.apache.jena.vocabulary.RDF;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
 
 /**
  * This class represents a NIF Entity that is aligned to the corresponding Stanford NLP
@@ -142,7 +142,7 @@ public class Entity {
       return false;
     }
 
-    if (!this.sentence.equals(entity.sentence)) {
+    if (this.sentence.index() != entity.sentence.index()) {
       return false;
     }
 

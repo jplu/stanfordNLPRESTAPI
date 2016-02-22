@@ -16,27 +16,28 @@
  */
 package fr.eurecom.stanfordnlprestapi;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.eurecom.stanfordnlprestapi.cli.NerCommand;
+import fr.eurecom.stanfordnlprestapi.cli.PosCommand;
 
-import fr.eurecom.stanfordnlprestapi.commands.NerCommand;
-import fr.eurecom.stanfordnlprestapi.commands.PosCommand;
+import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfiguration;
 
 import fr.eurecom.stanfordnlprestapi.core.StanfordNlp;
 
-import fr.eurecom.stanfordnlprestapi.resources.NerResource;
-import fr.eurecom.stanfordnlprestapi.resources.PosResource;
+import fr.eurecom.stanfordnlprestapi.resources.PipelineResource;
 
 import io.dropwizard.Application;
 
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Olivier Varene
  * @author Julien Plu
  */
-public class App extends Application<AppConfiguration> {
+public class App extends Application<PipelineConfiguration> {
   static final Logger LOGGER = LoggerFactory.getLogger(App.class);
   private StanfordNlp pipeline;
 
@@ -49,25 +50,28 @@ public class App extends Application<AppConfiguration> {
   }
 
   @Override
-  public final void initialize(final Bootstrap<AppConfiguration> bootstrap) {
-    super.initialize(bootstrap);
+  public final void initialize(final Bootstrap<PipelineConfiguration> bootstrap) {
+    //super.initialize(bootstrap);
     // add pos and ner commands on cli
     bootstrap.addCommand(new PosCommand());
     bootstrap.addCommand(new NerCommand());
   }
 
   @Override
-  public final void run(final AppConfiguration newT, final Environment newEnvironment)
+  public final void run(final PipelineConfiguration newT, final Environment newEnvironment)
       throws Exception {
-    this.pipeline = new StanfordNlp(newT.getPipeline());
+    this.pipeline = new StanfordNlp(newT);
 
-    // handles /v1/pos
-    newEnvironment.jersey().register(new PosResource(this.pipeline));
-    // handles /v1/ner
-    newEnvironment.jersey().register(new NerResource(this.pipeline));
+    newEnvironment.jersey().register(new PipelineResource(this.pipeline));
   }
 
-  // MAIN
+  /**
+   * Main entry.
+   *
+   * @param args command line arguments.
+   *
+   * @throws Exception
+   */
   public static void main(final String... args) throws Exception {
     new App().run(args);
   }

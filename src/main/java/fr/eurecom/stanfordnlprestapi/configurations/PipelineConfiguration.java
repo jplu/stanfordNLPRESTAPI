@@ -16,7 +16,11 @@
  */
 package fr.eurecom.stanfordnlprestapi.configurations;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.dropwizard.Configuration;
+
+import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,27 +29,16 @@ import org.slf4j.LoggerFactory;
  * @author Olivier Varene
  * @author Julien Plu
  */
-public class PipelineConfiguration {
+public class PipelineConfiguration extends Configuration {
   static final Logger LOGGER = LoggerFactory.getLogger(PipelineConfiguration.class);
-  // TODO(Olivier Varene): use Ner and Pos configuration classes and migrate configuration file
-  @NotEmpty
+  @JsonProperty
+  @NotNull
   private PosConfiguration pos;
-  @NotEmpty
+  @JsonProperty
+  @NotNull
   private NerConfiguration ner;
-  @NotEmpty
-  private final String annotators;
 
-  /**
-   * PipelineConfiguration constructor.
-   */
   public PipelineConfiguration() {
-    this.pos = new PosConfiguration();
-    this.ner = new NerConfiguration();
-    this.annotators = "tokenize, ssplit, pos, lemma, ner";
-  }
-
-  public final String getAnnotators() {
-    return this.annotators;
   }
 
   public final PosConfiguration getPos() {
@@ -69,7 +62,6 @@ public class PipelineConfiguration {
     return "PipelineConfiguration{"
         + "pos=" + this.pos
         + ", ner=" + this.ner
-        + ", annotators=" + this.annotators
         + '}';
   }
 }

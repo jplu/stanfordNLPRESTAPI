@@ -16,6 +16,18 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
+
+import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
+
+import java.io.StringWriter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 
 import org.apache.jena.rdf.model.Model;
@@ -29,17 +41,6 @@ import org.apache.jena.vocabulary.RDF;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.StringWriter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
-
-import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
 
 /**
  * This class represents a NIF context that is aligned to the corresponding Stanford NLP
@@ -82,6 +83,10 @@ public class Context {
 
   public final String text() {
     return this.text;
+  }
+
+  public final List<Sentence> sentences() {
+    return Collections.unmodifiableList(this.sentences);
   }
 
   /**
@@ -145,6 +150,45 @@ public class Context {
     RDFDataMgr.write(rdf, this.rdfModel(tool, process), format);
 
     return rdf.toString();
+  }
+
+  @Override
+  public final boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+
+    if ((obj == null) || (this.getClass() != obj.getClass())) {
+      return false;
+    }
+
+    final Context context = (Context) obj;
+
+    if (this.start != context.start) {
+      return false;
+    }
+
+    if (this.end != context.end) {
+      return false;
+    }
+
+    if (!this.text.equals(context.text)) {
+      return false;
+    }
+
+    return this.sentences.size() == context.sentences.size();
+
+  }
+
+  @Override
+  public final int hashCode() {
+    int result = this.text.hashCode();
+
+    result = 31 * (result + this.start);
+    result = 31 * (result + this.end);
+    result = 31 * (result + this.sentences.hashCode());
+
+    return result;
   }
 
   @Override

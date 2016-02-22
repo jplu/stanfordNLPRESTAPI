@@ -31,8 +31,6 @@ public class PosConfiguration {
   private String model;
 
   public PosConfiguration() {
-    this.model = "edu/stanford/nlp/models/pos-tagger/english-left3words/"
-        + "english-left3words-distsim.tagger";
   }
 
   public final String getModel() {

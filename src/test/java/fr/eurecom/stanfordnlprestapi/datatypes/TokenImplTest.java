@@ -16,6 +16,12 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
+import fr.eurecom.stanfordnlprestapi.interfaces.Token;
+
+import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
+import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
+
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 
 import org.apache.jena.rdf.model.Model;
@@ -29,12 +35,6 @@ import org.junit.Test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
-import fr.eurecom.stanfordnlprestapi.interfaces.Token;
-
-import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
-import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
 
 /**
  * @author Julien Plu
@@ -209,5 +209,79 @@ public class TokenImplTest {
         sentence, 1);
 
     Assert.assertEquals("Issue to get the proper text from a Token", "My", token.text());
+  }
+
+  /**
+   * Test {@link TokenImpl#hashCode()} method.
+   */
+  @Test
+  public final void testHashCode() {
+    final Context context = new Context("I like Natalie Portman", 0, 22);
+    final Sentence sentence = new SentenceImpl("I like Natalie Portman", context, 0, 22, 0,
+        NullSentence.getInstance());
+    final Token token1 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+        sentence, 1);
+    final Token token2 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+        sentence, 1);
+
+    Assert.assertNotSame("The two sentences are the same", token1, token2);
+    Assert.assertEquals("Issue to compute the hascode of a sentence", (long) token1.hashCode(),
+        (long) token2.hashCode());
+  }
+
+  /**
+   * Test {@link TokenImpl#equals(Object)} method.
+   */
+  @Test
+  public final void testEquals() {
+    final Context context = new Context("I like Natalie Portman", 0, 22);
+    final Context context2 = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Sentence sentence = new SentenceImpl("I like Natalie Portman", context, 0, 22, 0,
+        NullSentence.getInstance());
+    final Sentence sentence2 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Token token1 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+        sentence, 1);
+    final Token token2 = new TokenImpl("A", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+        sentence, 1);
+    final Token token3 = new TokenImpl("I", "PRP", 1, 1, "I", NullToken.getInstance(), context,
+        sentence, 1);
+    final Token token4 = new TokenImpl("I", "VBZ", 0, 1, "I", NullToken.getInstance(), context,
+        sentence, 1);
+    final Token token5 = new TokenImpl("I", "PRP", 0, 2, "I", NullToken.getInstance(), context,
+        sentence, 1);
+    final Token token6 = new TokenImpl("I", "PRP", 0, 1, "A", NullToken.getInstance(), context,
+        sentence, 1);
+    final Token token7 = new TokenImpl("I", "PRP", 0, 1, "I", new TokenImpl("like", "VBP", 2, 6,
+        "like", NullToken.getInstance(), context, sentence, 2), context, sentence, 1);
+    final Token token8 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+        sentence, 1);
+    final Token token9 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context2,
+        sentence, 1);
+    final Token token10 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+        sentence2, 1);
+    final Token token11 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+        sentence, 2);
+    final Token token12 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+        sentence, 1);
+
+    token8.nextToken(new TokenImpl("like", "VBP", 2, 6, "like", NullToken.getInstance(), context,
+        sentence, 2));
+
+    Assert.assertFalse("Issue with equals on the property text", token1.equals(token2));
+    Assert.assertFalse("Issue with equals on the property start", token1.equals(token3));
+    Assert.assertFalse("Issue with equals on the property tag", token1.equals(token4));
+    Assert.assertFalse("Issue with equals on the property end", token1.equals(token5));
+    Assert.assertFalse("Issue with equals on the property lemma", token1.equals(token6));
+    Assert.assertFalse("Issue with equals on the property previousToken", token1.equals(token7));
+    Assert.assertFalse("Issue with equals on the property nextToken", token1.equals(token8));
+    Assert.assertFalse("Issue with equals on the property context", token1.equals(token9));
+    Assert.assertFalse("Issue with equals on the property sentence", token1.equals(token10));
+    Assert.assertFalse("Issue with equals on the property index", token1.equals(token11));
+    Assert.assertEquals("Issue with equals", token1, token12);
+    Assert.assertEquals("Issue with equals on the same object", token1, token1);
+    Assert.assertFalse("Issue with equals on null", token1.equals(null));
+    Assert.assertFalse("Issue with equals on different object", token1.equals(context));
   }
 }

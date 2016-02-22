@@ -16,6 +16,21 @@
  */
 package fr.eurecom.stanfordnlprestapi.integrations;
 
+import fr.eurecom.stanfordnlprestapi.App;
+
+import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfiguration;
+import io.dropwizard.testing.ResourceHelpers;
+
+import io.dropwizard.testing.junit.DropwizardAppRule;
+
+import java.io.ByteArrayInputStream;
+
+import java.nio.charset.Charset;
+
+import java.nio.file.FileSystems;
+
+import javax.ws.rs.client.Client;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
@@ -33,20 +48,6 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-
-import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-
-import javax.ws.rs.client.Client;
-
-import fr.eurecom.stanfordnlprestapi.App;
-import fr.eurecom.stanfordnlprestapi.AppConfiguration;
-
-import io.dropwizard.testing.ResourceHelpers;
-
-import io.dropwizard.testing.junit.DropwizardAppRule;
-
 /**
  * @author Julien Plu
  */
@@ -54,17 +55,17 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 public class StanfordNlpRestApiIntegrationTest {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlpRestApiIntegrationTest.class);
   @Rule
-  public final DropwizardAppRule<AppConfiguration> rule = new DropwizardAppRule<>(App.class,
+  public final DropwizardAppRule<PipelineConfiguration> rule = new DropwizardAppRule<>(App.class,
       ResourceHelpers.resourceFilePath("config.yaml"));
 
   public StanfordNlpRestApiIntegrationTest() {
   }
 
   /**
-   * Run and test the server like if we would do it in command line.
+   * Run and test the server like if we would do it in command line for NER.
    */
   @Test
-  public final void runServerTest() {
+  public final void runServerTestNer() {
     final Client client = new JerseyClientBuilder().build();
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model serviceModel = ModelFactory.createDefaultModel();
@@ -77,6 +78,26 @@ public class StanfordNlpRestApiIntegrationTest {
             String.class).getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
 
     Assert.assertTrue("Answer given by the server is not valid for NER during integration test",
+        fileModel.isIsomorphicWith(serviceModel));
+  }
+
+  /**
+   * Run and test the server like if we would do it in command line for POS.
+   */
+  @Test
+  public final void runServerTestPos() {
+    final Client client = new JerseyClientBuilder().build();
+    final Model fileModel = ModelFactory.createDefaultModel();
+    final Model serviceModel = ModelFactory.createDefaultModel();
+
+    RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
+        FileSystems.getDefault().getSeparator() + "pos.ttl"), Lang.TURTLE);
+    RDFDataMgr.read(serviceModel, new ByteArrayInputStream(client.target(
+        String.format("http://localhost:%d/v1/pos", this.rule.getLocalPort())).queryParam("q", "My "
+        + "favorite actress is: Natalie Portman. She is very stunning.").request().get(
+        String.class).getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+
+    Assert.assertTrue("Answer given by the server is not valid for POS during integration test",
         fileModel.isIsomorphicWith(serviceModel));
   }
 }

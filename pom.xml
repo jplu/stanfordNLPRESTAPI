@@ -163,6 +163,10 @@
                             <excludes>
                                 <exclude>**/App*</exclude>
                                 <exclude>**/*Command*</exclude>
+                                <exclude>**/*Configuration*</exclude>
+                                <exclude>**/*Exception*</exclude>
+                                <exclude>**/NlpProcess*</exclude>
+                                <exclude>**/Null*</exclude>
                             </excludes>
                             <rules>
                                 <rule>
@@ -171,7 +175,7 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.90</minimum>
+                                            <minimum>1.00</minimum>
                                         </limit>
                                         <limit>
                                             <counter>BRANCH</counter>

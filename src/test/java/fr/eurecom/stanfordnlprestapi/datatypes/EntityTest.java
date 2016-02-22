@@ -16,6 +16,10 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
+
+import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
+
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 
 import org.apache.jena.rdf.model.Model;
@@ -29,10 +33,6 @@ import org.junit.Test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
-
-import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
 
 /**
  * @author Julien Plu

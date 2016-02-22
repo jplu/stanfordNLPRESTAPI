@@ -16,6 +16,15 @@
  */
 package fr.eurecom.stanfordnlprestapi.endpoints;
 
+import fr.eurecom.stanfordnlprestapi.resources.PipelineResource;
+
+import io.dropwizard.testing.junit.ResourceTestRule;
+
+import java.io.ByteArrayInputStream;
+
+import java.nio.charset.Charset;
+import java.nio.file.FileSystems;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
@@ -29,31 +38,23 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-
-import fr.eurecom.stanfordnlprestapi.resources.NerResource;
-
-import io.dropwizard.testing.junit.ResourceTestRule;
-
 /**
  * @author Julien Plu
  */
-public class NerEndpointTest {
-  static final Logger LOGGER = LoggerFactory.getLogger(NerEndpointTest.class);
+public class PipelineEndpointTest {
+  static final Logger LOGGER = LoggerFactory.getLogger(PipelineEndpointTest.class);
   @Rule
   public ResourceTestRule resources = ResourceTestRule.builder().addResource(
-      new NerResource()).build();
+      new PipelineResource("tokenize, ssplit, pos, lemma, ner, parse, dcoref")).build();
 
-  public NerEndpointTest() {
+  public PipelineEndpointTest() {
   }
 
   /**
    * Test the NER endpoint.
    */
   @Test
-  public final void nerResourceDropwizard() throws Exception {
+  public final void pipelineResourceNerDropwizard() throws Exception {
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model serviceModel = ModelFactory.createDefaultModel();
 
@@ -62,10 +63,30 @@ public class NerEndpointTest {
 
     RDFDataMgr.read(serviceModel, new ByteArrayInputStream(this.resources.client().target(
         "/v1/ner").queryParam("q", "My favorite actress is: Natalie Portman. She is very "
-        + "stunning.").request().get(String.class).getBytes(Charset.forName("UTF-8"))),
+            + "stunning.").request().get(String.class).getBytes(Charset.forName("UTF-8"))),
         Lang.TURTLE);
 
     Assert.assertTrue("Answer given by the server is not valid for NER",
+        fileModel.isIsomorphicWith(serviceModel));
+  }
+
+  /**
+   * Test the POS endpoint.
+   */
+  @Test
+  public final void pipelineResourcePosDropwizard() throws Exception {
+    final Model fileModel = ModelFactory.createDefaultModel();
+    final Model serviceModel = ModelFactory.createDefaultModel();
+
+    RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
+        FileSystems.getDefault().getSeparator() + "pos.ttl"), Lang.TURTLE);
+
+    RDFDataMgr.read(serviceModel, new ByteArrayInputStream(this.resources.client().target(
+        "/v1/pos").queryParam("q", "My favorite actress is: Natalie Portman. She is very "
+            + "stunning.").request().get(String.class).getBytes(Charset.forName("UTF-8"))),
+        Lang.TURTLE);
+
+    Assert.assertTrue("Answer given by the server is not valid for POS",
         fileModel.isIsomorphicWith(serviceModel));
   }
 }

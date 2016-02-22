@@ -16,6 +16,15 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
+
+import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
+
+import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 
 import org.apache.jena.rdf.model.Model;
@@ -29,15 +38,6 @@ import org.junit.Test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
-
-import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
-
-import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
 
 /**
  * @author Julien Plu
@@ -161,5 +161,49 @@ public class ContextTest {
 
     Assert.assertEquals("Issue to get the proper text from a Context", "My favorite actress is:"
         + " Natalie Portman. She is very stunning.", context.text());
+  }
+
+  /**
+   * Test {@link Context#hashCode()} method.
+   */
+  @Test
+  public final void testHashCode() {
+    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Context context2 = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+
+    Assert.assertNotSame("The two context are the same", context, context2);
+    Assert.assertEquals("Issue to compute the hascode of a context", (long) context.hashCode(),
+        (long) context2.hashCode());
+  }
+
+  /**
+   * Test {@link Context#equals(Object)} method.
+   */
+  @Test
+  public final void testEquals() {
+    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Context context2 = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Context context3 = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 1, 60);
+    final Context context4 = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 64);
+    final Context context5 = new Context("My favorite actress: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+
+    context2.addSentence(sentence);
+
+    Assert.assertFalse("Issue with equals on the property sentences", context.equals(context2));
+    Assert.assertFalse("Issue with equals on the property start", context.equals(context3));
+    Assert.assertFalse("Issue with equals on the property end", context.equals(context4));
+    Assert.assertFalse("Issue with equals on the property text", context.equals(context5));
+    Assert.assertEquals("Issue with equals on the same object", context, context);
+    Assert.assertFalse("Issue with equals on null", context.equals(null));
+    Assert.assertFalse("Issue with equals on different object", context.equals(sentence));
   }
 }

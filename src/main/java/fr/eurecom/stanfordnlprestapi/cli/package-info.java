@@ -14,33 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.eurecom.stanfordnlprestapi.configurations;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
+ * Command classes for POS and NER.
+ *
  * @author Julien Plu
  */
-public class PosConfigurationTest {
-  static final Logger LOGGER = LoggerFactory.getLogger(PosConfigurationTest.class);
-
-  public PosConfigurationTest(){
-  }
-
-  /**
-   * Test {@link PosConfiguration#toString()} method.
-   */
-  @Test
-  public final void testToString() {
-    final PosConfiguration conf = new PosConfiguration();
-
-    conf.setModel("");
-
-    Assert.assertEquals("Issue to get the proper toString value", "PosConfiguration{model=''}",
-        conf.toString());
-  }
-}
+package fr.eurecom.stanfordnlprestapi.cli;

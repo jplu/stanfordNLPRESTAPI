@@ -16,12 +16,13 @@
  */
 package fr.eurecom.stanfordnlprestapi.interfaces;
 
-import org.apache.jena.rdf.model.Model;
+import fr.eurecom.stanfordnlprestapi.datatypes.Entity;
+
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 
 import java.util.List;
 
-import fr.eurecom.stanfordnlprestapi.datatypes.Entity;
-import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Interface that represents a NIF and Stanford NLP sentence.

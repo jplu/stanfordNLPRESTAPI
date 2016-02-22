@@ -22,15 +22,6 @@ package fr.eurecom.stanfordnlprestapi.enums;
  * @author Julien Plu
  */
 public enum NlpProcess {
-  NER("NER"), POS("POS");
-
-  private final String property;
-
-  NlpProcess(final String newProperty) {
-    this.property = newProperty;
-  }
-
-  public final String property() {
-    return this.property;
-  }
+  NER,
+  POS
 }

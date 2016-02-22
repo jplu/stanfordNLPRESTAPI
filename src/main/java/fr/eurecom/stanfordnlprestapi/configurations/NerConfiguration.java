@@ -16,12 +16,12 @@
  */
 package fr.eurecom.stanfordnlprestapi.configurations;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Olivier Varene
@@ -40,9 +40,6 @@ public class NerConfiguration {
    * NerConfiguration constructor.
    */
   public NerConfiguration() {
-    this.model = "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz";
-    this.useSuTime = false;
-    this.applyNumericClassifiers = false;
   }
 
   @JsonProperty

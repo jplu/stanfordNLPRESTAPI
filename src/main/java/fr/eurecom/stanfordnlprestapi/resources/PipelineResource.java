@@ -16,10 +16,11 @@
  */
 package fr.eurecom.stanfordnlprestapi.resources;
 
-import org.apache.jena.riot.RDFFormat;
+import com.codahale.metrics.annotation.Timed;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.eurecom.stanfordnlprestapi.core.StanfordNlp;
+
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 
 import java.util.Properties;
 
@@ -31,54 +32,77 @@ import javax.ws.rs.WebApplicationException;
 
 import javax.ws.rs.core.Response;
 
-import com.codahale.metrics.annotation.Timed;
+import org.apache.jena.riot.RDFFormat;
 
-import fr.eurecom.stanfordnlprestapi.core.StanfordNlp;
-
-import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * @author Olivier Varene
  * @author Julien Plu
  */
-@Path("/v1/pos")
-public class PosResource {
-  static final Logger LOGGER = LoggerFactory.getLogger(PosResource.class);
+@Path("/v1")
+public class PipelineResource {
+  static final Logger LOGGER = LoggerFactory.getLogger(PipelineResource.class);
   private final StanfordNlp pipeline;
 
   /**
-   * PosResource constructor.
+   * PipelineResource constructor.
    *
-   * @param newPipeline The pipeline that will be used.
+   * @param newPipeline The pipeline that will be used
    */
-  public PosResource(final StanfordNlp newPipeline) {
-    PosResource.LOGGER.info("PosResource init");
+  public PipelineResource(final StanfordNlp newPipeline) {
+    PipelineResource.LOGGER.info("PipelineResource init");
 
     this.pipeline = newPipeline;
   }
 
   /**
-   * PosResource constructor.
+   * PipelineResource constructor.
+   *
+   * @param annotators List of annotators to use for StanfordNLP
    */
-  public PosResource() {
+  public PipelineResource(final String annotators) {
     final Properties props = new Properties();
 
-    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
+    props.setProperty("annotators", annotators);
 
     this.pipeline = new StanfordNlp(props);
   }
 
   /**
-   * The API call for a POS process.
+   * The API call for a NER process.
    *
-   * @param rawRequest HTTP query.
+   * @param rawRequest HTTP query
    *
-   * @return The corresponding response of the query.
+   * @return The corresponding response of the query
    */
   @GET
   @Timed
   @Produces("text/turtle; charset=utf-8")
-  public final Response get(@QueryParam("q") final String rawRequest) {
+  @Path("/ner/")
+  public final Response getNer(@QueryParam("q") final String rawRequest) {
+    if ((rawRequest == null) || rawRequest.isEmpty()) {
+      throw new WebApplicationException("Empty request", Response.Status.PRECONDITION_FAILED);
+    }
+
+    final String res = this.pipeline.run(rawRequest).rdfString("stanfordnlp",
+        RDFFormat.TURTLE_PRETTY, NlpProcess.NER);
+
+    return Response.ok(res).build();
+  }
+
+  /**
+   * The API call for a POS process.
+   *
+   * @param rawRequest HTTP query
+   *
+   * @return The corresponding response of the query
+   */
+  @GET
+  @Timed
+  @Produces("text/turtle; charset=utf-8")
+  @Path("/pos/")
+  public final Response getPos(@QueryParam("q") final String rawRequest) {
     if ((rawRequest == null) || rawRequest.isEmpty()) {
       throw new WebApplicationException("Empty request", Response.Status.PRECONDITION_FAILED);
     }
@@ -91,6 +115,6 @@ public class PosResource {
 
   @Override
   public final String toString() {
-    return "PosResource{}";
+    return "PipelineResource{}";
   }
 }

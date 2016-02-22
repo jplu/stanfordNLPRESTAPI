@@ -16,6 +16,20 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
+
+import fr.eurecom.stanfordnlprestapi.exceptions.InexistentNlpProcessException;
+
+import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
+import fr.eurecom.stanfordnlprestapi.interfaces.Token;
+
+import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
+import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 
 import org.apache.jena.rdf.model.Model;
@@ -26,19 +40,6 @@ import org.apache.jena.vocabulary.RDF;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
-
-import fr.eurecom.stanfordnlprestapi.exceptions.InexistentNlpProcessException;
-import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
-import fr.eurecom.stanfordnlprestapi.interfaces.Token;
-
-import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
-import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
 
 /**
  * This class represents a NIF sentence that is aligned to the corresponding Stanford NLP
@@ -129,8 +130,7 @@ public class SentenceImpl implements Sentence {
   }
 
   @Override
-  public final Model rdfModel(final String tool, final NlpProcess process) throws
-      InexistentNlpProcessException{
+  public final Model rdfModel(final String tool, final NlpProcess process) {
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
     final String base = "http://127.0.0.1/" + tool + '#';
     final Model model = ModelFactory.createDefaultModel();
@@ -203,6 +203,71 @@ public class SentenceImpl implements Sentence {
     }
 
     return model;
+  }
+
+  @Override
+  public final boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+
+    if ((obj == null) || (this.getClass() != obj.getClass())) {
+      return false;
+    }
+
+    final SentenceImpl sentence = (SentenceImpl) obj;
+
+    if (this.start != sentence.start) {
+      return false;
+    }
+
+    if (this.end != sentence.end) {
+      return false;
+    }
+
+    if (this.index != sentence.index) {
+      return false;
+    }
+
+    if (!this.text.equals(sentence.text)) {
+      return false;
+    }
+
+    if (!this.context.equals(sentence.context)) {
+      return false;
+    }
+
+    if (!this.tokens.equals(sentence.tokens)) {
+      return false;
+    }
+
+    if (!this.entities.equals(sentence.entities)) {
+      return false;
+    }
+
+    if (!this.nextSentence.equals(sentence.nextSentence)) {
+      return false;
+    }
+
+    return this.previousSentence.equals(sentence.previousSentence);
+  }
+
+  @Override
+  public final int hashCode() {
+    int result = this.text.hashCode();
+
+    result = 31 * (result + this.context.hashCode());
+    result = 31 * (result + this.tokens.hashCode());
+    result = 31 * (result + this.entities.hashCode());
+    result = 31 * (result + this.nextSentence.hashCode());
+    result = 31 * (result + this.previousSentence.hashCode());
+    result = 31 * (result + this.firstToken.hashCode());
+    result = 31 * (result + this.lastToken.hashCode());
+    result = 31 * (result + this.start);
+    result = 31 * (result + this.end);
+    result = 31 * (result + this.index);
+
+    return result;
   }
 
   @Override

@@ -16,6 +16,11 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
+import fr.eurecom.stanfordnlprestapi.interfaces.Token;
+
+import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
+
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 
 import org.apache.jena.rdf.model.Model;
@@ -26,11 +31,6 @@ import org.apache.jena.vocabulary.RDF;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
-import fr.eurecom.stanfordnlprestapi.interfaces.Token;
-
-import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
 
 /**
  * This class represents a NIF token that is aligned to the corresponding Stanford NLP annotations.
@@ -155,6 +155,75 @@ public class TokenImpl implements Token {
     }
 
     return model;
+  }
+
+  @Override
+  public final boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+
+    if ((obj == null) || (this.getClass() != obj.getClass())) {
+      return false;
+    }
+
+    final TokenImpl token = (TokenImpl) obj;
+
+    if (this.start != token.start) {
+      return false;
+    }
+
+    if (this.end != token.end) {
+      return false;
+    }
+
+    if (this.index != token.index) {
+      return false;
+    }
+
+    if (!this.text.equals(token.text)) {
+      return false;
+    }
+
+    if (!this.tag.equals(token.tag)) {
+      return false;
+    }
+
+    if (!this.lemma.equals(token.lemma)) {
+      return false;
+    }
+
+    if (!this.previousToken.equals(token.previousToken)) {
+      return false;
+    }
+
+    if (this.nextToken.index() != token.nextToken.index()) {
+      return false;
+    }
+
+    if (!this.context.equals(token.context)) {
+      return false;
+    }
+
+    return this.sentence.index() == token.sentence.index();
+
+  }
+
+  @Override
+  public final int hashCode() {
+    int result = this.text.hashCode();
+
+    result = 31 * (result + this.tag.hashCode());
+    result = 31 * (result + this.start);
+    result = 31 * (result + this.end);
+    result = 31 * (result + this.lemma.hashCode());
+    result = 31 * (result + this.previousToken.hashCode());
+    result = 31 * (result + this.nextToken.hashCode());
+    result = 31 * (result + this.context.hashCode());
+    result = 31 * (result + this.sentence.hashCode());
+    result = 31 * (result + this.index);
+
+    return result;
   }
 
   @Override

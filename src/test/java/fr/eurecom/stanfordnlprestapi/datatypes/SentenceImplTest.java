@@ -16,6 +16,16 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
+
+import fr.eurecom.stanfordnlprestapi.exceptions.InexistentNlpProcessException;
+
+import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
+import fr.eurecom.stanfordnlprestapi.interfaces.Token;
+
+import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
+import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
+
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 
 import org.apache.jena.rdf.model.Model;
@@ -29,14 +39,6 @@ import org.junit.Test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
-import fr.eurecom.stanfordnlprestapi.exceptions.InexistentNlpProcessException;
-import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
-
-import fr.eurecom.stanfordnlprestapi.interfaces.Token;
-import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
-import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
 
 /**
  * @author Julien Plu
@@ -253,5 +255,75 @@ public class SentenceImplTest {
         0, 40, 1, NullSentence.getInstance());
 
     sentence.rdfModel("stanfordnlp", null);
+  }
+
+  /**
+   * Test {@link SentenceImpl#hashCode()} method.
+   */
+  @Test
+  public final void testHashCode() {
+    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Sentence sentence2 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+
+    Assert.assertNotSame("The two sentences are the same", sentence, sentence2);
+    Assert.assertEquals("Issue to compute the hascode of a sentence", (long) sentence.hashCode(),
+        (long) sentence2.hashCode());
+  }
+
+  /**
+   * Test {@link SentenceImpl#equals(Object)} method.
+   */
+  @Test
+  public final void testEquals() {
+    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Context context2 = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 63);
+    final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Sentence sentence2 = new SentenceImpl("My favorite actress: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Sentence sentence3 = new SentenceImpl("My favorite actress is: Natalie Portman.",
+        context2, 0, 40, 1, NullSentence.getInstance());
+    final Sentence sentence4 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Sentence sentence5 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Sentence sentence6 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Sentence sentence7 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, new SentenceImpl("Paris is a nice city.", context, 0, 21, 0,
+        NullSentence.getInstance()));
+    final Sentence sentence8 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        1, 40, 1, NullSentence.getInstance());
+    final Sentence sentence9 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 44, 1, NullSentence.getInstance());
+    final Sentence sentence10 = new SentenceImpl("My favorite actress is: Natalie Portman.",
+        context, 0, 40, 2, NullSentence.getInstance());
+
+    sentence4.addToken(new TokenImpl("like", "VBP", 2, 6, "like", NullToken.getInstance(), context,
+        sentence, 2));
+    sentence5.addEntity(new Entity("Natalie Portman", "PERSON", sentence, context, 7, 22));
+    sentence6.nextSentence(new SentenceImpl("Paris is a nice city.", context, 0, 21, 0,
+        NullSentence.getInstance()));
+
+    Assert.assertFalse("Issue with equals on the property text", sentence.equals(sentence2));
+    Assert.assertFalse("Issue with equals on the property context", sentence.equals(sentence3));
+    Assert.assertFalse("Issue with equals on the property tokens", sentence.equals(sentence4));
+    Assert.assertFalse("Issue with equals on the property entities", sentence.equals(sentence5));
+    Assert.assertFalse("Issue with equals on the property nextSentence", sentence.equals(
+        sentence6));
+    Assert.assertFalse("Issue with equals on the property previousSentence", sentence.equals(
+        sentence7));
+    Assert.assertFalse("Issue with equals on the property start", sentence.equals(sentence8));
+    Assert.assertFalse("Issue with equals on the property end", sentence.equals(sentence9));
+    Assert.assertFalse("Issue with equals on the property index", sentence.equals(sentence10));
+    Assert.assertEquals("Issue with equals on the same object", sentence, sentence);
+    Assert.assertFalse("Issue with equals on null", sentence.equals(null));
+    Assert.assertFalse("Issue with equals on different object", sentence.equals(context));
   }
 }

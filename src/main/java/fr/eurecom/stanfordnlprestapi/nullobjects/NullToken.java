@@ -16,13 +16,13 @@
  */
 package fr.eurecom.stanfordnlprestapi.nullobjects;
 
+import fr.eurecom.stanfordnlprestapi.interfaces.Token;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.eurecom.stanfordnlprestapi.interfaces.Token;
 
 /**
  * Null object that represents a null token.
