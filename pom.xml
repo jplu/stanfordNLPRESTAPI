@@ -167,6 +167,7 @@
                                 <exclude>**/*Exception*</exclude>
                                 <exclude>**/NlpProcess*</exclude>
                                 <exclude>**/Null*</exclude>
+                                <exclude>**/*HealthCheck*</exclude>
                             </excludes>
                             <rules>
                                 <rule>
@@ -364,6 +365,18 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>

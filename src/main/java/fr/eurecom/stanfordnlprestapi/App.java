@@ -23,6 +23,7 @@ import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfiguration;
 
 import fr.eurecom.stanfordnlprestapi.core.StanfordNlp;
 
+import fr.eurecom.stanfordnlprestapi.healthchecks.ModelHealthCheck;
 import fr.eurecom.stanfordnlprestapi.resources.PipelineResource;
 
 import io.dropwizard.Application;
@@ -62,6 +63,11 @@ public class App extends Application<PipelineConfiguration> {
   public final void run(final PipelineConfiguration newT, final Environment newEnvironment)
       throws Exception {
     this.pipeline = new StanfordNlp(newT);
+
+    newEnvironment.healthChecks().register("pos model", new ModelHealthCheck(
+        newT.getPos().getModel()));
+    newEnvironment.healthChecks().register("ner model", new ModelHealthCheck(
+        newT.getNer().getModel()));
 
     newEnvironment.jersey().register(new PipelineResource(this.pipeline));
   }

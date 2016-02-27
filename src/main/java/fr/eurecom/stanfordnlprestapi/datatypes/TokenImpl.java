@@ -163,7 +163,7 @@ public class TokenImpl implements Token {
       return true;
     }
 
-    if ((obj == null) || (this.getClass() != obj.getClass())) {
+    if (obj == null || this.getClass() != obj.getClass()) {
       return false;
     }
 

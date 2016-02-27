@@ -189,7 +189,7 @@ public class StanfordNlp {
         type = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
 
         if (stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).indexOf(token)
-            == (stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).size() - 1)) {
+            == stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).size() - 1) {
           sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start,
               token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
         }
@@ -198,7 +198,7 @@ public class StanfordNlp {
         sb.append(token.get(CoreAnnotations.TextAnnotation.class));
 
         if (stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).indexOf(token)
-            == (stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).size() - 1)) {
+            == stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).size() - 1) {
           sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start,
               token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
         }

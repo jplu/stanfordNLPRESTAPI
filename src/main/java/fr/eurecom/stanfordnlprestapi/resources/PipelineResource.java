@@ -83,7 +83,7 @@ public class PipelineResource {
   @Path("/ner/")
   public final Response getNer(@QueryParam("text") final String text,
                                @QueryParam("format") @DefaultValue("turtle") final String format) {
-    if ((text == null)) {
+    if (text == null) {
       throw new WebApplicationException("Text parameter is not provided",
           Response.Status.PRECONDITION_FAILED);
     }
@@ -126,7 +126,7 @@ public class PipelineResource {
   @Path("/pos/")
   public final Response getPos(@QueryParam("text") final String text,
                                @QueryParam("format") @DefaultValue("turtle") final String format) {
-    if ((text == null)) {
+    if (text == null) {
       throw new WebApplicationException("Text parameter is not provided",
           Response.Status.PRECONDITION_FAILED);
     }
