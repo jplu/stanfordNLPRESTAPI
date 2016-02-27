@@ -24,6 +24,7 @@ import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 
 import java.util.Properties;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -72,21 +73,42 @@ public class PipelineResource {
   /**
    * The API call for a NER process.
    *
-   * @param rawRequest HTTP query
+   * @param text HTTP query
    *
    * @return The corresponding response of the query
    */
   @GET
   @Timed
-  @Produces("text/turtle; charset=utf-8")
+  @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
   @Path("/ner/")
-  public final Response getNer(@QueryParam("q") final String rawRequest) {
-    if ((rawRequest == null) || rawRequest.isEmpty()) {
-      throw new WebApplicationException("Empty request", Response.Status.PRECONDITION_FAILED);
+  public final Response getNer(@QueryParam("text") final String text,
+                               @QueryParam("format") @DefaultValue("turtle") final String format) {
+    if ((text == null)) {
+      throw new WebApplicationException("Text parameter is not provided",
+          Response.Status.PRECONDITION_FAILED);
     }
 
-    final String res = this.pipeline.run(rawRequest).rdfString("stanfordnlp",
-        RDFFormat.TURTLE_PRETTY, NlpProcess.NER);
+    if (text.isEmpty()) {
+      throw new WebApplicationException("Text parameter is empty",
+          Response.Status.PRECONDITION_FAILED);
+    }
+
+    if (!"jsonld".equals(format) && !"turtle".equals(format) && !format.isEmpty()) {
+      throw new WebApplicationException("Format parameter " + format + " does not exists",
+          Response.Status.PRECONDITION_FAILED);
+    }
+
+    String res = "";
+
+    if ("turtle".equals(format) || format.isEmpty()) {
+      res = this.pipeline.run(text).rdfString("stanfordnlp",
+          RDFFormat.TURTLE_PRETTY, NlpProcess.NER);
+    }
+
+    if ("jsonld".equals(format)) {
+      res = this.pipeline.run(text).rdfString("stanfordnlp",
+          RDFFormat.JSONLD_PRETTY, NlpProcess.NER);
+    }
 
     return Response.ok(res).build();
   }
@@ -94,21 +116,42 @@ public class PipelineResource {
   /**
    * The API call for a POS process.
    *
-   * @param rawRequest HTTP query
+   * @param text HTTP query
    *
    * @return The corresponding response of the query
    */
   @GET
   @Timed
-  @Produces("text/turtle; charset=utf-8")
+  @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
   @Path("/pos/")
-  public final Response getPos(@QueryParam("q") final String rawRequest) {
-    if ((rawRequest == null) || rawRequest.isEmpty()) {
-      throw new WebApplicationException("Empty request", Response.Status.PRECONDITION_FAILED);
+  public final Response getPos(@QueryParam("text") final String text,
+                               @QueryParam("format") @DefaultValue("turtle") final String format) {
+    if ((text == null)) {
+      throw new WebApplicationException("Text parameter is not provided",
+          Response.Status.PRECONDITION_FAILED);
     }
 
-    final String res = this.pipeline.run(rawRequest).rdfString("stanfordnlp",
-        RDFFormat.TURTLE_PRETTY, NlpProcess.POS);
+    if (text.isEmpty()) {
+      throw new WebApplicationException("Text parameter is empty",
+          Response.Status.PRECONDITION_FAILED);
+    }
+
+    if (!"jsonld".equals(format) && !"turtle".equals(format) && !format.isEmpty()) {
+      throw new WebApplicationException("Format parameter " + format + " does not exists",
+          Response.Status.PRECONDITION_FAILED);
+    }
+
+    String res = "";
+
+    if ("turtle".equals(format) || format.isEmpty()) {
+      res = this.pipeline.run(text).rdfString("stanfordnlp",
+          RDFFormat.TURTLE_PRETTY, NlpProcess.POS);
+    }
+
+    if ("jsonld".equals(format)) {
+      res = this.pipeline.run(text).rdfString("stanfordnlp",
+          RDFFormat.JSONLD_PRETTY, NlpProcess.POS);
+    }
 
     return Response.ok(res).build();
   }

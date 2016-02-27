@@ -60,19 +60,32 @@ public class NerCommand<T extends PipelineConfiguration> extends ConfiguredComma
         .type(String.class)
         .required(true)
         .help("text to analyse");
+    subparser.addArgument("-f")
+        .dest("format")
+        .type(String.class)
+        .required(false)
+        .help("turtle or jsonld");
   }
 
   @Override
   protected final void run(final Bootstrap<T> newBootstrap, final Namespace
       newNamespace, final T newT) throws Exception {
     NerCommand.LOGGER.info("NER analysis on \"{}\" :", newNamespace.getString("text"));
-    NerCommand.LOGGER.info("POS analysis uses \"{}\" as configuration file", newNamespace.getString(
+    NerCommand.LOGGER.info("NER analysis uses \"{}\" as configuration file", newNamespace.getString(
         "file"));
 
     this.pipeline = new StanfordNlp(newT);
 
-    NerCommand.LOGGER.info(this.pipeline.run(newNamespace.getString("text")).rdfString(
-        "stanfordnlp", RDFFormat.TURTLE_PRETTY, NlpProcess.NER));
+    if (newNamespace.get("format") == null || "turtle".equals(newNamespace.get("format"))
+        || !"jsonld".equals(newNamespace.get("format"))) {
+      NerCommand.LOGGER.info(this.pipeline.run(newNamespace.getString("text")).rdfString(
+          "stanfordnlp", RDFFormat.TURTLE_PRETTY, NlpProcess.NER));
+    }
+
+    if ("jsonld".equals(newNamespace.get("format"))) {
+      NerCommand.LOGGER.info(this.pipeline.run(newNamespace.getString("text")).rdfString(
+          "stanfordnlp", RDFFormat.JSONLD_PRETTY, NlpProcess.NER));
+    }
   }
 
   @Override

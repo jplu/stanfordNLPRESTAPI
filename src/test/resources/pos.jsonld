@@ -1,0 +1,521 @@
+{
+  "@context": {
+    "local": "http://127.0.0.1/stanfordnlp#",
+    "nif": "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "local:char=0,40",
+      "@type": [
+        "nif:RFC5147String",
+        "nif:String",
+        "nif:Sentence"
+      ],
+      "nif:anchorOf": "My favorite actress is: Natalie Portman.",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "0"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "40"
+      },
+      "nif:firstToken": {
+        "@id": "local:char=0,2"
+      },
+      "nif:lastToken": {
+        "@id": "local:char=39,40"
+      },
+      "nif:nextSentence": {
+        "@id": "local:char=41,62"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:word": [
+        {
+          "@id": "local:char=20,22"
+        },
+        {
+          "@id": "local:char=22,23"
+        },
+        {
+          "@id": "local:char=0,2"
+        },
+        {
+          "@id": "local:char=24,31"
+        },
+        {
+          "@id": "local:char=3,11"
+        },
+        {
+          "@id": "local:char=39,40"
+        },
+        {
+          "@id": "local:char=12,19"
+        },
+        {
+          "@id": "local:char=32,39"
+        }
+      ]
+    },
+    {
+      "@id": "local:char=0,2",
+      "@type": [
+        "nif:String",
+        "nif:RFC5147String",
+        "nif:Word"
+      ],
+      "nif:anchorOf": "My",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "0"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "2"
+      },
+      "nif:lemma": "my",
+      "nif:nextWord": {
+        "@id": "local:char=3,11"
+      },
+      "nif:posTag": "PRP$",
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=0,40"
+      }
+    },
+    {
+      "@id": "local:char=32,39",
+      "@type": [
+        "nif:String",
+        "nif:RFC5147String",
+        "nif:Word"
+      ],
+      "nif:anchorOf": "Portman",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "32"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "39"
+      },
+      "nif:lemma": "Portman",
+      "nif:nextWord": {
+        "@id": "local:char=39,40"
+      },
+      "nif:posTag": "NNP",
+      "nif:previousWord": {
+        "@id": "local:char=24,31"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=0,40"
+      }
+    },
+    {
+      "@id": "local:char=53,61",
+      "@type": [
+        "nif:RFC5147String",
+        "nif:String",
+        "nif:Word"
+      ],
+      "nif:anchorOf": "stunning",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "53"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "61"
+      },
+      "nif:lemma": "stunning",
+      "nif:nextWord": {
+        "@id": "local:char=61,62"
+      },
+      "nif:posTag": "JJ",
+      "nif:previousWord": {
+        "@id": "local:char=48,52"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=41,62"
+      }
+    },
+    {
+      "@id": "local:char=24,31",
+      "@type": [
+        "nif:RFC5147String",
+        "nif:String",
+        "nif:Word"
+      ],
+      "nif:anchorOf": "Natalie",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "24"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "31"
+      },
+      "nif:lemma": "Natalie",
+      "nif:nextWord": {
+        "@id": "local:char=32,39"
+      },
+      "nif:posTag": "NNP",
+      "nif:previousWord": {
+        "@id": "local:char=22,23"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=0,40"
+      }
+    },
+    {
+      "@id": "local:char=41,62",
+      "@type": [
+        "nif:String",
+        "nif:RFC5147String",
+        "nif:Sentence"
+      ],
+      "nif:anchorOf": "She is very stunning.",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "41"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "62"
+      },
+      "nif:firstToken": {
+        "@id": "local:char=41,44"
+      },
+      "nif:lastToken": {
+        "@id": "local:char=61,62"
+      },
+      "nif:previousSentence": {
+        "@id": "local:char=0,40"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:word": [
+        {
+          "@id": "local:char=41,44"
+        },
+        {
+          "@id": "local:char=61,62"
+        },
+        {
+          "@id": "local:char=48,52"
+        },
+        {
+          "@id": "local:char=53,61"
+        },
+        {
+          "@id": "local:char=45,47"
+        }
+      ]
+    },
+    {
+      "@id": "local:char=3,11",
+      "@type": [
+        "nif:Word",
+        "nif:String",
+        "nif:RFC5147String"
+      ],
+      "nif:anchorOf": "favorite",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "3"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "11"
+      },
+      "nif:lemma": "favorite",
+      "nif:nextWord": {
+        "@id": "local:char=12,19"
+      },
+      "nif:posTag": "JJ",
+      "nif:previousWord": {
+        "@id": "local:char=0,2"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=0,40"
+      }
+    },
+    {
+      "@id": "local:char=48,52",
+      "@type": [
+        "nif:String",
+        "nif:RFC5147String",
+        "nif:Word"
+      ],
+      "nif:anchorOf": "very",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "48"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "52"
+      },
+      "nif:lemma": "very",
+      "nif:nextWord": {
+        "@id": "local:char=53,61"
+      },
+      "nif:posTag": "RB",
+      "nif:previousWord": {
+        "@id": "local:char=45,47"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=41,62"
+      }
+    },
+    {
+      "@id": "local:char=22,23",
+      "@type": [
+        "nif:RFC5147String",
+        "nif:Word",
+        "nif:String"
+      ],
+      "nif:anchorOf": ":",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "22"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "23"
+      },
+      "nif:lemma": ":",
+      "nif:nextWord": {
+        "@id": "local:char=24,31"
+      },
+      "nif:posTag": ":",
+      "nif:previousWord": {
+        "@id": "local:char=20,22"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=0,40"
+      }
+    },
+    {
+      "@id": "local:char=20,22",
+      "@type": [
+        "nif:Word",
+        "nif:RFC5147String",
+        "nif:String"
+      ],
+      "nif:anchorOf": "is",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "20"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "22"
+      },
+      "nif:lemma": "be",
+      "nif:nextWord": {
+        "@id": "local:char=22,23"
+      },
+      "nif:posTag": "VBZ",
+      "nif:previousWord": {
+        "@id": "local:char=12,19"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=0,40"
+      }
+    },
+    {
+      "@id": "local:char=41,44",
+      "@type": [
+        "nif:String",
+        "nif:Word",
+        "nif:RFC5147String"
+      ],
+      "nif:anchorOf": "She",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "41"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "44"
+      },
+      "nif:lemma": "she",
+      "nif:nextWord": {
+        "@id": "local:char=45,47"
+      },
+      "nif:posTag": "PRP",
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=41,62"
+      }
+    },
+    {
+      "@id": "local:char=39,40",
+      "@type": [
+        "nif:Word",
+        "nif:String",
+        "nif:RFC5147String"
+      ],
+      "nif:anchorOf": ".",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "39"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "40"
+      },
+      "nif:lemma": ".",
+      "nif:posTag": ".",
+      "nif:previousWord": {
+        "@id": "local:char=32,39"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=0,40"
+      }
+    },
+    {
+      "@id": "local:char=61,62",
+      "@type": [
+        "nif:String",
+        "nif:RFC5147String",
+        "nif:Word"
+      ],
+      "nif:anchorOf": ".",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "61"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "62"
+      },
+      "nif:lemma": ".",
+      "nif:posTag": ".",
+      "nif:previousWord": {
+        "@id": "local:char=53,61"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=41,62"
+      }
+    },
+    {
+      "@id": "local:char=45,47",
+      "@type": [
+        "nif:String",
+        "nif:RFC5147String",
+        "nif:Word"
+      ],
+      "nif:anchorOf": "is",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "45"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "47"
+      },
+      "nif:lemma": "be",
+      "nif:nextWord": {
+        "@id": "local:char=48,52"
+      },
+      "nif:posTag": "VBZ",
+      "nif:previousWord": {
+        "@id": "local:char=41,44"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=41,62"
+      }
+    },
+    {
+      "@id": "local:char=12,19",
+      "@type": [
+        "nif:Word",
+        "nif:RFC5147String",
+        "nif:String"
+      ],
+      "nif:anchorOf": "actress",
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "12"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "19"
+      },
+      "nif:lemma": "actress",
+      "nif:nextWord": {
+        "@id": "local:char=20,22"
+      },
+      "nif:posTag": "NN",
+      "nif:previousWord": {
+        "@id": "local:char=3,11"
+      },
+      "nif:referenceContext": {
+        "@id": "local:char=0,62"
+      },
+      "nif:sentence": {
+        "@id": "local:char=0,40"
+      }
+    },
+    {
+      "@id": "local:char=0,62",
+      "@type": [
+        "nif:Context",
+        "nif:RFC5147String",
+        "nif:String"
+      ],
+      "nif:beginIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "0"
+      },
+      "nif:endIndex": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "62"
+      },
+      "nif:isString": "My favorite actress is: Natalie Portman. She is very stunning."
+    }
+  ]
+}
+

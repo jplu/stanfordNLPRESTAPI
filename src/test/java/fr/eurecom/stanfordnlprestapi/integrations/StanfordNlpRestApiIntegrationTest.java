@@ -73,8 +73,8 @@ public class StanfordNlpRestApiIntegrationTest {
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "ner.ttl"), Lang.TURTLE);
     RDFDataMgr.read(serviceModel, new ByteArrayInputStream(client.target(
-        String.format("http://localhost:%d/v1/ner", this.rule.getLocalPort())).queryParam("q", "My "
-            + "favorite actress is: Natalie Portman. She is very stunning.").request().get(
+        String.format("http://localhost:%d/v1/ner", this.rule.getLocalPort())).queryParam(
+        "text", "My favorite actress is: Natalie Portman. She is very stunning.").request().get(
             String.class).getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
 
     Assert.assertTrue("Answer given by the server is not valid for NER during integration test",
@@ -93,8 +93,8 @@ public class StanfordNlpRestApiIntegrationTest {
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "pos.ttl"), Lang.TURTLE);
     RDFDataMgr.read(serviceModel, new ByteArrayInputStream(client.target(
-        String.format("http://localhost:%d/v1/pos", this.rule.getLocalPort())).queryParam("q", "My "
-        + "favorite actress is: Natalie Portman. She is very stunning.").request().get(
+        String.format("http://localhost:%d/v1/pos", this.rule.getLocalPort())).queryParam(
+        "text", "My favorite actress is: Natalie Portman. She is very stunning.").request().get(
         String.class).getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
 
     Assert.assertTrue("Answer given by the server is not valid for POS during integration test",

@@ -27,6 +27,7 @@ import fr.eurecom.stanfordnlprestapi.resources.PipelineResource;
 
 import io.dropwizard.Application;
 
+import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -51,10 +52,10 @@ public class App extends Application<PipelineConfiguration> {
 
   @Override
   public final void initialize(final Bootstrap<PipelineConfiguration> bootstrap) {
-    //super.initialize(bootstrap);
+    super.initialize(bootstrap);
     // add pos and ner commands on cli
-    bootstrap.addCommand(new PosCommand());
-    bootstrap.addCommand(new NerCommand());
+    bootstrap.addCommand((Command) new PosCommand());
+    bootstrap.addCommand((Command) new NerCommand());
   }
 
   @Override

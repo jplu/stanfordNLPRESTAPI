@@ -60,6 +60,11 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
         .type(String.class)
         .required(true)
         .help("text to analyse");
+    subparser.addArgument("-f")
+        .dest("format")
+        .type(String.class)
+        .required(false)
+        .help("turtle or jsonld");
   }
 
   @Override
@@ -71,8 +76,16 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
 
     this.pipeline = new StanfordNlp(newT);
 
-    PosCommand.LOGGER.info(this.pipeline.run(newNamespace.getString("text")).rdfString(
-        "stanfordnlp", RDFFormat.TURTLE_PRETTY, NlpProcess.POS));
+    if (newNamespace.get("format") == null || "turtle".equals(newNamespace.get("format"))
+        || !"jsonld".equals(newNamespace.get("format"))) {
+      PosCommand.LOGGER.info(this.pipeline.run(newNamespace.getString("text")).rdfString(
+          "stanfordnlp", RDFFormat.TURTLE_PRETTY, NlpProcess.POS));
+    }
+
+    if ("jsonld".equals(newNamespace.get("format"))) {
+      PosCommand.LOGGER.info(this.pipeline.run(newNamespace.getString("text")).rdfString(
+          "stanfordnlp", RDFFormat.JSONLD_PRETTY, NlpProcess.POS));
+    }
   }
 
   @Override

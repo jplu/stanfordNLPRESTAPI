@@ -71,77 +71,133 @@ public class PipelineResourceTest {
   }
 
   /**
-   * Test the response provided by the {@link PipelineResource#getNer(String)} method.
+   * Test the response provided by the {@link PipelineResource#getNer(String, String)} method with
+   * Turtle format.
    */
   @Test
-  public final void testNerResponse() {
+  public final void testNerResponseTurtle() {
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model testModel = ModelFactory.createDefaultModel();
 
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "ner.ttl"), Lang.TURTLE);
+    RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.getNer("My "
+        + "favorite actress is: Natalie Portman. She is very stunning.", "").getEntity().toString()
+        .getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
 
-    testModel.read(new ByteArrayInputStream(PipelineResourceTest.resource.getNer("My favorite "
-        + "actress is: Natalie Portman. She is very stunning.").getEntity().toString().getBytes(
-        Charset.forName("UTF-8"))), null, "TTL");
-
-    Assert.assertTrue("Issue to get the proper full RDF model of a context for NER",
+    Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for NER",
         fileModel.isIsomorphicWith(testModel));
   }
 
   /**
-   * Test the response provided by the {@link PipelineResource#getPos(String)} method.
+   * Test the response provided by the {@link PipelineResource#getPos(String, String)} method with
+   * Turtle format.
    */
   @Test
-  public final void testPosResponse() {
+  public final void testPosResponseTurtle() {
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model testModel = ModelFactory.createDefaultModel();
 
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "pos.ttl"), Lang.TURTLE);
+    RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.getPos("My "
+        + "favorite actress is: Natalie Portman. She is very stunning.", "").getEntity().toString()
+        .getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
 
-    testModel.read(new ByteArrayInputStream(PipelineResourceTest.resource.getPos("My favorite "
-        + "actress is: Natalie Portman. She is very stunning.").getEntity().toString().getBytes(
-        Charset.forName("UTF-8"))), null, "TTL");
-
-    Assert.assertTrue("Issue to get the proper full RDF model of a context for POS",
+    Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for POS",
         fileModel.isIsomorphicWith(testModel));
   }
 
   /**
-   * Test the response provided by the {@link PipelineResource#getPos(String)} method with a null
-   * parameter.
+   * Test the response provided by the {@link PipelineResource#getNer(String, String)} method with
+   * JSON-LD format.
+   */
+  @Test
+  public final void testNerResponseJsonld() {
+    final Model fileModel = ModelFactory.createDefaultModel();
+    final Model testModel = ModelFactory.createDefaultModel();
+
+    RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
+        FileSystems.getDefault().getSeparator() + "ner.jsonld"), Lang.JSONLD);
+    RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.getNer("My "
+        + "favorite actress is: Natalie Portman. She is very stunning.", "jsonld").getEntity()
+        .toString().getBytes(Charset.forName("UTF-8"))), Lang.JSONLD);
+
+    Assert.assertTrue("Issue to get the proper full RDF JSON-LD model of a context for NER",
+        fileModel.isIsomorphicWith(testModel));
+  }
+
+  /**
+   * Test the response provided by the {@link PipelineResource#getPos(String, String)} method with
+   * JSON-LD format.
+   */
+  @Test
+  public final void testPosResponseJsonld() {
+    final Model fileModel = ModelFactory.createDefaultModel();
+    final Model testModel = ModelFactory.createDefaultModel();
+
+    RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
+        FileSystems.getDefault().getSeparator() + "pos.jsonld"), Lang.JSONLD);
+    RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.getPos("My "
+        + "favorite actress is: Natalie Portman. She is very stunning.", "jsonld").getEntity()
+        .toString().getBytes(Charset.forName("UTF-8"))), Lang.JSONLD);
+
+    Assert.assertTrue("Issue to get the proper full RDF JSON-LD model of a context for POS",
+        fileModel.isIsomorphicWith(testModel));
+  }
+
+  /**
+   * Test the response provided by the {@link PipelineResource#getNer(String, String)} method
+   * with a null parameter.
    */
   @Test(expected = WebApplicationException.class)
   public final void testNerResponseWithNull() {
-    PipelineResourceTest.resource.getNer(null);
+    PipelineResourceTest.resource.getNer(null, "");
   }
 
   /**
-   * Test the response provided by the {@link PipelineResource#getPos(String)} method with an empty
-   * string.
+   * Test the response provided by the {@link PipelineResource#getNer(String, String)} method with
+   * an empty string.
    */
   @Test(expected = WebApplicationException.class)
   public final void testNerResponseWithEmptyString() {
-    PipelineResourceTest.resource.getNer("");
+    PipelineResourceTest.resource.getNer("", "");
   }
 
   /**
-   * Test the response provided by the {@link PipelineResource#getPos(String)} method with a null
-   * parameter.
+   * Test the response provided by the {@link PipelineResource#getPos(String, String)} method
+   * with a null parameter.
    */
   @Test(expected = WebApplicationException.class)
   public final void testPosResponseWithNull() {
-    PipelineResourceTest.resource.getPos(null);
+    PipelineResourceTest.resource.getPos(null, "");
   }
 
   /**
-   * Test the response provided by the {@link PipelineResource#getPos(String)} method with an empty
-   * string.
+   * Test the response provided by the {@link PipelineResource#getNer(String, String)} method with
+   * invalid format.
+   */
+  @Test(expected = WebApplicationException.class)
+  public final void testNerResponseWithInvalidFormat() {
+    PipelineResourceTest.resource.getNer("coucou", "toto");
+  }
+
+  /**
+   * Test the response provided by the {@link PipelineResource#getPos(String, String)} method
+   * invalid format.
+   */
+  @Test(expected = WebApplicationException.class)
+  public final void testPosResponseWithInvalidFormat() {
+    PipelineResourceTest.resource.getPos("coucou", "toto");
+  }
+
+  /**
+   * Test the response provided by the {@link PipelineResource#getPos(String, String)} method with
+   * an empty string.
    */
   @Test(expected = WebApplicationException.class)
   public final void testPosResponseWithEmptyString() {
-    PipelineResourceTest.resource.getPos("");
+    PipelineResourceTest.resource.getPos("", "");
   }
 
   /**

@@ -62,7 +62,7 @@ public class PipelineEndpointTest {
         FileSystems.getDefault().getSeparator() + "ner.ttl"), Lang.TURTLE);
 
     RDFDataMgr.read(serviceModel, new ByteArrayInputStream(this.resources.client().target(
-        "/v1/ner").queryParam("q", "My favorite actress is: Natalie Portman. She is very "
+        "/v1/ner").queryParam("text", "My favorite actress is: Natalie Portman. She is very "
             + "stunning.").request().get(String.class).getBytes(Charset.forName("UTF-8"))),
         Lang.TURTLE);
 
@@ -82,7 +82,7 @@ public class PipelineEndpointTest {
         FileSystems.getDefault().getSeparator() + "pos.ttl"), Lang.TURTLE);
 
     RDFDataMgr.read(serviceModel, new ByteArrayInputStream(this.resources.client().target(
-        "/v1/pos").queryParam("q", "My favorite actress is: Natalie Portman. She is very "
+        "/v1/pos").queryParam("text", "My favorite actress is: Natalie Portman. She is very "
             + "stunning.").request().get(String.class).getBytes(Charset.forName("UTF-8"))),
         Lang.TURTLE);
 
