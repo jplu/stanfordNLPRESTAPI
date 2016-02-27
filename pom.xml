@@ -378,6 +378,14 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>4.1.0</version>
+                <configuration>
+                    <repoToken>v3LfCY9mGXQfG4jzOrvXib7TBrdFeeN6u</repoToken>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
