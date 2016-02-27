@@ -1,9 +1,24 @@
 language: java
 jdk:
-- oraclejdk8
+  - oraclejdk8
+
+before_install:
+  - wget http://mirrors.ircam.fr/pub/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+  - tar xzvf apache-maven-3.3.9-bin.tar.gz
+  - chmod +x apache-maven-3.3.9/bin/mvn
+  - export M2_HOME=$PWD/apache-maven-3.3.9
+  - export PATH=$PWD/apache-maven-3.3.9/bin:${PATH}
+  - hash -r
+
+before_script:
+  - export M2_HOME=$PWD/apache-maven-3.3.9
+  - export PATH=$PWD/apache-maven-3.3.9/bin:${PATH}
+  - hash -r
+
+script: mvn -U clean package
 
 after_success:
-- mvn clean verify -P integration-test
-- mvn clean test jacoco:report coveralls:report
+  - mvn verify -P integration-test
+  - mvn coveralls:report
 
 sudo: false
