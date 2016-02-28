@@ -7,6 +7,6 @@ script: mvn test -Denforcer.skip=true -B
 
 after_success:
   - mvn verify -P integration-test -Denforcer.skip=true
-  - mvn jacoco:report coveralls:report -Denforcer.skip=true
+  - mvn clean verify coveralls:report -Denforcer.skip=true
 
 sudo: false
