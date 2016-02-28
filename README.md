@@ -28,7 +28,7 @@ optional arguments:
 ```
 
 As you can see there is two way to use this wrapper: via a REST API or via CLI.
-The output is in **text/turtle** or **application/json** format on both CLI and Web Service modes
+The output is in RDF Turtle or JSON-LD format on both CLI and Web Service modes
 
 ## CLI
 
@@ -90,6 +90,8 @@ optional arguments:
   -h, --help             show this help message and exit
 ```
 
+The format in the HTTP header are respectively **text/turtle** for RDF Turtle or **application/json** for RDF JSON-LD.
+
 ## Configuration :
 
 The CLI commands and the Web service use the same configuration file (*conf/config.yaml*):
@@ -116,8 +118,7 @@ server:
 
 # How to contribute
 
-In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/master/README.md)
-file.
+In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/develop/CONTRIBUTING.md) file.
 
 # Opening an issue
 
