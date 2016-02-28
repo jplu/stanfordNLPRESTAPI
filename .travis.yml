@@ -2,10 +2,11 @@ language: java
 jdk:
   - oraclejdk8
 
-install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V -o
+script: mvn test -Denforcer.skip=true -B
 
 after_success:
-  - mvn clean verify -P integration-test
-  - mvn clean test jacoco:report coveralls:report
+  - mvn verify -P integration-test -Denforcer.skip=true
+  - mvn jacoco:report coveralls:report -Denforcer.skip=true
 
 sudo: false
