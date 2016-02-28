@@ -384,6 +384,9 @@
                 <version>4.1.0</version>
                 <configuration>
                     <repoToken>v3LfCY9mGXQfG4jzOrvXib7TBrdFeeN6u</repoToken>
+                    <jacocoReports>
+                        <param>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml</param>
+                    </jacocoReports>
                 </configuration>
             </plugin>
         </plugins>
