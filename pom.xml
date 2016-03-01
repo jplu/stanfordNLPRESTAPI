@@ -389,6 +389,9 @@
                 <artifactId>jgitflow-maven-plugin</artifactId>
                 <version>1.0-m5.1</version>
                 <configuration>
+                    <pushFeatures>true</pushFeatures>
+                    <pushHotfixes>true</pushHotfixes>
+                    <pushReleases>true</pushReleases>
                     <noDeploy>true</noDeploy>
                 </configuration>
             </plugin>
