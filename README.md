@@ -12,10 +12,44 @@ to get results in NIF format. The REST API is created via [Dropwizard](http://ww
 
 Java 1.8 and Maven 3.0.3 minimum.
 
+# Maven
+
+This section is about how to use maven to compile and execute the tests.
+
+## Compilation
+
+To compile StanfordNLPRESTAPI, use the following Maven command:
+
+```
+mvn -U clean package
+```
+
+The fat JAR will be available in the *target* directory.
+
+## Tests
+
+To run the unit tests, use the following Maven command:
+
+```
+mvn clean test
+```
+
+To run the integration tests, use the following Maven command:
+
+```
+mvn clean verify -P integration-test
+```
+
+To run the integration and the unit tests in same time, use the following Maven command:
+
+```
+mvn clean verify -P all-tests
+```
+
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.0.0-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-1.0.1.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -27,19 +61,19 @@ optional arguments:
   -v, --version          show the application version and exit
 ```
 
-As you can see there is two way to use this wrapper: via a REST API or via CLI.
-The output is in RDF Turtle or JSON-LD format on both CLI and Web Service modes
+There is two ways to use this wrapper: via a REST API or via CLI. The output is in RDF Turtle or 
+JSON-LD format on both CLI and Web Service modes
 
 ## CLI
 
-The first way is via CLI there is two possible sub-commands, **ner** and **pos**.
+The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 
 ### NER
 
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.0.0-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-1.0.1.jar
        ner -t TEXT [-f FORMAT] [-h] [file]
 
 NER command on text
@@ -58,7 +92,7 @@ optional arguments:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.0.0-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-1.0.1.jar
        pos -t TEXT [-f FORMAT] [-h] [file]
 
 POS command on text
@@ -73,12 +107,12 @@ optional arguments:
 
 ```
 
-## Web Service :
+## Web Service
 
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1..00-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-1.0.1.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -92,7 +126,23 @@ optional arguments:
 
 The format in the HTTP header are respectively **text/turtle** for RDF Turtle or **application/json** for RDF JSON-LD.
 
-## Configuration :
+## Docker
+
+It is possible to deploy StanfordNLPRESTAPI as a container via Docker. First, be sure to have
+compiled StanfordNLPRESTAPI. Next, for deploying the app as a container you have to build the 
+Docker image:
+
+```
+docker build -t jplu/stanford-nlp-rest-api:1.0.1 .
+```
+
+Once the image is built, it is possible to run it:
+
+```
+docker run -it -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.0.1
+```
+
+## Configuration
 
 The CLI commands and the Web service use the same configuration file (*conf/config.yaml*):
 
@@ -116,6 +166,7 @@ server:
       port: 7001
 ```
 
+
 # How to contribute
 
 In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/develop/CONTRIBUTING.md) file.
@@ -134,13 +185,14 @@ only one, so others will find your issue helpful, too. To open an issue:
 
 # Team
 
-**Owner**: Julien Plu (@jplu)
+**Owner**: Julien Plu ([@jplu](https://github.com/jplu))
 
 **Maintainers and Collaborators**:
-* Julien Plu (main contact) (@jplu)
-* Olivier Varene (@ovarene)
-* Giuseppe Rizzo (@giusepperizzo)
-* Raphaël Troncy (@rtroncy)
+
+* Julien Plu (main contact) ([@jplu](https://github.com/jplu))
+* Olivier Varene ([@ovarene](https://github.com/ovarene))
+* Giuseppe Rizzo ([@giusepperizzo](https://github.com/giuesepperizzo))
+* Raphaël Troncy ([@rtroncy](https://github.com/rtroncy))
 
 # License
 
