@@ -40,8 +40,34 @@ ner:
 
 logging:
   level: INFO
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+    - type: file
+      currentLogFilename: /logs/stanford.log
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: /logs/stanford-%d.log
+      archivedFileCount: 5
+      timeZone: UTC
 
 server:
+  requestLog:
+    enabled: true
+    appenders:
+        - type: console
+          threshold: ALL
+          timeZone: UTC
+          target: stdout
+        - type: file
+          currentLogFilename: /logs/stanford-queries.log
+          threshold: ALL
+          archive: true
+          archivedLogFilenamePattern: /logs/stanford-queries-%d.log
+          archivedFileCount: 5
+          timeZone: UTC
   applicationConnectors:
     - type: http
       port: 7000
