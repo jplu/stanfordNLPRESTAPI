@@ -16,7 +16,9 @@
  */
 package fr.eurecom.stanfordnlprestapi.resources;
 
+import fr.eurecom.stanfordnlprestapi.configurations.CorefConfiguration;
 import fr.eurecom.stanfordnlprestapi.configurations.NerConfiguration;
+import fr.eurecom.stanfordnlprestapi.configurations.ParseConfiguration;
 import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfiguration;
 import fr.eurecom.stanfordnlprestapi.configurations.PosConfiguration;
 
@@ -59,11 +61,17 @@ public class PipelineResourceTest {
 
     pipeline.setNer(new NerConfiguration());
     pipeline.setPos(new PosConfiguration());
+    pipeline.setParse(new ParseConfiguration());
+    pipeline.setCoref(new CorefConfiguration());
     pipeline.getNer().setApplyNumericClassifiers(false);
     pipeline.getNer().setUseSuTime(false);
-    pipeline.getNer().setModel("edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz");
-    pipeline.getPos().setModel("edu/stanford/nlp/models/pos-tagger/english-left3words/"
-        + "english-left3words-distsim.tagger");
+    pipeline.getNer().setModel(
+        "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
+    pipeline.getPos().setModel("models/english-bidirectional-distsim.tagger");
+    pipeline.getParse().setModel("models/englishRNN.ser.gz");
+    pipeline.getCoref().setDoClustering(true);
+    pipeline.getCoref().setMdType("rule");
+    pipeline.getCoref().setMode("statistical");
 
     final StanfordNlp stanford = new StanfordNlp(pipeline);
 

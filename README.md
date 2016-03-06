@@ -217,7 +217,7 @@ only one, so others will find your issue helpful, too. To open an issue:
 
 * Julien Plu (main contact) ([@jplu](https://github.com/jplu))
 * Olivier Varene ([@ovarene](https://github.com/ovarene))
-* Giuseppe Rizzo ([@giusepperizzo](https://github.com/giuesepperizzo))
+* Giuseppe Rizzo ([@giusepperizzo](https://github.com/giusepperizzo))
 * Raphaël Troncy ([@rtroncy](https://github.com/rtroncy))
 
 # License
