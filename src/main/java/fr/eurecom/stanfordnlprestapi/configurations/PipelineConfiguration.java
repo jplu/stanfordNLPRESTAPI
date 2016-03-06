@@ -37,8 +37,22 @@ public class PipelineConfiguration extends Configuration {
   @JsonProperty
   @NotNull
   private NerConfiguration ner;
+  @JsonProperty
+  @NotNull
+  private ParseConfiguration parse;
+  @JsonProperty
+  @NotNull
+  private CorefConfiguration coref;
 
   public PipelineConfiguration() {
+  }
+
+  public final ParseConfiguration getParse() {
+    return this.parse;
+  }
+
+  public final void setParse(final ParseConfiguration newParse) {
+    this.parse = newParse;
   }
 
   public final PosConfiguration getPos() {
@@ -57,11 +71,21 @@ public class PipelineConfiguration extends Configuration {
     this.ner = newNer;
   }
 
+  public final CorefConfiguration getCoref() {
+    return this.coref;
+  }
+
+  public final void setCoref(final CorefConfiguration newCoref) {
+    this.coref = newCoref;
+  }
+
   @Override
   public final String toString() {
     return "PipelineConfiguration{"
         + "pos=" + this.pos
         + ", ner=" + this.ner
+        + ", parse=" + this.parse
+        + ", parse=" + this.coref
         + '}';
   }
 }

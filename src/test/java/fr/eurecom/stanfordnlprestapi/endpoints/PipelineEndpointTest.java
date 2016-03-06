@@ -45,7 +45,7 @@ public class PipelineEndpointTest {
   static final Logger LOGGER = LoggerFactory.getLogger(PipelineEndpointTest.class);
   @Rule
   public ResourceTestRule resources = ResourceTestRule.builder().addResource(
-      new PipelineResource("tokenize, ssplit, pos, lemma, ner, parse, dcoref")).build();
+      new PipelineResource("tokenize, ssplit, pos, lemma, ner, parse, mention, coref")).build();
 
   public PipelineEndpointTest() {
   }

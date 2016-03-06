@@ -41,13 +41,65 @@
     <artifactId>stanfordNLPRESTAPI</artifactId>
     <name>StanfordNLPRESTAPI</name>
     <version>1.1.0-SNAPSHOT</version>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skip.integration.tests>true</skip.integration.tests>
         <skip.unit.tests>false</skip.unit.tests>
-        <docker.registry.name></docker.registry.name>
-        <docker.repository.name>${docker.registry.name}jplu/${project.artifactId}</docker.repository.name>
+        <docker.registry.name/>
+        <docker.repository.name>${docker.registry.name}jplu/stanford-nlp-rest-api</docker.repository.name>
     </properties>
+
+    <licenses>
+        <license>
+            <name>GPL v3</name>
+            <url>https://www.gnu.org/licenses/gpl.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>jplu</id>
+            <name>Julien Plu</name>
+            <email>julien.plu@eurecom.fr</email>
+            <url>http://jplu.github.io</url>
+            <organization>Eurecom</organization>
+            <organizationUrl>http://www.eurecom.fr</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>ovarene</id>
+            <name>Olivier Varene</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>giusepperizzo</id>
+            <name>Giuseppe Rizzo</name>
+            <email>giuse.rizzo@gmail.com</email>
+            <url>http://www.eurecom.fr/~rizzo</url>
+            <organization>ISMB</organization>
+            <organizationUrl>http://www.ismb.it</organizationUrl>
+            <roles>
+                <role>collaborator</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>rtroncy</id>
+            <name>Raphaël Troncy</name>
+            <email>raphael.troncy@eurecom.fr</email>
+            <url>http://www.eurecom.fr/~troncy/</url>
+            <organization>Eurecom</organization>
+            <organizationUrl>http://www.eurecom.fr</organizationUrl>
+            <roles>
+                <role>collaborator</role>
+            </roles>
+        </developer>
+    </developers>
+
     <profiles>
         <profile>
             <id>all-tests</id>

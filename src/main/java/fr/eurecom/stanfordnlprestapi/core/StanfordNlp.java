@@ -59,6 +59,8 @@ public class StanfordNlp {
    * @param props properties to configure the pipeline.
    */
   public StanfordNlp(final Properties props) {
+    StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", props);
+
     this.pipeline = new StanfordCoreNLP(props);
   }
 
@@ -70,14 +72,18 @@ public class StanfordNlp {
   public StanfordNlp(final PipelineConfiguration conf) {
     final Properties props = new Properties();
 
-    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
     props.setProperty("pos.model", conf.getPos().getModel());
     props.setProperty("ner.model", conf.getNer().getModel());
     props.setProperty("ner.useSUTime", Boolean.toString(conf.getNer().getUseSuTime()));
     props.setProperty("ner.applyNumericClassifiers", Boolean.toString(
         conf.getNer().getApplyNumericClassifiers()));
+    props.setProperty("parse.model", conf.getParse().getModel());
+    props.setProperty("coref.doClustering", Boolean.toString(conf.getCoref().getDoClustering()));
+    props.setProperty("coref.md.type", conf.getCoref().getMdType());
+    props.setProperty("coref.mode", conf.getCoref().getMode());
 
-    StanfordNlp.LOGGER.info("Run Stanford core NLP with: " + props);
+    StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", props);
 
     this.pipeline = new StanfordCoreNLP(props);
   }

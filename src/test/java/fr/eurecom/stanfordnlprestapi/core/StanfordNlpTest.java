@@ -62,7 +62,16 @@ public class StanfordNlpTest {
   public static void setUpBeforeClass() {
     final Properties props = new Properties();
 
-    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
+    props.setProperty("pos.model", "models/english-bidirectional-distsim.tagger");
+    props.setProperty("ner.model",
+        "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
+    props.setProperty("ner.useSUTime", "false");
+    props.setProperty("ner.applyNumericClassifiers", "false");
+    props.setProperty("parse.model", "models/englishRNN.ser.gz");
+    props.setProperty("coref.doClustering", "true");
+    props.setProperty("coref.md.type", "rule");
+    props.setProperty("coref.mode", "statistical");
 
     StanfordNlpTest.stanfordNlp = new StanfordNlp(props);
   }
