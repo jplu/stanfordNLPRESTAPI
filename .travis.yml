@@ -1,12 +1,13 @@
+sudo: required
 language: java
 jdk:
 - oraclejdk8
 before_install:
-  - echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
+  - echo "MAVEN_OPTS='-Xmx7g'" > ~/.mavenrc
   - echo $JAVA_OPTS
-  - export JAVA_OPTS=-Xmx2g
+  - export JAVA_OPTS=-Xmx7g
   - echo $JAVA_OPTS
-install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -Dcheckstyle.skip=true -B -V -X -e
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V
 script: mvn test -Denforcer.skip=true -B
 after_success:
 - mvn verify -P integration-test -Denforcer.skip=true
