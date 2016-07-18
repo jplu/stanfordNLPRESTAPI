@@ -3,6 +3,9 @@ jdk:
 - oraclejdk8
 before_install:
   - echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
+  - echo $JAVA_OPTS
+  - export JAVA_OPTS=-Xmx2g
+  - echo $JAVA_OPTS
 install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V
 script: mvn test -Denforcer.skip=true -B
 after_success:
