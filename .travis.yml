@@ -6,7 +6,7 @@ before_install:
   - echo $JAVA_OPTS
   - export JAVA_OPTS=-Xmx2g
   - echo $JAVA_OPTS
-install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V -X -e
 script: mvn test -Denforcer.skip=true -B
 after_success:
 - mvn verify -P integration-test -Denforcer.skip=true
