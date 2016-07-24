@@ -49,7 +49,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.1-SNAPSHOT.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -73,7 +73,7 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.1-SNAPSHOT.jar
        ner -t TEXT [-f FORMAT] [-h] [file]
 
 NER command on text
@@ -92,7 +92,7 @@ optional arguments:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.1-SNAPSHOT.jar
        pos -t TEXT [-f FORMAT] [-h] [file]
 
 POS command on text
@@ -112,7 +112,7 @@ optional arguments:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.1-SNAPSHOT.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -139,7 +139,7 @@ mvn docker:build
 Once the image is built, it is possible to run it:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.0
+docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.1-SNAPSHOT
 ```
 
 ## Configuration
