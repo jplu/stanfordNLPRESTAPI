@@ -10,7 +10,7 @@ to get results in NIF format. The REST API is created via [Dropwizard](http://ww
 
 # Requirements
 
-Java 1.8 and Maven 3.0.3 minimum.
+Java 1.8 and Maven 3.0.3 minimum. Docker is optional.
 
 # Maven
 
@@ -49,7 +49,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -73,7 +73,7 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
        ner -t TEXT [-f FORMAT] [-h] [file]
 
 NER command on text
@@ -92,7 +92,7 @@ optional arguments:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
        pos -t TEXT [-f FORMAT] [-h] [file]
 
 POS command on text
@@ -112,7 +112,7 @@ optional arguments:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -133,13 +133,13 @@ compiled StanfordNLPRESTAPI. Next, for deploying the app as a container you have
 Docker image:
 
 ```
-docker build -t jplu/stanford-nlp-rest-api:1.0.1 .
+mvn docker:build
 ```
 
 Once the image is built, it is possible to run it:
 
 ```
-docker run -it -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.0.1
+docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.0
 ```
 
 ## Configuration
@@ -148,16 +148,48 @@ The CLI commands and the Web service use the same configuration file (*conf/conf
 
 ```yaml
 pos:
-  model: "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger"
+  model: "models/english-bidirectional-distsim.tagger"
 ner:
   model: "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz"
   useSuTime: false
   applyNumericClassifiers: false
+parse:
+  model: "models/englishRNN.ser.gz"
+coref:
+  md.type: "rule"
+  mode: "statistical"
+  doClustering: "true"
 
 logging:
   level: INFO
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+    - type: file
+      currentLogFilename: /logs/stanford.log
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: /logs/stanford-%d.log
+      archivedFileCount: 5
+      timeZone: UTC
 
 server:
+  requestLog:
+    enabled: true
+    appenders:
+        - type: console
+          threshold: ALL
+          timeZone: UTC
+          target: stdout
+        - type: file
+          currentLogFilename: /logs/stanford-queries.log
+          threshold: ALL
+          archive: true
+          archivedLogFilenamePattern: /logs/stanford-queries-%d.log
+          archivedFileCount: 5
+          timeZone: UTC
   applicationConnectors:
     - type: http
       port: 7000
@@ -191,7 +223,7 @@ only one, so others will find your issue helpful, too. To open an issue:
 
 * Julien Plu (main contact) ([@jplu](https://github.com/jplu))
 * Olivier Varene ([@ovarene](https://github.com/ovarene))
-* Giuseppe Rizzo ([@giusepperizzo](https://github.com/giuesepperizzo))
+* Giuseppe Rizzo ([@giusepperizzo](https://github.com/giusepperizzo))
 * Raphaël Troncy ([@rtroncy](https://github.com/rtroncy))
 
 # License

@@ -15,33 +15,49 @@
 # along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-#
-# This file is part of StanfordNLPRESTAPI.
-#
-# StanfordNLPRESTAPI is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# StanfordNLPRESTAPI is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
-#
 pos:
-  model: "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger"
+  model: "models/english-bidirectional-distsim.tagger"
 ner:
   model: "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz"
   useSuTime: false
   applyNumericClassifiers: false
+parse:
+  model: "models/englishRNN.ser.gz"
+coref:
+  md.type: "rule"
+  mode: "statistical"
+  doClustering: "true"
 
 logging:
   level: INFO
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+    - type: file
+      currentLogFilename: /logs/stanford.log
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: /logs/stanford-%d.log
+      archivedFileCount: 5
+      timeZone: UTC
 
 server:
+  requestLog:
+    enabled: true
+    appenders:
+        - type: console
+          threshold: ALL
+          timeZone: UTC
+          target: stdout
+        - type: file
+          currentLogFilename: /logs/stanford-queries.log
+          threshold: ALL
+          archive: true
+          archivedLogFilenamePattern: /logs/stanford-queries-%d.log
+          archivedFileCount: 5
+          timeZone: UTC
   applicationConnectors:
     - type: http
       port: 7000

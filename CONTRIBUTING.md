@@ -44,10 +44,6 @@ Feature branch must reflect Github issue number and have meaningful name.
 
 ```mvn jgitflow:feature-start```
 
-Push feature branch into remote repository.
-
-```git push origin feature/name```
-
 ### Work on feature branch
 
 ```
@@ -86,13 +82,6 @@ Finish the feature.
 mvn jgitflow:feature-finish
 ```
 
-Push changes from develop into remote repository.
-
-``
-git push origin develop
-git push origin :feature/name
-```
-
 ### Hotfix
 
 ### Create new hotfix branch
@@ -100,10 +89,6 @@ git push origin :feature/name
 Hotfix branch must reflect Github issue number and have meaningful name.
 
 ```mvn jgitflow:hotfix-start```
-
-Push hotfix branch into remote repository.
-
-```git push origin hotfix/name```
 
 ### Work on hotfix branch
 
@@ -142,10 +127,3 @@ Finish the feature.
 ```
 mvn jgitflow:hotfix-finish
 ```
-
-Push changes from develop into remote repository.
-
-``
-git push origin develop
-git push origin :hotfix/name
-````
