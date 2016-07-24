@@ -14,7 +14,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
+    along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses />.
 
 -->
 <!--
@@ -40,13 +40,13 @@
     <groupId>fr.eurecom</groupId>
     <artifactId>stanfordNLPRESTAPI</artifactId>
     <name>StanfordNLPRESTAPI</name>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skip.integration.tests>true</skip.integration.tests>
         <skip.unit.tests>false</skip.unit.tests>
-        <docker.registry.name/>
+        <docker.registry.name />
         <docker.repository.name>${docker.registry.name}jplu/stanford-nlp-rest-api</docker.repository.name>
     </properties>
 
