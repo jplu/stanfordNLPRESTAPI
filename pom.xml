@@ -14,7 +14,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses/>.
+    along with StanfordNLPRESTAPI.  If not, see <http://www.gnu.org/licenses />.
 
 -->
 <!--
@@ -46,7 +46,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skip.integration.tests>true</skip.integration.tests>
         <skip.unit.tests>false</skip.unit.tests>
-        <docker.registry.name/>
+        <docker.registry.name />
         <docker.repository.name>${docker.registry.name}jplu/stanford-nlp-rest-api</docker.repository.name>
     </properties>
 
