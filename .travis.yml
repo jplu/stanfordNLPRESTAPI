@@ -7,7 +7,7 @@ before_install:
   - echo "MAVEN_OPTS='-Xmx7g'" > ~/.mavenrc
   - export JAVA_OPTS='-Xmx7g'
 install: mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V
-#script: travis_wait 30 mvn test -Denforcer.skip=true -B
+script: mvn test -Dmaven.test.skip=true -Denforcer.skip=true -B
 #after_success:
 #- travis_wait 30 mvn verify -P integration-test -Denforcer.skip=true
 #- mvn clean verify coveralls:report -Denforcer.skip=true
