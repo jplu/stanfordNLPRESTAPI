@@ -6,10 +6,10 @@ jdk:
 before_install:
   - echo "MAVEN_OPTS='-Xmx7g'" > ~/.mavenrc
   - export JAVA_OPTS='-Xmx7g'
-install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V -e
-script: mvn test -Denforcer.skip=true -B
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V
+script: travis_wait 30 mvn test -Denforcer.skip=true -B
 after_success:
-- mvn verify -P integration-test -Denforcer.skip=true
+- travis_wait 30 mvn verify -P integration-test -Denforcer.skip=true
 - mvn clean verify coveralls:report -Denforcer.skip=true
 notifications:
   slack:
