@@ -6,11 +6,11 @@ jdk:
 before_install:
   - echo "MAVEN_OPTS='-Xmx7g'" > ~/.mavenrc
   - export JAVA_OPTS='-Xmx7g'
-install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V
-script: travis_wait 30 mvn test -Denforcer.skip=true -B
-after_success:
-- travis_wait 30 mvn verify -P integration-test -Denforcer.skip=true
-- mvn clean verify coveralls:report -Denforcer.skip=true
+install: mvn install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Denforcer.skip=true -B -V
+#script: travis_wait 30 mvn test -Denforcer.skip=true -B
+#after_success:
+#- travis_wait 30 mvn verify -P integration-test -Denforcer.skip=true
+#- mvn clean verify coveralls:report -Denforcer.skip=true
 notifications:
   slack:
     secure: wATviRngbj5gS3k/92Ah1aGJLy3RWXZ9pKlC70+eaLpP4HWtFxH/9mzjnBkxGp/9qIb2uOYe5+khme5kHdx5ZKTbdSDf9mON/oyN2hPEr4f8IlgRevMUmT2CIakXbnt9YjmVRWPBqpwB5bzQf3ZOkqujdDhrAKhkgifLdB2wZ5Ii2AcfJdinKeuavOn+0Q/7EvxHCAsJbTh+8EI1kJNkP78QjKwoeH+QrEs3ZLIcwbfqV28zbjYI6KvfYw83NvGsSOVwglM9onDGeORTBBXzsFFPGQgzMc9GV1+93aXQeiCVgJbiG5X2mMT+xOBuL79wn73JQfoCywUL/r/6Re/1bgrqcRBfSitpxq8wEY3eonPKLSa7K5RyJ3zxZX0wk+YdgCCd1A6+5gc5/a8ketdgp5uZeBySVMNlH39BoBk9ebSkaQrOazxOnhdku+ySCtpkYg4DRnRmFAbbe8GY6jAnu1yG9hv97mOLmQDM4WQxtfFeZ6+5XJTMUN/6Z0z2ThTV6RH22rF86JWv9+anY4XunHQ49sHo0hrnUP2IArc4sMNg07wKPEpyJ/Aaf+7kgazTJCfEnYWep12EVl8+e8jyMHqP61Ht6RGjr0f4T9vgduWBdhgjJ2I+Lsyo+BwykcPyYhiEVmWpz5u9EbUMHbGdNC4HnoTqeOEzg27zLCio7Eo=
