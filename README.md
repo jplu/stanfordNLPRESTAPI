@@ -31,7 +31,7 @@ The fat JAR will be available in the *target* directory.
 To run the unit tests, use the following Maven command:
 
 ```
-mvn clean test
+mvn clean verify -P unit-tests
 ```
 
 To run the integration tests, use the following Maven command:
