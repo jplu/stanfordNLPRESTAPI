@@ -133,6 +133,7 @@ compiled StanfordNLPRESTAPI. Next, for deploying the app as a container you have
 Docker image:
 
 ```
+docker build -t jplu/java github.com/jplu/docker-java
 mvn docker:build
 ```
 
