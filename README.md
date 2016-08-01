@@ -31,7 +31,7 @@ The fat JAR will be available in the *target* directory.
 To run the unit tests, use the following Maven command:
 
 ```
-mvn clean test
+mvn clean verify -P unit-tests
 ```
 
 To run the integration tests, use the following Maven command:
@@ -49,7 +49,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.1.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -73,7 +73,7 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.1.jar
        ner -t TEXT [-f FORMAT] [-h] [file]
 
 NER command on text
@@ -92,7 +92,7 @@ optional arguments:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.1.jar
        pos -t TEXT [-f FORMAT] [-h] [file]
 
 POS command on text
@@ -112,7 +112,7 @@ optional arguments:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.1.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -133,13 +133,14 @@ compiled StanfordNLPRESTAPI. Next, for deploying the app as a container you have
 Docker image:
 
 ```
+docker build -t jplu/java github.com/jplu/docker-java
 mvn docker:build
 ```
 
 Once the image is built, it is possible to run it:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.0
+docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.1
 ```
 
 ## Configuration
