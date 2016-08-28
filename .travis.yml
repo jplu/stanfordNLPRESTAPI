@@ -4,7 +4,7 @@ language: java
 jdk:
 - oraclejdk8
 install: mvn install -Dmaven.test.skip=true
-script: mvn verify -P unit-tests -Denforcer.skip=true -Djavadoc.skip=true -Dlicense.skip=true -Dpmd.skip=true -Dfindbugs.skip=true -Dcheckstyle.skip=true -Dxml.skip=true -DsurefireArgLine="-Xmx4g"
+script: mvn test -DsurefireArgLine="-Xmx4g"
 after_success:
 - mvn verify -P integration-test -Denforcer.skip=true -Djavadoc.skip=true -Dlicense.skip=true -Dpmd.skip=true -Dfindbugs.skip=true -Dcheckstyle.skip=true -Dxml.skip=true -DsurefireArgLine="-Xmx4g"
 - mvn verify coveralls:report -Denforcer.skip=true -Djavadoc.skip=true -Dlicense.skip=true -Dpmd.skip=true -Dfindbugs.skip=true -Dcheckstyle.skip=true -Dxml.skip=true -DsurefireArgLine="-Xmx4g"
