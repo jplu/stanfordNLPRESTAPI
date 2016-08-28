@@ -1,7 +1,7 @@
 # StanfordNLPRESTAPI
 
-[![Build status](https://travis-ci.org/jplu/stanfordNLPRESTAPI.svg?branch=develop)](https://travis-ci.org/jplu/stanfordNLPRESTAPI)
-[![Coverage Status](https://coveralls.io/repos/github/jplu/stanfordNLPRESTAPI/badge.svg?branch=develop)](https://coveralls.io/github/jplu/stanfordNLPRESTAPI?branch=develop)
+[![Build status](https://travis-ci.org/jplu/stanfordNLPRESTAPI.svg?branch=master)](https://travis-ci.org/jplu/stanfordNLPRESTAPI)
+[![Coverage Status](https://coveralls.io/repos/github/jplu/stanfordNLPRESTAPI/badge.svg?branch=master)](https://coveralls.io/github/jplu/stanfordNLPRESTAPI?branch=master)
 [![License (GPL version 3)](https://img.shields.io/badge/license-GNU%20GPL%20version%203-blue.svg?style=flat-square)](http://opensource.org/licenses/GPL-3.0)
 
 # Introduction
@@ -49,7 +49,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.4-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.4.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -73,7 +73,7 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.4-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.4.jar
        ner -t TEXT [-f FORMAT] [-h] [file]
 
 NER command on text
@@ -92,7 +92,7 @@ optional arguments:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.4-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.4.jar
        pos -t TEXT [-f FORMAT] [-h] [file]
 
 POS command on text
@@ -112,7 +112,7 @@ optional arguments:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.4-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.4.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -141,7 +141,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.4-SNAPSHOT
+docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.4
 ```
 
 Or with:
@@ -209,7 +209,7 @@ server:
 
 # How to contribute
 
-In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/develop/CONTRIBUTING.md) file.
+In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/master/CONTRIBUTING.md) file.
 
 # Opening an issue
 
