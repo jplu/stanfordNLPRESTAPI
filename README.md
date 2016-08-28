@@ -10,7 +10,7 @@ to get results in NIF format. The REST API is created via [Dropwizard](http://ww
 
 # Requirements
 
-Java 1.8 and Maven 3.0.3 minimum. Docker is optional.
+Java 1.8 and Maven 3.0.3 minimum. Docker (1.6 or later) is optional.
 
 # Maven
 
@@ -49,7 +49,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.2.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.3.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -73,7 +73,7 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.2.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.3.jar
        ner -t TEXT [-f FORMAT] [-h] [file]
 
 NER command on text
@@ -92,7 +92,7 @@ optional arguments:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.2.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.3.jar
        pos -t TEXT [-f FORMAT] [-h] [file]
 
 POS command on text
@@ -112,7 +112,7 @@ optional arguments:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.1.2.jar
+usage: java -jar stanfordNLPRESTAPI-1.1.3.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -124,7 +124,8 @@ optional arguments:
   -h, --help             show this help message and exit
 ```
 
-The format in the HTTP header are respectively **text/turtle** for RDF Turtle or **application/json** for RDF JSON-LD.
+The format in the HTTP header are respectively **text/turtle** for RDF Turtle or
+**application/json** for RDF JSON-LD.
 
 ## Docker
 
@@ -137,10 +138,16 @@ docker build -t jplu/java github.com/jplu/docker-java
 mvn docker:build
 ```
 
-Once the image is built, it is possible to run it:
+Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.2
+docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.3
+```
+
+Or with:
+
+```
+mvn docker:start
 ```
 
 ## Configuration
@@ -202,7 +209,7 @@ server:
 
 # How to contribute
 
-In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/develop/CONTRIBUTING.md) file.
+In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/master/CONTRIBUTING.md) file.
 
 # Opening an issue
 
