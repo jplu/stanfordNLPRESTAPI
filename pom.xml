@@ -469,7 +469,7 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.15.14</version>
+                <version>0.15.16</version>
                 <configuration>
                     <images>
                         <image>
@@ -485,10 +485,23 @@
                                     <port>7000</port>
                                     <port>7001</port>
                                 </ports>
+                                <workdir>/maven</workdir>
                                 <cmd>
-                                    <shell>java -jar /maven/${project.build.finalName}.jar server /maven/config.yaml</shell>
+                                    <shell>java -Xmx4g -jar ${project.build.finalName}.jar server config.yaml</shell>
                                 </cmd>
                             </build>
+                            <run>
+                                <ports>
+                                    <port>7000:7000</port>
+                                    <port>7001:7001</port>
+                                </ports>
+                                <wait>
+                                    <http>
+                                        <url>http://localhost:7001/healthcheck</url>
+                                    </http>
+                                    <time>500000</time>
+                                </wait>
+                            </run>
                         </image>
                     </images>
                 </configuration>

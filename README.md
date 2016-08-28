@@ -10,7 +10,7 @@ to get results in NIF format. The REST API is created via [Dropwizard](http://ww
 
 # Requirements
 
-Java 1.8 and Maven 3.0.3 minimum. Docker is optional.
+Java 1.8 and Maven 3.0.3 minimum. Docker (1.6 or later) is optional.
 
 # Maven
 
@@ -137,10 +137,16 @@ docker build -t jplu/java github.com/jplu/docker-java
 mvn docker:build
 ```
 
-Once the image is built, it is possible to run it:
+Once the image is built, it is possible to run it with:
 
 ```
 docker run -d -p 7000:7000 -p 7001:7001 jplu/stanford-nlp-rest-api:1.1.3-SNAPSHOT
+```
+
+Or with:
+
+```
+mvn docker:start
 ```
 
 ## Configuration
