@@ -1,7 +1,6 @@
 <!--
 
-    StanfordNLPRESTAPI - This project offer a REST API over Stanford CoreNLP framework to get
-results in NIF format.
+    StanfordNLPRESTAPI - Offering a REST API over Stanford CoreNLP to get results in NIF format.
     Copyright © 2016 Julien Plu (julien.plu@redaction-developpez.com)
 
     This program is free software: you can redistribute it and/or modify
