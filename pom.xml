@@ -23,7 +23,7 @@
     <groupId>fr.eurecom</groupId>
     <artifactId>stanfordNLPRESTAPI</artifactId>
     <name>StanfordNLPRESTAPI</name>
-    <version>1.1.4</version>
+    <version>1.1.5</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -359,7 +359,7 @@
                 <configuration>
                     <excludedGroups>fr.eurecom.stanfordnlprestapi.integrations.IntegrationTest
                     </excludedGroups>
-                    <argLine>${surefireArgLine}</argLine>
+                    <argLine>${surefireArgLine} -Xmx4g</argLine>
                     <skipTests>${skip.unit.tests}</skipTests>
                     <parallel>methods</parallel>
                     <threadCount>10</threadCount>
@@ -369,7 +369,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
-                    <argLine>${failsafeArgLine}</argLine>
+                    <argLine>${failsafeArgLine} -Xmx4g</argLine>
                     <skipTests>${skip.integration.tests}</skipTests>
                     <includes>
                         <include>**/*.java</include>
