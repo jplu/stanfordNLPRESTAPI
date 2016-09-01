@@ -49,7 +49,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.2.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.2.1.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -73,7 +73,7 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.2.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.2.1.jar
        ner -t TEXT [-f FORMAT] [-h] [file]
 
 NER command on text
@@ -92,7 +92,7 @@ optional arguments:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.2.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.2.1.jar
        pos -t TEXT [-f FORMAT] [-h] [file]
 
 POS command on text
@@ -112,7 +112,7 @@ optional arguments:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.2.0.jar
+usage: java -jar stanfordNLPRESTAPI-1.2.1.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -141,7 +141,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v models:/maven/models -v conf:/maven/conf jplu/stanford-nlp-rest-api:1.2.0
+docker run -d -p 7000:7000 -p 7001:7001 -v models:/maven/models -v conf:/maven/conf jplu/stanford-nlp-rest-api:1.2.1
 ```
 
 Or with:
@@ -164,11 +164,9 @@ case you want to add models you will have to download and put them in the *model
 also download the jar files provided by Stanford with models for other languages. To use them you
 will have to include them in the CLASSPATH. We provide two models:
 
-* OKE2016[1]: NER model trained with the OKE2016 challenge training dataset.
-* NEEL2016[2][3][4]: NER model for tweets trained with the NEEL2016 challenge training dataset.
-
-The model for the POS tagging can be found on the GATE [website](https://gate.ac.uk/wiki/twitter-postagger.html)
-and put in the *models* folder.
+* OKE2016 [1]: NER model trained with the OKE2016 challenge training dataset.
+* NEEL2016 [2][3][4]: NER model for tweets trained with the NEEL2016 challenge training dataset.
+* gate-EN-twitter [5]: POS tagger model for tagging tweets.
 
 # How to contribute
 
@@ -207,3 +205,4 @@ All the content of this repository is licensed under the terms of the GPL v3 lic
 * [2]: Rizzo G., van Erp M., Plu J., Troncy R. (2015), NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
 * [3]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015), Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
 * [4]: Cano A.E., Rizzo G., Varga A., Rowe M., Stankovic M., Dadzie A.S. (2014), Making Sense of Microposts (#Microposts2014) Named Entity Extraction & Linking Challenge. In (WWW'14),4th International Workshop on Making Sense of Microposts (#Microposts'14), Seoul, Korea.
+* [5]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013), Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria
