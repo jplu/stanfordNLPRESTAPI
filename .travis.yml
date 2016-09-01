@@ -1,6 +1,9 @@
 sudo: required
 dist: precise
 language: java
+cache:
+  directories:
+  - $HOME/.m2
 jdk:
 - oraclejdk8
 install: mvn install -Dmaven.test.skip=true
