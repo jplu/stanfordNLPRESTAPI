@@ -64,7 +64,7 @@ public class StanfordNlpTest {
     final Properties props = new Properties();
 
     props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
-    props.setProperty("pos.model", "models/english-bidirectional-distsim.tagger");
+    props.setProperty("pos.model", "edu/stanford/nlp/models/pos-tagger/english-bidirectional/english-bidirectional-distsim.tagger");
     props.setProperty("ner.model",
         "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
     props.setProperty("ner.useSUTime", "false");
