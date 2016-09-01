@@ -69,7 +69,7 @@ public class StanfordNlpTest {
         "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
     props.setProperty("ner.useSUTime", "false");
     props.setProperty("ner.applyNumericClassifiers", "false");
-    props.setProperty("parse.model", "models/englishRNN.ser.gz");
+    props.setProperty("parse.model", "edu/stanford/nlp/models/lexparser/englishRNN.ser.gz");
     props.setProperty("coref.doClustering", "true");
     props.setProperty("coref.md.type", "rule");
     props.setProperty("coref.mode", "statistical");
