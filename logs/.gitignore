@@ -1,4 +1,4 @@
 # Ignore everything in this directory
-../models/gate-EN-twitter.model
+*
 # Except this file
 !.gitignore
