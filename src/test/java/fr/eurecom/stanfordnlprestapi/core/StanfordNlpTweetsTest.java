@@ -55,7 +55,7 @@ public class StanfordNlpTweetsTest {
     props.setProperty("ner.model", "models/NEEL2016.ser.gz");
     props.setProperty("ner.useSUTime", "false");
     props.setProperty("ner.applyNumericClassifiers", "false");
-    props.setProperty("parse.model", "models/englishRNN.ser.gz");
+    props.setProperty("parse.model", "edu/stanford/nlp/models/lexparser/englishRNN.ser.gz");
     props.setProperty("coref.doClustering", "true");
     props.setProperty("coref.md.type", "rule");
     props.setProperty("coref.mode", "statistical");

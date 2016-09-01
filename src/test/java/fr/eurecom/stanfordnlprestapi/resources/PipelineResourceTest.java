@@ -68,8 +68,10 @@ public class PipelineResourceTest {
     pipeline.getNer().setUseSuTime(false);
     pipeline.getNer().setModel(
         "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
-    pipeline.getPos().setModel("models/english-bidirectional-distsim.tagger");
-    pipeline.getParse().setModel("models/englishRNN.ser.gz");
+    pipeline.getPos().setModel(
+        "edu/stanford/nlp/models/pos-tagger/english-bidirectional/"
+            + "english-bidirectional-distsim.tagger");
+    pipeline.getParse().setModel("edu/stanford/nlp/models/lexparser/englishRNN.ser.gz");
     pipeline.getCoref().setDoClustering(true);
     pipeline.getCoref().setMdType("rule");
     pipeline.getCoref().setMode("statistical");
