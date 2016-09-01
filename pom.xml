@@ -23,7 +23,7 @@
     <groupId>fr.eurecom</groupId>
     <artifactId>stanfordNLPRESTAPI</artifactId>
     <name>StanfordNLPRESTAPI</name>
-    <version>1.1.5</version>
+    <version>1.2.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -343,7 +343,7 @@
                                     <version>1.8</version>
                                 </requireJavaVersion>
                                 <requireMavenVersion>
-                                    <version>3.0.3</version>
+                                    <version>3.0.5</version>
                                 </requireMavenVersion>
                             </rules>
                         </configuration>
@@ -485,9 +485,13 @@
                                     <port>7000</port>
                                     <port>7001</port>
                                 </ports>
+                                <volumes>
+                                    <volume>/maven/conf</volume>
+                                    <volume>/maven/models</volume>
+                                </volumes>
                                 <workdir>/maven</workdir>
                                 <cmd>
-                                    <shell>java -Xmx4g -jar ${project.build.finalName}.jar server config.yaml</shell>
+                                    <shell>java -Xmx4g -jar ${project.build.finalName}.jar server conf/config.yaml</shell>
                                 </cmd>
                             </build>
                             <run>
@@ -495,6 +499,12 @@
                                     <port>7000:7000</port>
                                     <port>7001:7001</port>
                                 </ports>
+                                <volumes>
+                                    <bind>
+                                        <volume>${project.basedir}/conf:/maven/conf</volume>
+                                        <volume>${project.basedir}/models:/maven/models</volume>
+                                    </bind>
+                                </volumes>
                                 <wait>
                                     <http>
                                         <url>http://localhost:7001/healthcheck</url>
@@ -532,7 +542,7 @@
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
             <version>3.6.0</version>
-            <classifier>models</classifier>
+            <classifier>models-english</classifier>
             <exclusions>
                 <exclusion>
                     <groupId>joda-time</groupId>

@@ -25,17 +25,5 @@
             <source>target/${project.build.finalName}.jar</source>
             <outputDirectory>/</outputDirectory>
         </file>
-        <file>
-            <source>conf/config.yaml</source>
-            <outputDirectory>/</outputDirectory>
-        </file>
-        <file>
-            <source>models/englishRNN.ser.gz</source>
-            <outputDirectory>/models/</outputDirectory>
-        </file>
-        <file>
-            <source>models/english-bidirectional-distsim.tagger</source>
-            <outputDirectory>/models/</outputDirectory>
-        </file>
     </files>
 </assembly>

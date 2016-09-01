@@ -104,12 +104,6 @@ public class Context {
     final Model model = ModelFactory.createDefaultModel();
     final Map<String, String> prefixes = new HashMap<>();
 
-    prefixes.put("nif", nif);
-    prefixes.put("local", base);
-    prefixes.put("xsd", "http://www.w3.org/2001/XMLSchema#");
-
-    model.setNsPrefixes(prefixes);
-
     model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "String"));
     model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
@@ -127,6 +121,12 @@ public class Context {
     model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "isString"),
         ResourceFactory.createTypedLiteral(this.text));
+  
+    prefixes.put("nif", nif);
+    prefixes.put("local", base);
+    prefixes.put("xsd", "http://www.w3.org/2001/XMLSchema#");
+  
+    model.setNsPrefixes(prefixes);
 
     for (final Sentence sentence : this.sentences) {
       model.add(sentence.rdfModel(tool, process));

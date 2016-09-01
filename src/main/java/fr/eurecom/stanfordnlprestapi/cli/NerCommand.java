@@ -79,13 +79,13 @@ public class NerCommand<T extends PipelineConfiguration> extends ConfiguredComma
 
     if (newNamespace.get("format") == null || "turtle".equals(newNamespace.get("format"))
         || !"jsonld".equals(newNamespace.get("format"))) {
-      NerCommand.LOGGER.info(this.pipeline.run(newNamespace.getString("text")).rdfString(
-          "stanfordnlp", RDFFormat.TURTLE_PRETTY, NlpProcess.NER));
+      NerCommand.LOGGER.info(System.lineSeparator() + this.pipeline.run(newNamespace.getString(
+          "text")).rdfString("stanfordnlp", RDFFormat.TURTLE_PRETTY, NlpProcess.NER));
     }
-
+    
     if ("jsonld".equals(newNamespace.get("format"))) {
-      NerCommand.LOGGER.info(this.pipeline.run(newNamespace.getString("text")).rdfString(
-          "stanfordnlp", RDFFormat.JSONLD_PRETTY, NlpProcess.NER));
+      NerCommand.LOGGER.info(System.lineSeparator() + this.pipeline.run(newNamespace.getString(
+          "text")).rdfString("stanfordnlp", RDFFormat.JSONLD_PRETTY, NlpProcess.NER));
     }
   }
 

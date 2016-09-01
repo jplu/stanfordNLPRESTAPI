@@ -1,0 +1,96 @@
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+@prefix local: <http://127.0.0.1/stanfordnlp#> .
+
+<http://127.0.0.1/stanfordnlp#char=0,10>
+        a                     nif:RFC5147String , nif:String , nif:Word ;
+        nif:anchorOf          "@julienplu" ;
+        nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "10"^^xsd:nonNegativeInteger ;
+        nif:lemma             "@julienplu" ;
+        nif:nextWord          <http://127.0.0.1/stanfordnlp#char=11,16> ;
+        nif:posTag            "USR" ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,48> ;
+        nif:sentence          <http://127.0.0.1/stanfordnlp#char=0,48> .
+
+<http://127.0.0.1/stanfordnlp#char=21,24>
+        a                     nif:Word , nif:String , nif:RFC5147String ;
+        nif:anchorOf          "the" ;
+        nif:beginIndex        "21"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "24"^^xsd:nonNegativeInteger ;
+        nif:lemma             "the" ;
+        nif:nextWord          <http://127.0.0.1/stanfordnlp#char=25,28> ;
+        nif:posTag            "DT" ;
+        nif:previousWord      <http://127.0.0.1/stanfordnlp#char=17,20> ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,48> ;
+        nif:sentence          <http://127.0.0.1/stanfordnlp#char=0,48> .
+
+<http://127.0.0.1/stanfordnlp#char=29,38>
+        a                     nif:String , nif:Word , nif:RFC5147String ;
+        nif:anchorOf          "#starwars" ;
+        nif:beginIndex        "29"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "38"^^xsd:nonNegativeInteger ;
+        nif:lemma             "#starwars" ;
+        nif:nextWord          <http://127.0.0.1/stanfordnlp#char=39,48> ;
+        nif:posTag            "HT" ;
+        nif:previousWord      <http://127.0.0.1/stanfordnlp#char=25,28> ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,48> ;
+        nif:sentence          <http://127.0.0.1/stanfordnlp#char=0,48> .
+
+<http://127.0.0.1/stanfordnlp#char=17,20>
+        a                     nif:String , nif:Word , nif:RFC5147String ;
+        nif:anchorOf          "for" ;
+        nif:beginIndex        "17"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "20"^^xsd:nonNegativeInteger ;
+        nif:lemma             "for" ;
+        nif:nextWord          <http://127.0.0.1/stanfordnlp#char=21,24> ;
+        nif:posTag            "IN" ;
+        nif:previousWord      <http://127.0.0.1/stanfordnlp#char=11,16> ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,48> ;
+        nif:sentence          <http://127.0.0.1/stanfordnlp#char=0,48> .
+
+<http://127.0.0.1/stanfordnlp#char=25,28>
+        a                     nif:String , nif:RFC5147String , nif:Word ;
+        nif:anchorOf          "new" ;
+        nif:beginIndex        "25"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "28"^^xsd:nonNegativeInteger ;
+        nif:lemma             "new" ;
+        nif:nextWord          <http://127.0.0.1/stanfordnlp#char=29,38> ;
+        nif:posTag            "JJ" ;
+        nif:previousWord      <http://127.0.0.1/stanfordnlp#char=21,24> ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,48> ;
+        nif:sentence          <http://127.0.0.1/stanfordnlp#char=0,48> .
+
+<http://127.0.0.1/stanfordnlp#char=11,16>
+        a                     nif:String , nif:RFC5147String , nif:Word ;
+        nif:anchorOf          "Ready" ;
+        nif:beginIndex        "11"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "16"^^xsd:nonNegativeInteger ;
+        nif:lemma             "ready" ;
+        nif:nextWord          <http://127.0.0.1/stanfordnlp#char=17,20> ;
+        nif:posTag            "JJ" ;
+        nif:previousWord      <http://127.0.0.1/stanfordnlp#char=0,10> ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,48> ;
+        nif:sentence          <http://127.0.0.1/stanfordnlp#char=0,48> .
+
+<http://127.0.0.1/stanfordnlp#char=39,48>
+        a                     nif:Word , nif:String , nif:RFC5147String ;
+        nif:anchorOf          "#theforce" ;
+        nif:beginIndex        "39"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "48"^^xsd:nonNegativeInteger ;
+        nif:lemma             "#theforce" ;
+        nif:posTag            "HT" ;
+        nif:previousWord      <http://127.0.0.1/stanfordnlp#char=29,38> ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,48> ;
+        nif:sentence          <http://127.0.0.1/stanfordnlp#char=0,48> .
+
+<http://127.0.0.1/stanfordnlp#char=0,48>
+        a                     nif:Context , nif:RFC5147String , nif:String , nif:Sentence ;
+        nif:anchorOf          "@julienplu Ready for the new #starwars #theforce" ;
+        nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "48"^^xsd:nonNegativeInteger ;
+        nif:firstToken        <http://127.0.0.1/stanfordnlp#char=0,10> ;
+        nif:isString          "@julienplu Ready for the new #starwars #theforce" ;
+        nif:lastToken         <http://127.0.0.1/stanfordnlp#char=39,48> ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,48> ;
+        nif:word              <http://127.0.0.1/stanfordnlp#char=0,10> , <http://127.0.0.1/stanfordnlp#char=11,16> , <http://127.0.0.1/stanfordnlp#char=29,38> , <http://127.0.0.1/stanfordnlp#char=25,28> , <http://127.0.0.1/stanfordnlp#char=17,20> , <http://127.0.0.1/stanfordnlp#char=21,24> , <http://127.0.0.1/stanfordnlp#char=39,48> .

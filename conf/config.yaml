@@ -17,17 +17,17 @@
 #
 
 pos:
-  model: "models/english-bidirectional-distsim.tagger"
+  model: edu/stanford/nlp/models/pos-tagger/english-bidirectional/english-bidirectional-distsim.tagger
 ner:
-  model: "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz"
+  model: edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz
   useSuTime: false
   applyNumericClassifiers: false
 parse:
-  model: "models/englishRNN.ser.gz"
+  model: edu/stanford/nlp/models/lexparser/englishRNN.ser.gz
 coref:
-  mdType: "rule"
-  mode: "statistical"
-  doClustering: "true"
+  mdType: rule
+  mode: statistical
+  doClustering: true
 
 logging:
   level: INFO
@@ -37,10 +37,10 @@ logging:
       timeZone: UTC
       target: stdout
     - type: file
-      currentLogFilename: /logs/stanford.log
+      currentLogFilename: logs/stanford.log
       threshold: ALL
       archive: true
-      archivedLogFilenamePattern: /logs/stanford-%d.log
+      archivedLogFilenamePattern: logs/stanford-%d.log
       archivedFileCount: 5
       timeZone: UTC
 
@@ -53,10 +53,10 @@ server:
           timeZone: UTC
           target: stdout
         - type: file
-          currentLogFilename: /logs/stanford-queries.log
+          currentLogFilename: logs/stanford-queries.log
           threshold: ALL
           archive: true
-          archivedLogFilenamePattern: /logs/stanford-queries-%d.log
+          archivedLogFilenamePattern: logs/stanford-queries-%d.log
           archivedFileCount: 5
           timeZone: UTC
   applicationConnectors:
