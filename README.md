@@ -164,11 +164,9 @@ case you want to add models you will have to download and put them in the *model
 also download the jar files provided by Stanford with models for other languages. To use them you
 will have to include them in the CLASSPATH. We provide two models:
 
-* OKE2016[1]: NER model trained with the OKE2016 challenge training dataset.
-* NEEL2016[2][3][4]: NER model for tweets trained with the NEEL2016 challenge training dataset.
-
-The model for the POS tagging can be found on the GATE [website](https://gate.ac.uk/wiki/twitter-postagger.html)
-and put in the *models* folder.
+* OKE2016 [1]: NER model trained with the OKE2016 challenge training dataset.
+* NEEL2016 [2][3][4]: NER model for tweets trained with the NEEL2016 challenge training dataset.
+* gate-EN-twitter [5]: POS tagger model for tagging tweets.
 
 # How to contribute
 
@@ -207,3 +205,4 @@ All the content of this repository is licensed under the terms of the GPL v3 lic
 * [2]: Rizzo G., van Erp M., Plu J., Troncy R. (2015), NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
 * [3]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015), Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
 * [4]: Cano A.E., Rizzo G., Varga A., Rowe M., Stankovic M., Dadzie A.S. (2014), Making Sense of Microposts (#Microposts2014) Named Entity Extraction & Linking Challenge. In (WWW'14),4th International Workshop on Making Sense of Microposts (#Microposts'14), Seoul, Korea.
+* [5]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013), Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria
