@@ -41,6 +41,7 @@ import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,15 +191,18 @@ public class StanfordNlp {
       if (!"O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))
           && sb.toString().isEmpty()) {
         start = token.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class);
-
-        sb.append(token.get(CoreAnnotations.TextAnnotation.class));
-
         type = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
 
-        if (stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).indexOf(token)
+        sb.append(token.get(CoreAnnotations.TextAnnotation.class));
+  
+        if (Pattern.compile("@|#").matcher(sb.toString()).find()
+            || stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).indexOf(token)
             == stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).size() - 1) {
           sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start,
               token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
+  
+          sb = new StringBuilder();
+          type = "";
         }
       } else if (!"O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))) {
         sb.append(' ');
@@ -210,7 +214,6 @@ public class StanfordNlp {
               token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
         }
       } else if (!sb.toString().isEmpty()) {
-
         final int index = stanfordSentence.get(
             CoreAnnotations.TokensAnnotation.class).indexOf(token);
         final int end = stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).get(
