@@ -50,7 +50,7 @@ public class ContextTest {
   }
 
   /**
-   * Test {@link Context#rdfModel(String, NlpProcess)} method for POS.
+   * Test {@link Context#rdfModel(String, NlpProcess, String)} method for POS.
    */
   @Test
   public final void testPosRdfModel() {
@@ -66,7 +66,7 @@ public class ContextTest {
 
     prefixes.put("nif", nif);
 
-    final String base = "http://127.0.0.1/stanfordnlp#";
+    final String base = "http://127.0.0.1/stanfordnlp/context#";
 
     prefixes.put("local", base);
     prefixes.put("xsd", "http://www.w3.org/2001/XMLSchema#");
@@ -91,11 +91,12 @@ public class ContextTest {
             + "stunning."));
 
     Assert.assertTrue("Issue to create the model for a Context",
-        model.isIsomorphicWith(context.rdfModel("stanfordnlp", NlpProcess.POS)));
+        model.isIsomorphicWith(context.rdfModel("stanfordnlp", NlpProcess.POS,
+            "http://127.0.0.1")));
   }
 
   /**
-   * Test {@link Context#rdfModel(String, NlpProcess)} method for NER.
+   * Test {@link Context#rdfModel(String, NlpProcess, String)} method for NER.
    */
   @Test
   public final void testNerRdfModel() {
@@ -111,7 +112,7 @@ public class ContextTest {
 
     prefixes.put("nif", nif);
 
-    final String base = "http://127.0.0.1/stanfordnlp#";
+    final String base = "http://127.0.0.1/stanfordnlp/context#";
 
     prefixes.put("local", base);
     prefixes.put("xsd", "http://www.w3.org/2001/XMLSchema#");
@@ -136,7 +137,8 @@ public class ContextTest {
             + "stunning."));
 
     Assert.assertTrue("Issue to create the model for a Context",
-        model.isIsomorphicWith(context.rdfModel("stanfordnlp", NlpProcess.NER)));
+        model.isIsomorphicWith(context.rdfModel("stanfordnlp", NlpProcess.NER,
+            "http://127.0.0.1")));
   }
 
   /**

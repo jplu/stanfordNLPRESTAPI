@@ -49,7 +49,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.2.1.jar
+usage: java -jar stanfordNLPRESTAPI-2.0.0.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -73,8 +73,8 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.2.1.jar
-       ner -t TEXT [-f FORMAT] [-h] [file]
+usage: java -jar stanfordNLPRESTAPI-2.0.0.jar
+       ner [-f {turtle,jsonld}] [-s {neel2015,neel2016,oke2015,oke2016,none}] [-o OFILE] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 NER command on text
 
@@ -82,9 +82,19 @@ positional arguments:
   file                   application configuration file
 
 optional arguments:
-  -t TEXT                text to analyse
-  -f FORMAT              turtle or jsonld
+  -f {turtle,jsonld}, --format {turtle,jsonld}
+                         turtle or jsonld (default: turtle)
+  -s {neel2015,neel2016,oke2015,oke2016,none}, --setting {neel2015,neel2016,oke2015,oke2016,none}
+                         neel2015, neel2016, oke2015, oke2016 or none (default: none)
+  -o OFILE, --output-file OFILE
+                         Output file name which will contain the annotations
   -h, --help             show this help message and exit
+
+inputs:
+  -t TEXT, --text TEXT   text to analyse
+  -i IFILE, --input-file IFILE
+                         Input file name which contain the text to process
+  -u URL, --url URL      URL to process
 ```
 
 ### POS
@@ -92,8 +102,8 @@ optional arguments:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.2.1.jar
-       pos -t TEXT [-f FORMAT] [-h] [file]
+usage: java -jar stanfordNLPRESTAPI-2.0.0.jar
+       pos [-f {turtle,jsonld}] [-s {none,tweet}] [-o OFILE] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 POS command on text
 
@@ -101,10 +111,19 @@ positional arguments:
   file                   application configuration file
 
 optional arguments:
-  -t TEXT                text to analyse
-  -f FORMAT              turtle or jsonld
+  -f {turtle,jsonld}, --format {turtle,jsonld}
+                         turtle or jsonld (default: turtle)
+  -s {none,tweet}, --setting {none,tweet}
+                         none or tweet (default: none)
+  -o OFILE, --output-file OFILE
+                         Output file name which will contain the annotations
   -h, --help             show this help message and exit
 
+inputs:
+  -t TEXT, --text TEXT   text to analyse
+  -i IFILE, --input-file IFILE
+                         Input file name which contain the text to process
+  -u URL, --url URL      URL to process
 ```
 
 ## Web Service
@@ -112,7 +131,7 @@ optional arguments:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-1.2.1.jar
+usage: java -jar stanfordNLPRESTAPI-2.0.0.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -141,7 +160,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v models:/maven/models -v conf:/maven/conf jplu/stanford-nlp-rest-api:1.2.1
+docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:2.0.0
 ```
 
 Or with:
@@ -164,9 +183,11 @@ case you want to add models you will have to download and put them in the *model
 also download the jar files provided by Stanford with models for other languages. To use them you
 will have to include them in the CLASSPATH. We provide two models:
 
-* OKE2016 [1]: NER model trained with the OKE2016 challenge training dataset.
-* NEEL2016 [2][3][4]: NER model for tweets trained with the NEEL2016 challenge training dataset.
-* gate-EN-twitter [5]: POS tagger model for tagging tweets.
+* OKE2015 [1]: NER model trained with the OKE2015 challenge training dataset.
+* OKE2016 [2]: NER model trained with the OKE2016 challenge training dataset.
+* NEEL2015 [3][4]: NER model for tweets trained with the NEEL2015 challenge training dataset.
+* NEEL2016 [3][4][5]: NER model for tweets trained with the NEEL2016 challenge training dataset.
+* gate-EN-twitter [6]: POS tagger model for tagging tweets.
 
 # How to contribute
 
@@ -201,8 +222,9 @@ All the content of this repository is licensed under the terms of the GPL v3 lic
 
 # References
 
-* [1]: Plu J., Rizzo G., Troncy R. (2016) Enhancing Entity Linking by Combining NER Models. In: 13th Extended Semantic Web Conference (ESWC'16), Challenges Track, Heraklion, Greece.
-* [2]: Rizzo G., van Erp M., Plu J., Troncy R. (2015), NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
-* [3]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015), Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
-* [4]: Cano A.E., Rizzo G., Varga A., Rowe M., Stankovic M., Dadzie A.S. (2014), Making Sense of Microposts (#Microposts2014) Named Entity Extraction & Linking Challenge. In (WWW'14),4th International Workshop on Making Sense of Microposts (#Microposts'14), Seoul, Korea.
-* [5]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013), Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria
+* [1]: Plu J., Rizzo G., Troncy R. (2015) A Hybrid Approach for Entity Recognition and Linking. In: 12th European Semantic Web Conference (ESWC'15), Open Extraction Challenge, Portoroz, Slovenia.
+* [2]: Plu J., Rizzo G., Troncy R. (2016) Enhancing Entity Linking by Combining NER Models. In: 13th Extended Semantic Web Conference (ESWC'16), Challenges Track, Heraklion, Greece.
+* [3]: Cano A.E., Rizzo G., Varga A., Rowe M., Stankovic M., Dadzie A.S. (2014), Making Sense of Microposts (#Microposts2014) Named Entity Extraction & Linking Challenge. In (WWW'14),4th International Workshop on Making Sense of Microposts (#Microposts'14), Seoul, Korea.
+* [4]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015), Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
+* [5]: Rizzo G., van Erp M., Plu J., Troncy R. (2015), NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
+* [6]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013), Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria

@@ -47,7 +47,8 @@ public class TokenImplTest {
   }
 
   /**
-   * Test {@link TokenImpl#rdfModel(String)} method of a {@link Token} with a next {@link Token}.
+   * Test {@link TokenImpl#rdfModel(String, String)} method of a {@link Token} with a next
+   * {@link Token}.
    */
   @Test
   public final void testRdfModelWithNextToken() {
@@ -63,43 +64,46 @@ public class TokenImplTest {
     token.nextToken(token2);
 
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/stanfordnlp#";
+    final String base = "http://127.0.0.1/stanfordnlp";
     final Model model = ModelFactory.createDefaultModel();
 
-    model.add(ResourceFactory.createResource(base + "char=0,2"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"), RDF.type,
         ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"), RDF.type,
         ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"), RDF.type,
         ResourceFactory.createResource(nif + "Word"));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), ResourceFactory.createProperty(nif
-        + "beginIndex"), ResourceFactory.createTypedLiteral(Integer.toString(0),
-            XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), ResourceFactory.createProperty(nif
-        + "endIndex"), ResourceFactory.createTypedLiteral(Integer.toString(2),
-            XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), ResourceFactory.createProperty(nif
-        + "anchorOf"), ResourceFactory.createPlainLiteral("My"));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), ResourceFactory.createProperty(nif
-        + "sentence"), ResourceFactory.createResource(base + "char=" + sentence.start() + ','
-        + sentence.end()));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), ResourceFactory.createProperty(nif
-        + "referenceContext"), ResourceFactory.createResource(base + "char=" + context.start() + ','
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
+        ResourceFactory.createProperty(nif + "beginIndex"),
+        ResourceFactory.createTypedLiteral(Integer.toString(0), XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
+        ResourceFactory.createProperty(nif + "endIndex"),
+        ResourceFactory.createTypedLiteral(Integer.toString(2), XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
+        ResourceFactory.createProperty(nif + "anchorOf"), ResourceFactory.createPlainLiteral("My"));
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
+        ResourceFactory.createProperty(nif + "sentence"),
+        ResourceFactory.createResource(base + "/sentence#char=" + sentence.start() + ','
+            + sentence.end()));
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
+        ResourceFactory.createProperty(nif + "referenceContext"),
+        ResourceFactory.createResource(base + "/context#char=" + context.start() + ','
             + context.end()));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), ResourceFactory.createProperty(nif
-        + "posTag"), ResourceFactory.createPlainLiteral("PRP$"));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), ResourceFactory.createProperty(nif
-        + "lemma"), ResourceFactory.createPlainLiteral("my"));
-    model.add(ResourceFactory.createResource(base + "char=0,2"), ResourceFactory.createProperty(nif
-        + "nextWord"), ResourceFactory.createResource(base + "char=" + token2.start() + ','
-        + token2.end()));
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
+        ResourceFactory.createProperty(nif + "posTag"), ResourceFactory.createPlainLiteral("PRP$"));
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
+        ResourceFactory.createProperty(nif + "lemma"), ResourceFactory.createPlainLiteral("my"));
+    model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
+        ResourceFactory.createProperty(nif + "nextWord"),
+        ResourceFactory.createResource(base + "/token#char=" + token2.start() + ','
+            + token2.end()));
 
     Assert.assertTrue("Issue to create the model for a Token with a next Token",
-        model.isIsomorphicWith(token.rdfModel("stanfordnlp")));
+        model.isIsomorphicWith(token.rdfModel("stanfordnlp", "http://127.0.0.1")));
   }
 
   /**
-   * Test {@link TokenImpl#rdfModel(String)} method of a {@link Token} with a previous
+   * Test {@link TokenImpl#rdfModel(String, String)} method of a {@link Token} with a previous
    * {@link Token}.
    */
   @Test
@@ -114,39 +118,44 @@ public class TokenImplTest {
         context, sentence, 2);
 
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/stanfordnlp#";
+    final String base = "http://127.0.0.1/stanfordnlp";
     final Model model = ModelFactory.createDefaultModel();
 
-    model.add(ResourceFactory.createResource(base + "char=3,11"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"), RDF.type,
         ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"), RDF.type,
         ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"), RDF.type,
         ResourceFactory.createResource(nif + "Word"));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), ResourceFactory.createProperty(nif
-        + "beginIndex"), ResourceFactory.createTypedLiteral(Integer.toString(3),
-        XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), ResourceFactory.createProperty(nif
-        + "endIndex"), ResourceFactory.createTypedLiteral(Integer.toString(11),
-        XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), ResourceFactory.createProperty(nif
-        + "anchorOf"), ResourceFactory.createPlainLiteral("favorite"));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), ResourceFactory.createProperty(nif
-        + "sentence"), ResourceFactory.createResource(base + "char=" + sentence.start() + ','
-        + sentence.end()));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), ResourceFactory.createProperty(nif
-        + "referenceContext"), ResourceFactory.createResource(base + "char=" + context.start() + ','
-        + context.end()));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), ResourceFactory.createProperty(nif
-        + "posTag"), ResourceFactory.createPlainLiteral("JJ"));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), ResourceFactory.createProperty(nif
-        + "lemma"), ResourceFactory.createPlainLiteral("favorite"));
-    model.add(ResourceFactory.createResource(base + "char=3,11"), ResourceFactory.createProperty(nif
-        + "previousWord"), ResourceFactory.createResource(base + "char=" + token.start() + ','
-        + token.end()));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "beginIndex"),
+        ResourceFactory.createTypedLiteral(Integer.toString(3), XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "endIndex"),
+        ResourceFactory.createTypedLiteral(Integer.toString(11),
+            XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "anchorOf"),
+        ResourceFactory.createPlainLiteral("favorite"));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "sentence"),
+        ResourceFactory.createResource(base + "/sentence#char=" + sentence.start() + ','
+            + sentence.end()));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "referenceContext"),
+        ResourceFactory.createResource(base + "/context#char=" + context.start() + ','
+            + context.end()));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "posTag"), ResourceFactory.createPlainLiteral("JJ"));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "lemma"),
+        ResourceFactory.createPlainLiteral("favorite"));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "previousWord"),
+        ResourceFactory.createResource(base + "/token#char=" + token.start() + ',' + token.end()));
 
     Assert.assertTrue("Issue to create the model for a Token with a previous Token",
-        model.isIsomorphicWith(token2.rdfModel("stanfordnlp")));
+        model.isIsomorphicWith(token2.rdfModel("stanfordnlp", "http://127.0.0.1")));
   }
 
 

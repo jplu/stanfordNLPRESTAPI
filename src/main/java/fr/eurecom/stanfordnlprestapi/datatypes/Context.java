@@ -95,41 +95,44 @@ public class Context {
    *
    * @param tool    Tool used to extract the context.
    * @param process Process required as RDF model.
+   * @param host    Host from where is hosted the app.
    *
    * @return RDF model in NIF of the context.
    */
-  public final Model rdfModel(final String tool, final NlpProcess process) {
+  public final Model rdfModel(final String tool, final NlpProcess process, final String host) {
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/" + tool + '#';
+    final String base = host + '/' + tool;
+    final String local = base + "/ontology/";
     final Model model = ModelFactory.createDefaultModel();
-    final Map<String, String> prefixes = new HashMap<>();
-
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+  
+    model.add(ResourceFactory.createResource(base + "/context#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/context#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/context#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "Context"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/context#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "beginIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(this.start),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/context#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "endIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(this.end),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/context#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "isString"),
         ResourceFactory.createTypedLiteral(this.text));
   
+    final Map<String, String> prefixes = new HashMap<>();
+    
     prefixes.put("nif", nif);
-    prefixes.put("local", base);
+    prefixes.put("local", local);
     prefixes.put("xsd", "http://www.w3.org/2001/XMLSchema#");
   
     model.setNsPrefixes(prefixes);
 
     for (final Sentence sentence : this.sentences) {
-      model.add(sentence.rdfModel(tool, process));
+      model.add(sentence.rdfModel(tool, process, host));
     }
 
     return model;
@@ -141,14 +144,15 @@ public class Context {
    * @param tool    Tool used to extract the context.
    * @param format  Required RDF format.
    * @param process Process required as RDF model (pos or ner).
+   * @param host from where comes from the request.
    *
    * @return RDF string in NIF following the given format.
    */
   public final String rdfString(final String tool, final RDFFormat format,
-                                final NlpProcess process) {
+                                final NlpProcess process, final String host) {
     final StringWriter rdf = new StringWriter();
 
-    RDFDataMgr.write(rdf, this.rdfModel(tool, process), format);
+    RDFDataMgr.write(rdf, this.rdfModel(tool, process, host), format);
 
     return rdf.toString();
   }

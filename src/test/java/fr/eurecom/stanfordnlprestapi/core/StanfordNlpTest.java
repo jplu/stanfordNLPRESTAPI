@@ -76,7 +76,7 @@ public class StanfordNlpTest {
     props.setProperty("coref.md.type", "rule");
     props.setProperty("coref.mode", "statistical");
 
-    StanfordNlpTest.stanfordNlp = new StanfordNlp(props);
+    StanfordNlpTest.stanfordNlp = new StanfordNlp(props, "stanfordnlp");
   }
 
   /**
@@ -93,7 +93,7 @@ public class StanfordNlpTest {
 
     Assert.assertTrue("Issue to get the proper full RDF model of a context for POS",
         fileModel.isIsomorphicWith(StanfordNlpTest.stanfordNlp.run(text).rdfModel("stanfordnlp",
-            NlpProcess.POS)));
+            NlpProcess.POS, "http://127.0.0.1")));
   }
 
   /**
@@ -111,7 +111,7 @@ public class StanfordNlpTest {
 
     Assert.assertTrue("Issue to get the proper full RDF model of a context for NER",
         fileModel.isIsomorphicWith(StanfordNlpTest.stanfordNlp.run(text).rdfModel("stanfordnlp",
-            NlpProcess.NER)));
+            NlpProcess.NER, "http://127.0.0.1")));
   }
 
   /**

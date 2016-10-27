@@ -45,7 +45,7 @@ public class EntityTest {
   }
 
   /**
-   * Test {@link Entity#rdfModel(String)} method of an {@link Entity}.
+   * Test {@link Entity#rdfModel(String, String)} method of an {@link Entity}.
    */
   @Test
   public final void testRdfModel() {
@@ -55,38 +55,39 @@ public class EntityTest {
         0, 40, 1, NullSentence.getInstance());
     final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 24, 39);
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/stanfordnlp#";
+    final String base = "http://127.0.0.1/stanfordnlp";
+    final String local = base + "/ontology/";
     final Model model = ModelFactory.createDefaultModel();
 
-    model.add(ResourceFactory.createResource(base + "char=24,39"),
+    model.add(ResourceFactory.createResource(base + "/entity#char=24,39"),
         RDF.type, ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=24,39"),
+    model.add(ResourceFactory.createResource(base + "/entity#char=24,39"),
         RDF.type, ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=24,39"),
+    model.add(ResourceFactory.createResource(base + "/entity#char=24,39"),
         RDF.type, ResourceFactory.createResource(nif + "Phrase"));
-    model.add(ResourceFactory.createResource(base + "char=24,39"),
+    model.add(ResourceFactory.createResource(base + "/entity#char=24,39"),
         ResourceFactory.createProperty(nif + "beginIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(24),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=24,39"),
+    model.add(ResourceFactory.createResource(base + "/entity#char=24,39"),
         ResourceFactory.createProperty(nif + "endIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(39),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=24,39"),
+    model.add(ResourceFactory.createResource(base + "/entity#char=24,39"),
         ResourceFactory.createProperty(nif + "anchorOf"),
         ResourceFactory.createPlainLiteral("Natalie Portman"));
-    model.add(ResourceFactory.createResource(base + "char=24,39"),
+    model.add(ResourceFactory.createResource(base + "/entity#char=24,39"),
         ResourceFactory.createProperty(nif + "sentence"), ResourceFactory.createResource(base
-            + "char=0,40"));
-    model.add(ResourceFactory.createResource(base + "char=24,39"),
+            + "/sentence#char=0,40"));
+    model.add(ResourceFactory.createResource(base + "/entity#char=24,39"),
         ResourceFactory.createProperty(nif + "referenceContext"),
-        ResourceFactory.createResource(base + "char=0,62"));
-    model.add(ResourceFactory.createResource(base + "char=24,39"),
-        ResourceFactory.createProperty(base + "type"),
+        ResourceFactory.createResource(base + "/context#char=0,62"));
+    model.add(ResourceFactory.createResource(base + "/entity#char=24,39"),
+        ResourceFactory.createProperty(local + "type"),
         ResourceFactory.createPlainLiteral("PERSON"));
 
     Assert.assertTrue("Issue to create the model for an Entity",
-        model.isIsomorphicWith(entity.rdfModel("stanfordnlp")));
+        model.isIsomorphicWith(entity.rdfModel("stanfordnlp", "http://127.0.0.1")));
   }
 
   /**

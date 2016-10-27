@@ -107,52 +107,52 @@ public class TokenImpl implements Token {
   }
 
   @Override
-  public final Model rdfModel(final String tool) {
+  public final Model rdfModel(final String tool, final String host) {
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/" + tool + '#';
+    final String base = host + '/' + tool;
     final Model model = ModelFactory.createDefaultModel();
 
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "Word"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "beginIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(this.start),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "endIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(this.end),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "anchorOf"),
         ResourceFactory.createPlainLiteral(this.text));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "sentence"), ResourceFactory.createResource(base
-            + "char=" + this.sentence.start() + ',' + this.sentence.end()));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+            + "/sentence#char=" + this.sentence.start() + ',' + this.sentence.end()));
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "referenceContext"),
-        ResourceFactory.createResource(base + "char=" + this.context.start() + ','
+        ResourceFactory.createResource(base + "/context#char=" + this.context.start() + ','
             + this.context.end()));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "posTag"),
         ResourceFactory.createPlainLiteral(this.tag));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "lemma"),
         ResourceFactory.createPlainLiteral(this.lemma));
 
     if (this.nextToken.index() != -1) {
-      model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+      model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
           ResourceFactory.createProperty(nif + "nextWord"), ResourceFactory.createResource(base
-              + "char=" + this.nextToken.start() + ',' + this.nextToken.end()));
+              + "/token#char=" + this.nextToken.start() + ',' + this.nextToken.end()));
     }
 
     if (this.previousToken.index() != -1) {
-      model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+      model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
           ResourceFactory.createProperty(nif + "previousWord"), ResourceFactory.createResource(base
-              + "char=" + this.previousToken.start() + ',' + this.previousToken.end()));
+              + "/token#char=" + this.previousToken.start() + ',' + this.previousToken.end()));
     }
 
     return model;

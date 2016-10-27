@@ -51,8 +51,8 @@ public class SentenceImplTest {
   }
 
   /**
-   * Test the {@link SentenceImpl#rdfModel(String, NlpProcess)} method with a {@link Sentence} that
-   * has a NER annotation and a next {@link Sentence}.
+   * Test the {@link SentenceImpl#rdfModel(String, NlpProcess, String)} method with a
+   * {@link Sentence} that has a NER annotation and a next {@link Sentence}.
    */
   @Test
   public final void testRdfModelforNerWithNextSentence() {
@@ -68,42 +68,46 @@ public class SentenceImplTest {
     sentence.nextSentence(sentence2);
 
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/stanfordnlp#";
+    final String base = "http://127.0.0.1/stanfordnlp";
+    final String local = base + "/ontology/";
     final Model model = ModelFactory.createDefaultModel();
 
-    model.add(ResourceFactory.createResource(base + "char=0,40"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"), RDF.type,
         ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=0,40"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"), RDF.type,
         ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=0,40"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"), RDF.type,
         ResourceFactory.createResource(nif + "Sentence"));
-    model.add(ResourceFactory.createResource(base + "char=0,40"), ResourceFactory.createProperty(nif
-        + "beginIndex"), ResourceFactory.createTypedLiteral("0",
-        XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=0,40"), ResourceFactory.createProperty(nif
-        + "endIndex"), ResourceFactory.createTypedLiteral("40",
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "beginIndex"), ResourceFactory.createTypedLiteral("0",
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=0,40"), ResourceFactory.createProperty(nif
-        + "referenceContext"), ResourceFactory.createResource(base + "char=" + context.start() + ','
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "endIndex"), ResourceFactory.createTypedLiteral("40",
+            XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "referenceContext"),
+        ResourceFactory.createResource(base + "/context#char=" + context.start() + ','
             + context.end()));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         ResourceFactory.createProperty(nif + "anchorOf"),
         ResourceFactory.createTypedLiteral("My favorite actress is: Natalie Portman."));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
-        ResourceFactory.createProperty(base + "entity"), ResourceFactory.createResource(base
-            + "char=" + entity.start() + ',' + entity.end()));
-    model.add(entity.rdfModel("stanfordnlp"));
-    model.add(ResourceFactory.createResource(base + "char=0,40"), ResourceFactory.createProperty(nif
-        + "nextSentence"), ResourceFactory.createResource(base + "char=" + sentence2.start() + ','
-        + sentence2.end()));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(local + "entity"), ResourceFactory.createResource(base
+            + "/entity#char=" + entity.start() + ',' + entity.end()));
+    model.add(entity.rdfModel("stanfordnlp", "http://127.0.0.1"));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "nextSentence"),
+        ResourceFactory.createResource(base + "/sentence#char=" + sentence2.start() + ','
+            + sentence2.end()));
 
     Assert.assertTrue("Issue to create the model for a Sentence for NER with a next Sentence",
-        model.isIsomorphicWith(sentence.rdfModel("stanfordnlp", NlpProcess.NER)));
+        model.isIsomorphicWith(sentence.rdfModel("stanfordnlp", NlpProcess.NER,
+            "http://127.0.0.1")));
   }
 
   /**
-   * Test the {@link SentenceImpl#rdfModel(String, NlpProcess)} method with a {@link Sentence} that
-   * has a previous {@link Sentence} without NER or POS annotations.
+   * Test the {@link SentenceImpl#rdfModel(String, NlpProcess, String)} method with a
+   * {@link Sentence} that has a previous {@link Sentence} without NER or POS annotations.
    */
   @Test
   public final void testRdfModelWitPreviousSentenceWithoutAnnotations() {
@@ -115,38 +119,41 @@ public class SentenceImplTest {
         sentence);
 
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/stanfordnlp#";
+    final String base = "http://127.0.0.1/stanfordnlp";
     final Model model = ModelFactory.createDefaultModel();
 
-    model.add(ResourceFactory.createResource(base + "char=41,62"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/sentence#char=41,62"), RDF.type,
         ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=41,62"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/sentence#char=41,62"), RDF.type,
         ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=41,62"), RDF.type,
+    model.add(ResourceFactory.createResource(base + "/sentence#char=41,62"), RDF.type,
         ResourceFactory.createResource(nif + "Sentence"));
-    model.add(ResourceFactory.createResource(base + "char=41,62"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=41,62"),
         ResourceFactory.createProperty(nif + "beginIndex"), ResourceFactory.createTypedLiteral("41",
         XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=41,62"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=41,62"),
         ResourceFactory.createProperty(nif + "endIndex"), ResourceFactory.createTypedLiteral("62",
         XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=41,62"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=41,62"),
         ResourceFactory.createProperty(nif + "referenceContext"),
-        ResourceFactory.createResource(base + "char=" + context.start() + ',' + context.end()));
-    model.add(ResourceFactory.createResource(base + "char=41,62"),
+        ResourceFactory.createResource(base + "/context#char=" + context.start() + ','
+            + context.end()));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=41,62"),
         ResourceFactory.createProperty(nif + "anchorOf"),
         ResourceFactory.createTypedLiteral("She is very stunning."));
-    model.add(ResourceFactory.createResource(base + "char=41,62"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=41,62"),
         ResourceFactory.createProperty(nif + "previousSentence"),
-        ResourceFactory.createResource(base + "char=" + sentence.start() + ',' + sentence.end()));
+        ResourceFactory.createResource(base + "/sentence#char=" + sentence.start() + ','
+            + sentence.end()));
 
     Assert.assertTrue("Issue to create the model for a Sentence with a previous Sentence",
-        model.isIsomorphicWith(sentence2.rdfModel("stanfordnlp", NlpProcess.NER)));
+        model.isIsomorphicWith(sentence2.rdfModel("stanfordnlp", NlpProcess.NER,
+            "http://127.0.0.1")));
   }
 
   /**
-   * Test the {@link SentenceImpl#rdfModel(String, NlpProcess)} method with a {@link Sentence} that
-   * has a POS annotation.
+   * Test the {@link SentenceImpl#rdfModel(String, NlpProcess, String)} method with a
+   * {@link Sentence} that has a POS annotation.
    */
   @Test
   public final void testRdfModelforPos() {
@@ -160,45 +167,46 @@ public class SentenceImplTest {
     sentence.addToken(token);
 
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/stanfordnlp#";
+    final String base = "http://127.0.0.1/stanfordnlp";
     final Model model = ModelFactory.createDefaultModel();
 
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         RDF.type, ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         RDF.type, ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         RDF.type, ResourceFactory.createResource(nif + "Sentence"));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         ResourceFactory.createProperty(nif + "beginIndex"),
         ResourceFactory.createTypedLiteral("0",
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         ResourceFactory.createProperty(nif + "endIndex"),
         ResourceFactory.createTypedLiteral("40",
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         ResourceFactory.createProperty(nif + "firstToken"),
-        ResourceFactory.createResource(base + "char=" + token.start() + ','
+        ResourceFactory.createResource(base + "/token#char=" + token.start() + ','
             + token.end()));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         ResourceFactory.createProperty(nif + "lastToken"),
-        ResourceFactory.createResource(base + "char=" + token.start() + ','
+        ResourceFactory.createResource(base + "/token#char=" + token.start() + ','
             + token.end()));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         ResourceFactory.createProperty(nif + "referenceContext"),
-        ResourceFactory.createResource(base + "char=" + context.start() + ','
+        ResourceFactory.createResource(base + "/context#char=" + context.start() + ','
             + context.end()));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         ResourceFactory.createProperty(nif + "anchorOf"),
         ResourceFactory.createTypedLiteral("My favorite actress is: Natalie Portman."));
-    model.add(ResourceFactory.createResource(base + "char=0,40"),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         ResourceFactory.createProperty(nif + "word"), ResourceFactory.createResource(base
-            + "char=" + token.start() + ',' + token.end()));
-    model.add(token.rdfModel("stanfordnlp"));
+            + "/token#char=" + token.start() + ',' + token.end()));
+    model.add(token.rdfModel("stanfordnlp", "http://127.0.0.1"));
 
     Assert.assertTrue("Issue to create the model for a Sentence for POS",
-        model.isIsomorphicWith(sentence.rdfModel("stanfordnlp", NlpProcess.POS)));
+        model.isIsomorphicWith(sentence.rdfModel("stanfordnlp", NlpProcess.POS,
+            "http://127.0.0.1")));
   }
 
   /**
@@ -245,7 +253,7 @@ public class SentenceImplTest {
   }
 
   /**
-   * Test that {@link SentenceImpl#rdfModel(String, NlpProcess)} raise properly the
+   * Test that {@link SentenceImpl#rdfModel(String, NlpProcess, String)} raise properly the
    * {@link InexistentNlpProcessException} exception in case of inexistent NLP process.
    */
   @Test(expected = InexistentNlpProcessException.class)
@@ -255,7 +263,7 @@ public class SentenceImplTest {
     final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
 
-    sentence.rdfModel("stanfordnlp", null);
+    sentence.rdfModel("stanfordnlp", null, "http://127.0.0.1");
   }
 
   /**

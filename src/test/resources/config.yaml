@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+name: stanfordnlp
 pos:
   model: edu/stanford/nlp/models/pos-tagger/english-bidirectional/english-bidirectional-distsim.tagger
 ner:

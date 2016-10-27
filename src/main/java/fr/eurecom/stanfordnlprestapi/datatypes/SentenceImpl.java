@@ -131,76 +131,87 @@ public class SentenceImpl implements Sentence {
   }
 
   @Override
-  public final Model rdfModel(final String tool, final NlpProcess process) {
+  public final Model rdfModel(final String tool, final NlpProcess process, final String host) {
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/" + tool + '#';
+    final String base = host + '/' + tool;
+    final String local = base + "/ontology/";
     final Model model = ModelFactory.createDefaultModel();
 
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+            + this.end),
         RDF.type, ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+            + this.end),
         RDF.type, ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+            + this.end),
         RDF.type, ResourceFactory.createResource(nif + "Sentence"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+            + this.end),
         ResourceFactory.createProperty(nif + "beginIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(this.start),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+            + this.end),
         ResourceFactory.createProperty(nif + "endIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(this.end),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+            + this.end),
         ResourceFactory.createProperty(nif + "referenceContext"),
-        ResourceFactory.createResource(base + "char=" + this.context.start() + ','
+        ResourceFactory.createResource(base + "/context#char=" + this.context.start() + ','
             + this.context.end()));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+            + this.end),
         ResourceFactory.createProperty(nif + "anchorOf"),
         ResourceFactory.createTypedLiteral(this.text));
 
     if (process == NlpProcess.POS) {
       for (final Token token : this.tokens) {
-        model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+        model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+                + this.end),
             ResourceFactory.createProperty(nif + "word"), ResourceFactory.createResource(base
-                + "char=" + token.start() + ',' + token.end()));
-        model.add(token.rdfModel(tool));
+                + "/token#char=" + token.start() + ',' + token.end()));
+        model.add(token.rdfModel(tool, host));
       }
+  
+      model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+              + this.end),
+          ResourceFactory.createProperty(nif + "firstToken"),
+          ResourceFactory.createResource(base + "/token#char=" + this.firstToken.start() + ','
+              + this.firstToken.end()));
+    
+
+      model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+              + this.end),
+          ResourceFactory.createProperty(nif + "lastToken"),
+          ResourceFactory.createResource(base + "/token#char=" + this.lastToken.start() + ','
+              + this.lastToken.end()));
     } else if (process == NlpProcess.NER) {
       for (final Entity entity : this.entities) {
-        model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
-            ResourceFactory.createProperty(base + "entity"), ResourceFactory.createResource(base
-                + "char=" + entity.start() + ',' + entity.end()));
-        model.add(entity.rdfModel(tool));
+        model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+                + this.end),
+            ResourceFactory.createProperty(local + "entity"), ResourceFactory.createResource(base
+                + "/entity#char=" + entity.start() + ',' + entity.end()));
+        model.add(entity.rdfModel(tool, host));
       }
     } else {
       throw new InexistentNlpProcessException(process + " is not a valid NLP Process");
     }
 
     if (this.nextSentence.index() != -1) {
-      model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+      model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+              + this.end),
           ResourceFactory.createProperty(nif + "nextSentence"), ResourceFactory.createResource(base
-              + "char=" + this.nextSentence.start() + ',' + this.nextSentence.end()));
+              + "/sentence#char=" + this.nextSentence.start() + ',' + this.nextSentence.end()));
     }
 
     if (this.previousSentence.index() != -1) {
-      model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+      model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+              + this.end),
           ResourceFactory.createProperty(nif + "previousSentence"),
-          ResourceFactory.createResource(base + "char=" + this.previousSentence.start() + ','
-              + this.previousSentence.end()));
-    }
-
-    if (this.firstToken.index() != -1) {
-      model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
-          ResourceFactory.createProperty(nif + "firstToken"),
-          ResourceFactory.createResource(base + "char=" + this.firstToken.start() + ','
-              + this.firstToken.end()));
-    }
-
-    if (this.lastToken.index() != -1) {
-      model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
-          ResourceFactory.createProperty(nif + "lastToken"),
-          ResourceFactory.createResource(base + "char=" + this.lastToken.start() + ','
-              + this.lastToken.end()));
+          ResourceFactory.createResource(base + "/sentence#char=" + this.previousSentence.start()
+              + ',' + this.previousSentence.end()));
     }
 
     return model;

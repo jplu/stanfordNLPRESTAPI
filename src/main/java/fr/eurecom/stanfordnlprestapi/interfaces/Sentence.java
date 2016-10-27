@@ -45,5 +45,5 @@ public interface Sentence {
 
   int end();
 
-  Model rdfModel(final String tool, final NlpProcess process);
+  Model rdfModel(final String tool, final NlpProcess process, final String host);
 }

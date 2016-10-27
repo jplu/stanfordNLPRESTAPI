@@ -19,10 +19,15 @@ package fr.eurecom.stanfordnlprestapi.endpoints;
 
 import fr.eurecom.stanfordnlprestapi.resources.PipelineResource;
 
+import io.dropwizard.testing.junit.DropwizardClientRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 
@@ -33,6 +38,7 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -46,9 +52,43 @@ public class PipelineEndpointTest {
   static final Logger LOGGER = LoggerFactory.getLogger(PipelineEndpointTest.class);
   @Rule
   public ResourceTestRule resources = ResourceTestRule.builder().addResource(
-      new PipelineResource("tokenize, ssplit, pos, lemma, ner, parse, mention, coref")).build();
+      new PipelineResource("tokenize, ssplit, pos, lemma, ner, parse, mention, coref",
+          "stanfordnlp")).build();
+  
+  @ClassRule
+  public static final DropwizardClientRule DROPWIZARD = new DropwizardClientRule(
+      new PipelineResource("tokenize, ssplit, pos, lemma, ner, parse, mention, coref",
+          "stanfordnlp"));
 
   public PipelineEndpointTest() {
+  }
+  
+  /**
+   * Test the POS client.
+   */
+  @Test
+  public final void clientPos() throws Exception {
+    final URL url = new URL(PipelineEndpointTest.DROPWIZARD.baseUri() + "/v1/pos?text=test");
+    try (final BufferedReader response = new BufferedReader(new InputStreamReader(
+        url.openStream(), Charset.forName("UTF-8")))) {
+  
+      Assert.assertEquals("Issue with the POS client",
+          "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .", response.readLine());
+    }
+  }
+  
+  /**
+   * Test the NER client.
+   */
+  @Test
+  public final void clientNer() throws Exception {
+    final URL url = new URL(PipelineEndpointTest.DROPWIZARD.baseUri() + "/v1/ner?text=Paris");
+    try (final BufferedReader response = new BufferedReader(new InputStreamReader(
+        url.openStream(), Charset.forName("UTF-8")))) {
+    
+      Assert.assertEquals("Issue with the NER client",
+          "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .", response.readLine());
+    }
   }
 
   /**

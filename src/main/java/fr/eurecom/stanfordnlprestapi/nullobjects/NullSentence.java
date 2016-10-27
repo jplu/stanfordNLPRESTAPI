@@ -84,7 +84,7 @@ public final class NullSentence implements Sentence {
   }
 
   @Override
-  public Model rdfModel(final String tool, final NlpProcess process) {
+  public Model rdfModel(final String tool, final NlpProcess process, final String host) {
     return ModelFactory.createDefaultModel();
   }
 }

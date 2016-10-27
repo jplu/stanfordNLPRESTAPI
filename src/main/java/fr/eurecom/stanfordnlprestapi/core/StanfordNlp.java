@@ -53,16 +53,23 @@ import org.slf4j.LoggerFactory;
  */
 public class StanfordNlp {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlp.class);
-  private final StanfordCoreNLP pipeline;
+  private StanfordCoreNLP pipeline;
+  private final String ner;
+  private final String pos;
+  private final String name;
 
   /**
    * StanfordNlp constructor.
    *
    * @param props properties to configure the pipeline.
    */
-  public StanfordNlp(final Properties props) {
+  public StanfordNlp(final Properties props, final String newName) {
     StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", props);
-
+    
+    this.ner = props.getProperty("ner.model");
+    this.pos = props.getProperty("pos.model");
+    this.name = newName;
+    
     this.pipeline = new StanfordCoreNLP(props);
   }
 
@@ -72,14 +79,18 @@ public class StanfordNlp {
    * @param conf a pipeline configuration.
    */
   public StanfordNlp(final PipelineConfiguration conf) {
+    this.pos = conf.getPos().getModel();
+    this.ner = conf.getNer().getModel();
+    this.name = conf.getName();
+    
     final Properties props = new Properties();
-
+    
     props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
     props.setProperty("pos.model", conf.getPos().getModel());
     props.setProperty("ner.model", conf.getNer().getModel());
     props.setProperty("ner.useSUTime", Boolean.toString(conf.getNer().getUseSuTime()));
-    props.setProperty("ner.applyNumericClassifiers", Boolean.toString(
-        conf.getNer().getApplyNumericClassifiers()));
+    props.setProperty("ner.applyNumericClassifiers", Boolean.toString(conf.getNer()
+        .getApplyNumericClassifiers()));
     props.setProperty("parse.model", conf.getParse().getModel());
     props.setProperty("coref.doClustering", Boolean.toString(conf.getCoref().getDoClustering()));
     props.setProperty("coref.md.type", conf.getCoref().getMdType());
@@ -88,6 +99,43 @@ public class StanfordNlp {
     StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", props);
 
     this.pipeline = new StanfordCoreNLP(props);
+  }
+  
+  /**
+   * The name of the pipeline.
+   *
+   * @return name of the pipeline.
+   */
+  public final String getName() {
+    return this.name;
+  }
+  
+  /**
+   * Change Stanford CoreNLP settings.
+   *
+   * @param setting new Settings.
+   */
+  public final void setPipeline(final String setting) {
+    if ("tweet".equals(setting) || "neel2015".equals(setting) || "neel2016".equals(setting)) {
+      this.pipeline.getProperties().setProperty("pos.model", "models/gate-EN-twitter.model");
+    }
+    
+    if ("neel2015".equals(setting)) {
+      this.pipeline.getProperties().setProperty("ner.model", "models/NEEL2015.ser.gz");
+    } else if ("neel2016".equals(setting)) {
+      this.pipeline.getProperties().setProperty("ner.model", "models/NEEL2016.ser.gz");
+    } else if ("oke2015".equals(setting)) {
+      this.pipeline.getProperties().setProperty("ner.model", "models/OKE2015.ser.gz");
+    } else if ("oke2016".equals(setting)) {
+      this.pipeline.getProperties().setProperty("ner.model", "models/OKE2016.ser.gz");
+    } else if ("none".equals(setting)) {
+      this.pipeline.getProperties().setProperty("ner.model", this.ner);
+      this.pipeline.getProperties().setProperty("pos.model", this.pos);
+    }
+    
+    StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", this.pipeline.getProperties());
+    
+    this.pipeline = new StanfordCoreNLP(this.pipeline.getProperties());
   }
 
   /**
@@ -115,7 +163,6 @@ public class StanfordNlp {
 
   private void buildSentencesFromContext(final List<CoreMap> stanfordSentences,
                                          final Context context) {
-    final List<Sentence> sentences = new ArrayList<>();
     Sentence sentence = new SentenceImpl(stanfordSentences.get(0).toString(), context,
         stanfordSentences.get(0).get(CoreAnnotations.CharacterOffsetBeginAnnotation.class),
         stanfordSentences.get(0).get(CoreAnnotations.CharacterOffsetEndAnnotation.class),
@@ -123,7 +170,11 @@ public class StanfordNlp {
         NullSentence.getInstance());
 
     context.addSentence(sentence);
+    
+    final List<Sentence> sentences = new ArrayList<>();
+    
     sentences.add(sentence);
+    
     this.buildTokensFromSentence(stanfordSentences.get(0), context, sentence);
     this.buildEntitiesFromSentence(stanfordSentences.get(0), context, sentence);
 
@@ -147,7 +198,6 @@ public class StanfordNlp {
 
   private void buildTokensFromSentence(final CoreMap stanfordSentence, final Context context,
                                        final Sentence sentence) {
-    final List<Token> tokens = new ArrayList<>();
     final CoreLabel firstLabel = stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).get(
         0);
     Token token = new TokenImpl(firstLabel.get(CoreAnnotations.TextAnnotation.class),
@@ -159,6 +209,9 @@ public class StanfordNlp {
         firstLabel.get(CoreAnnotations.IndexAnnotation.class));
 
     sentence.addToken(token);
+    
+    final List<Token> tokens = new ArrayList<>();
+    
     tokens.add(token);
 
     for (int i = 1; i < stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).size(); i++) {

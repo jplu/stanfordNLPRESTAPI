@@ -35,5 +35,5 @@ public interface Token {
 
   int end();
 
-  Model rdfModel(final String tool);
+  Model rdfModel(final String tool, final String host);
 }
