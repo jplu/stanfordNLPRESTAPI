@@ -77,39 +77,42 @@ public class Entity {
    * Turn the entity into RDF model.
    *
    * @param tool Tool used to extract the entity.
+   * @param host Host from where comes from the request.
+   *
    * @return RDF model in NIF of the entity.
    */
-  public final Model rdfModel(final String tool) {
+  public final Model rdfModel(final String tool, final String host) {
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
-    final String base = "http://127.0.0.1/" + tool + '#';
+    final String base = host + '/' + tool;
+    final String local = base + "/ontology/";
     final Model model = ModelFactory.createDefaultModel();
 
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "String"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "RFC5147String"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "Phrase"));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "beginIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(this.start),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "endIndex"),
         ResourceFactory.createTypedLiteral(Integer.toString(this.end),
             XSDDatatype.XSDnonNegativeInteger));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "anchorOf"),
         ResourceFactory.createPlainLiteral(this.text));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+    model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "sentence"), ResourceFactory.createResource(base
-            + "char=" + this.sentence.start() + ',' + this.sentence.end()));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
+            + "/sentence#char=" + this.sentence.start() + ',' + this.sentence.end()));
+    model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "referenceContext"),
-        ResourceFactory.createResource(base + "char=" + this.context.start() + ','
+        ResourceFactory.createResource(base + "/context#char=" + this.context.start() + ','
             + this.context.end()));
-    model.add(ResourceFactory.createResource(base + "char=" + this.start + ',' + this.end),
-        ResourceFactory.createProperty(base + "type"),
+    model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
+        ResourceFactory.createProperty(local + "type"),
         ResourceFactory.createPlainLiteral(this.type));
 
     return model;

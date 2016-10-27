@@ -27,11 +27,22 @@ import io.dropwizard.cli.ConfiguredCommand;
 
 import io.dropwizard.setup.Bootstrap;
 
+import java.io.File;
+
+import java.net.URL;
+import java.nio.charset.Charset;
+
+import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.ArgumentAction;
+import net.sourceforge.argparse4j.inf.MutuallyExclusiveGroup;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.riot.RDFFormat;
 
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,36 +67,91 @@ public class NerCommand<T extends PipelineConfiguration> extends ConfiguredComma
   public final void configure(final Subparser subparser) {
     super.configure(subparser);
     // Add a command line option
-    subparser.addArgument("-t")
+  
+    final MutuallyExclusiveGroup group = subparser.addMutuallyExclusiveGroup("inputs")
+        .required(true);
+    final ArgumentAction urlAction = new UrlAction();
+  
+    group.addArgument("-t", "--text")
         .dest("text")
         .type(String.class)
-        .required(true)
         .help("text to analyse");
-    subparser.addArgument("-f")
+    group.addArgument("-i", "--input-file")
+        .dest("ifile")
+        .type(Arguments.fileType().verifyExists().verifyIsFile().verifyCanRead())
+        .help("Input file name which contain the text to process");
+    group.addArgument("-u", "--url")
+        .dest("url")
+        .type(String.class)
+        .action(urlAction)
+        .help("URL to process");
+    
+    subparser.addArgument("-f", "--format")
         .dest("format")
         .type(String.class)
         .required(false)
+        .setDefault("turtle")
+        .choices("turtle", "jsonld")
         .help("turtle or jsonld");
+    subparser.addArgument("-s", "--setting")
+        .dest("setting")
+        .type(String.class)
+        .required(false)
+        .setDefault("none")
+        .choices("neel2015", "neel2016", "oke2015", "oke2016", "none")
+        .help("neel2015, neel2016, oke2015, oke2016 or none");
+    subparser.addArgument("-o", "--output-file")
+        .dest("ofile")
+        .type(Arguments.fileType().verifyNotExists().verifyCanWriteParent())
+        .required(false)
+        .help("Output file name which will contain the annotations");
   }
 
   @Override
   protected final void run(final Bootstrap<T> newBootstrap, final Namespace
       newNamespace, final T newT) throws Exception {
-    NerCommand.LOGGER.info("NER analysis on \"{}\" :", newNamespace.getString("text"));
     NerCommand.LOGGER.info("NER analysis uses \"{}\" as configuration file", newNamespace.getString(
         "file"));
-
+    
     this.pipeline = new StanfordNlp(newT);
-
-    if (newNamespace.get("format") == null || "turtle".equals(newNamespace.get("format"))
-        || !"jsonld".equals(newNamespace.get("format"))) {
-      NerCommand.LOGGER.info(System.lineSeparator() + this.pipeline.run(newNamespace.getString(
-          "text")).rdfString("stanfordnlp", RDFFormat.TURTLE_PRETTY, NlpProcess.NER));
+    
+    if (newNamespace.getString("setting") != null && !"none".equals(newNamespace.getString(
+        "setting"))) {
+      this.pipeline.setPipeline(newNamespace.getString("setting"));
     }
     
-    if ("jsonld".equals(newNamespace.get("format"))) {
-      NerCommand.LOGGER.info(System.lineSeparator() + this.pipeline.run(newNamespace.getString(
-          "text")).rdfString("stanfordnlp", RDFFormat.JSONLD_PRETTY, NlpProcess.NER));
+    if ("turtle".equals(newNamespace.getString("format"))) {
+      this.process(newNamespace, newT, RDFFormat.TURTLE_PRETTY);
+    } else {
+      this.process(newNamespace, newT, RDFFormat.JSONLD_PRETTY);
+    }
+  }
+  
+  private void process(final Namespace newNamespace, final T newT, final RDFFormat format)
+      throws Exception {
+    final String text;
+  
+    if (newNamespace.getString("ifile") != null) {
+      text = FileUtils.readFileToString(new File(newNamespace.getString("ifile")),
+          Charset.forName("UTF-8"));
+    } else if (newNamespace.getString("url") != null) {
+      final String tmp = IOUtils.toString(new URL(newNamespace.getString("url")),
+          Charset.forName("UTF-8"));
+      
+      text = Jsoup.parse(tmp).text();
+    } else {
+      text = newNamespace.getString("text");
+    }
+  
+    NerCommand.LOGGER.info("NER analysis on \"{}\" :", newNamespace.getString("text"));
+  
+    final String result = this.pipeline.run(text).rdfString(newT.getName(), format, NlpProcess.NER,
+        "http://127.0.0.1");
+  
+    if (newNamespace.getString("ofile") != null) {
+      FileUtils.write(new File(newNamespace.getString("ofile")), result, Charset.forName("UTF-8"));
+    } else {
+      NerCommand.LOGGER.info("{}{}", System.lineSeparator(), result);
     }
   }
 

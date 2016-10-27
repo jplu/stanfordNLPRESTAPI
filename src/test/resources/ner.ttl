@@ -1,39 +1,35 @@
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
-@prefix local: <http://127.0.0.1/stanfordnlp#> .
+@prefix local: <http://127.0.0.1/stanfordnlp/ontology/> .
 
-<http://127.0.0.1/stanfordnlp#char=0,62>
-        a               nif:Context , nif:RFC5147String , nif:String ;
-        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
-        nif:endIndex    "62"^^xsd:nonNegativeInteger ;
-        nif:isString    "My favorite actress is: Natalie Portman. She is very stunning." .
-
-<http://127.0.0.1/stanfordnlp#char=0,40>
-        a                     nif:Sentence , nif:String , nif:RFC5147String ;
-        local:entity          <http://127.0.0.1/stanfordnlp#char=24,39> ;
-        nif:anchorOf          "My favorite actress is: Natalie Portman." ;
-        nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "40"^^xsd:nonNegativeInteger ;
-        nif:firstToken        <http://127.0.0.1/stanfordnlp#char=0,2> ;
-        nif:lastToken         <http://127.0.0.1/stanfordnlp#char=39,40> ;
-        nif:nextSentence      <http://127.0.0.1/stanfordnlp#char=41,62> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,62> .
-
-<http://127.0.0.1/stanfordnlp#char=41,62>
-        a                     nif:String , nif:Sentence , nif:RFC5147String ;
-        nif:anchorOf          "She is very stunning." ;
-        nif:beginIndex        "41"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "62"^^xsd:nonNegativeInteger ;
-        nif:firstToken        <http://127.0.0.1/stanfordnlp#char=41,44> ;
-        nif:lastToken         <http://127.0.0.1/stanfordnlp#char=61,62> ;
-        nif:previousSentence  <http://127.0.0.1/stanfordnlp#char=0,40> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,62> .
-
-<http://127.0.0.1/stanfordnlp#char=24,39>
+<http://127.0.0.1/stanfordnlp/entity#char=24,39>
         a                     nif:Phrase , nif:RFC5147String , nif:String ;
         local:type            "PERSON" ;
         nif:anchorOf          "Natalie Portman" ;
         nif:beginIndex        "24"^^xsd:nonNegativeInteger ;
         nif:endIndex          "39"^^xsd:nonNegativeInteger ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp#char=0,40> .
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=0,40> .
+
+<http://127.0.0.1/stanfordnlp/context#char=0,62>
+        a               nif:Context , nif:RFC5147String , nif:String ;
+        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "62"^^xsd:nonNegativeInteger ;
+        nif:isString    "My favorite actress is: Natalie Portman. She is very stunning." .
+
+<http://127.0.0.1/stanfordnlp/sentence#char=41,62>
+        a                     nif:String , nif:RFC5147String , nif:Sentence ;
+        nif:anchorOf          "She is very stunning." ;
+        nif:beginIndex        "41"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "62"^^xsd:nonNegativeInteger ;
+        nif:previousSentence  <http://127.0.0.1/stanfordnlp/sentence#char=0,40> ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> .
+
+<http://127.0.0.1/stanfordnlp/sentence#char=0,40>
+        a                     nif:String , nif:RFC5147String , nif:Sentence ;
+        local:entity          <http://127.0.0.1/stanfordnlp/entity#char=24,39> ;
+        nif:anchorOf          "My favorite actress is: Natalie Portman." ;
+        nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "40"^^xsd:nonNegativeInteger ;
+        nif:nextSentence      <http://127.0.0.1/stanfordnlp/sentence#char=41,62> ;
+        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> .

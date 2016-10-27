@@ -1,521 +1,244 @@
 {
-  "@context": {
-    "local": "http://127.0.0.1/stanfordnlp#",
-    "nif": "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#",
-    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-    "xsd": "http://www.w3.org/2001/XMLSchema#"
-  },
-  "@graph": [
-    {
-      "@id": "local:char=0,40",
-      "@type": [
-        "nif:RFC5147String",
-        "nif:String",
-        "nif:Sentence"
-      ],
-      "nif:anchorOf": "My favorite actress is: Natalie Portman.",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "0"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "40"
-      },
-      "nif:firstToken": {
-        "@id": "local:char=0,2"
-      },
-      "nif:lastToken": {
-        "@id": "local:char=39,40"
-      },
-      "nif:nextSentence": {
-        "@id": "local:char=41,62"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:word": [
-        {
-          "@id": "local:char=20,22"
-        },
-        {
-          "@id": "local:char=22,23"
-        },
-        {
-          "@id": "local:char=0,2"
-        },
-        {
-          "@id": "local:char=24,31"
-        },
-        {
-          "@id": "local:char=3,11"
-        },
-        {
-          "@id": "local:char=39,40"
-        },
-        {
-          "@id": "local:char=12,19"
-        },
-        {
-          "@id": "local:char=32,39"
-        }
-      ]
+  "@graph" : [ {
+    "@id" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "@type" : [ "nif:Context", "nif:RFC5147String", "nif:String" ],
+    "beginIndex" : "0",
+    "endIndex" : "62",
+    "isString" : "My favorite actress is: Natalie Portman. She is very stunning."
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40",
+    "@type" : [ "nif:RFC5147String", "nif:String", "nif:Sentence" ],
+    "anchorOf" : "My favorite actress is: Natalie Portman.",
+    "beginIndex" : "0",
+    "endIndex" : "40",
+    "firstToken" : "http://127.0.0.1/stanfordnlp/token#char=0,2",
+    "lastToken" : "http://127.0.0.1/stanfordnlp/token#char=39,40",
+    "nextSentence" : "http://127.0.0.1/stanfordnlp/sentence#char=41,62",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "word" : [ "http://127.0.0.1/stanfordnlp/token#char=3,11", "http://127.0.0.1/stanfordnlp/token#char=32,39", "http://127.0.0.1/stanfordnlp/token#char=12,19", "http://127.0.0.1/stanfordnlp/token#char=24,31", "http://127.0.0.1/stanfordnlp/token#char=0,2", "http://127.0.0.1/stanfordnlp/token#char=20,22", "http://127.0.0.1/stanfordnlp/token#char=39,40", "http://127.0.0.1/stanfordnlp/token#char=22,23" ]
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/sentence#char=41,62",
+    "@type" : [ "nif:RFC5147String", "nif:Sentence", "nif:String" ],
+    "anchorOf" : "She is very stunning.",
+    "beginIndex" : "41",
+    "endIndex" : "62",
+    "firstToken" : "http://127.0.0.1/stanfordnlp/token#char=41,44",
+    "lastToken" : "http://127.0.0.1/stanfordnlp/token#char=61,62",
+    "previousSentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "word" : [ "http://127.0.0.1/stanfordnlp/token#char=61,62", "http://127.0.0.1/stanfordnlp/token#char=41,44", "http://127.0.0.1/stanfordnlp/token#char=53,61", "http://127.0.0.1/stanfordnlp/token#char=48,52", "http://127.0.0.1/stanfordnlp/token#char=45,47" ]
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=0,2",
+    "@type" : [ "nif:RFC5147String", "nif:Word", "nif:String" ],
+    "anchorOf" : "My",
+    "beginIndex" : "0",
+    "endIndex" : "2",
+    "lemma" : "my",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=3,11",
+    "posTag" : "PRP$",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=12,19",
+    "@type" : [ "nif:String", "nif:RFC5147String", "nif:Word" ],
+    "anchorOf" : "actress",
+    "beginIndex" : "12",
+    "endIndex" : "19",
+    "lemma" : "actress",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=20,22",
+    "posTag" : "NN",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=3,11",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=20,22",
+    "@type" : [ "nif:RFC5147String", "nif:String", "nif:Word" ],
+    "anchorOf" : "is",
+    "beginIndex" : "20",
+    "endIndex" : "22",
+    "lemma" : "be",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=22,23",
+    "posTag" : "VBZ",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=12,19",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=22,23",
+    "@type" : [ "nif:RFC5147String", "nif:Word", "nif:String" ],
+    "anchorOf" : ":",
+    "beginIndex" : "22",
+    "endIndex" : "23",
+    "lemma" : ":",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=24,31",
+    "posTag" : ":",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=20,22",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=24,31",
+    "@type" : [ "nif:RFC5147String", "nif:String", "nif:Word" ],
+    "anchorOf" : "Natalie",
+    "beginIndex" : "24",
+    "endIndex" : "31",
+    "lemma" : "Natalie",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=32,39",
+    "posTag" : "NNP",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=22,23",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=3,11",
+    "@type" : [ "nif:Word", "nif:RFC5147String", "nif:String" ],
+    "anchorOf" : "favorite",
+    "beginIndex" : "3",
+    "endIndex" : "11",
+    "lemma" : "favorite",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=12,19",
+    "posTag" : "JJ",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=0,2",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=32,39",
+    "@type" : [ "nif:Word", "nif:RFC5147String", "nif:String" ],
+    "anchorOf" : "Portman",
+    "beginIndex" : "32",
+    "endIndex" : "39",
+    "lemma" : "Portman",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=39,40",
+    "posTag" : "NNP",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=24,31",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=39,40",
+    "@type" : [ "nif:Word", "nif:String", "nif:RFC5147String" ],
+    "anchorOf" : ".",
+    "beginIndex" : "39",
+    "endIndex" : "40",
+    "lemma" : ".",
+    "posTag" : ".",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=32,39",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=41,44",
+    "@type" : [ "nif:RFC5147String", "nif:Word", "nif:String" ],
+    "anchorOf" : "She",
+    "beginIndex" : "41",
+    "endIndex" : "44",
+    "lemma" : "she",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=45,47",
+    "posTag" : "PRP",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=41,62"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=45,47",
+    "@type" : [ "nif:Word", "nif:String", "nif:RFC5147String" ],
+    "anchorOf" : "is",
+    "beginIndex" : "45",
+    "endIndex" : "47",
+    "lemma" : "be",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=48,52",
+    "posTag" : "VBZ",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=41,44",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=41,62"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=48,52",
+    "@type" : [ "nif:RFC5147String", "nif:Word", "nif:String" ],
+    "anchorOf" : "very",
+    "beginIndex" : "48",
+    "endIndex" : "52",
+    "lemma" : "very",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=53,61",
+    "posTag" : "RB",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=45,47",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=41,62"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=53,61",
+    "@type" : [ "nif:RFC5147String", "nif:String", "nif:Word" ],
+    "anchorOf" : "stunning",
+    "beginIndex" : "53",
+    "endIndex" : "61",
+    "lemma" : "stunning",
+    "nextWord" : "http://127.0.0.1/stanfordnlp/token#char=61,62",
+    "posTag" : "JJ",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=48,52",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=41,62"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/token#char=61,62",
+    "@type" : [ "nif:String", "nif:RFC5147String", "nif:Word" ],
+    "anchorOf" : ".",
+    "beginIndex" : "61",
+    "endIndex" : "62",
+    "lemma" : ".",
+    "posTag" : ".",
+    "previousWord" : "http://127.0.0.1/stanfordnlp/token#char=53,61",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=41,62"
+  } ],
+  "@context" : {
+    "previousWord" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#previousWord",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=0,2",
-      "@type": [
-        "nif:String",
-        "nif:RFC5147String",
-        "nif:Word"
-      ],
-      "nif:anchorOf": "My",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "0"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "2"
-      },
-      "nif:lemma": "my",
-      "nif:nextWord": {
-        "@id": "local:char=3,11"
-      },
-      "nif:posTag": "PRP$",
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=0,40"
-      }
+    "nextWord" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#nextWord",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=32,39",
-      "@type": [
-        "nif:String",
-        "nif:RFC5147String",
-        "nif:Word"
-      ],
-      "nif:anchorOf": "Portman",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "32"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "39"
-      },
-      "nif:lemma": "Portman",
-      "nif:nextWord": {
-        "@id": "local:char=39,40"
-      },
-      "nif:posTag": "NNP",
-      "nif:previousWord": {
-        "@id": "local:char=24,31"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=0,40"
-      }
+    "endIndex" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#endIndex",
+      "@type" : "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
     },
-    {
-      "@id": "local:char=53,61",
-      "@type": [
-        "nif:RFC5147String",
-        "nif:String",
-        "nif:Word"
-      ],
-      "nif:anchorOf": "stunning",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "53"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "61"
-      },
-      "nif:lemma": "stunning",
-      "nif:nextWord": {
-        "@id": "local:char=61,62"
-      },
-      "nif:posTag": "JJ",
-      "nif:previousWord": {
-        "@id": "local:char=48,52"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=41,62"
-      }
+    "lemma" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#lemma"
     },
-    {
-      "@id": "local:char=24,31",
-      "@type": [
-        "nif:RFC5147String",
-        "nif:String",
-        "nif:Word"
-      ],
-      "nif:anchorOf": "Natalie",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "24"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "31"
-      },
-      "nif:lemma": "Natalie",
-      "nif:nextWord": {
-        "@id": "local:char=32,39"
-      },
-      "nif:posTag": "NNP",
-      "nif:previousWord": {
-        "@id": "local:char=22,23"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=0,40"
-      }
+    "posTag" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#posTag"
     },
-    {
-      "@id": "local:char=41,62",
-      "@type": [
-        "nif:String",
-        "nif:RFC5147String",
-        "nif:Sentence"
-      ],
-      "nif:anchorOf": "She is very stunning.",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "41"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "62"
-      },
-      "nif:firstToken": {
-        "@id": "local:char=41,44"
-      },
-      "nif:lastToken": {
-        "@id": "local:char=61,62"
-      },
-      "nif:previousSentence": {
-        "@id": "local:char=0,40"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:word": [
-        {
-          "@id": "local:char=41,44"
-        },
-        {
-          "@id": "local:char=61,62"
-        },
-        {
-          "@id": "local:char=48,52"
-        },
-        {
-          "@id": "local:char=53,61"
-        },
-        {
-          "@id": "local:char=45,47"
-        }
-      ]
+    "anchorOf" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"
     },
-    {
-      "@id": "local:char=3,11",
-      "@type": [
-        "nif:Word",
-        "nif:String",
-        "nif:RFC5147String"
-      ],
-      "nif:anchorOf": "favorite",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "3"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "11"
-      },
-      "nif:lemma": "favorite",
-      "nif:nextWord": {
-        "@id": "local:char=12,19"
-      },
-      "nif:posTag": "JJ",
-      "nif:previousWord": {
-        "@id": "local:char=0,2"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=0,40"
-      }
+    "sentence" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#sentence",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=48,52",
-      "@type": [
-        "nif:String",
-        "nif:RFC5147String",
-        "nif:Word"
-      ],
-      "nif:anchorOf": "very",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "48"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "52"
-      },
-      "nif:lemma": "very",
-      "nif:nextWord": {
-        "@id": "local:char=53,61"
-      },
-      "nif:posTag": "RB",
-      "nif:previousWord": {
-        "@id": "local:char=45,47"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=41,62"
-      }
+    "beginIndex" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#beginIndex",
+      "@type" : "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
     },
-    {
-      "@id": "local:char=22,23",
-      "@type": [
-        "nif:RFC5147String",
-        "nif:Word",
-        "nif:String"
-      ],
-      "nif:anchorOf": ":",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "22"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "23"
-      },
-      "nif:lemma": ":",
-      "nif:nextWord": {
-        "@id": "local:char=24,31"
-      },
-      "nif:posTag": ":",
-      "nif:previousWord": {
-        "@id": "local:char=20,22"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=0,40"
-      }
+    "referenceContext" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=20,22",
-      "@type": [
-        "nif:Word",
-        "nif:RFC5147String",
-        "nif:String"
-      ],
-      "nif:anchorOf": "is",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "20"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "22"
-      },
-      "nif:lemma": "be",
-      "nif:nextWord": {
-        "@id": "local:char=22,23"
-      },
-      "nif:posTag": "VBZ",
-      "nif:previousWord": {
-        "@id": "local:char=12,19"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=0,40"
-      }
+    "lastToken" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#lastToken",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=41,44",
-      "@type": [
-        "nif:String",
-        "nif:Word",
-        "nif:RFC5147String"
-      ],
-      "nif:anchorOf": "She",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "41"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "44"
-      },
-      "nif:lemma": "she",
-      "nif:nextWord": {
-        "@id": "local:char=45,47"
-      },
-      "nif:posTag": "PRP",
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=41,62"
-      }
+    "word" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#word",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=39,40",
-      "@type": [
-        "nif:Word",
-        "nif:String",
-        "nif:RFC5147String"
-      ],
-      "nif:anchorOf": ".",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "39"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "40"
-      },
-      "nif:lemma": ".",
-      "nif:posTag": ".",
-      "nif:previousWord": {
-        "@id": "local:char=32,39"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=0,40"
-      }
+    "firstToken" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#firstToken",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=61,62",
-      "@type": [
-        "nif:String",
-        "nif:RFC5147String",
-        "nif:Word"
-      ],
-      "nif:anchorOf": ".",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "61"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "62"
-      },
-      "nif:lemma": ".",
-      "nif:posTag": ".",
-      "nif:previousWord": {
-        "@id": "local:char=53,61"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=41,62"
-      }
+    "previousSentence" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#previousSentence",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=45,47",
-      "@type": [
-        "nif:String",
-        "nif:RFC5147String",
-        "nif:Word"
-      ],
-      "nif:anchorOf": "is",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "45"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "47"
-      },
-      "nif:lemma": "be",
-      "nif:nextWord": {
-        "@id": "local:char=48,52"
-      },
-      "nif:posTag": "VBZ",
-      "nif:previousWord": {
-        "@id": "local:char=41,44"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=41,62"
-      }
+    "nextSentence" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#nextSentence",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=12,19",
-      "@type": [
-        "nif:Word",
-        "nif:RFC5147String",
-        "nif:String"
-      ],
-      "nif:anchorOf": "actress",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "12"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "19"
-      },
-      "nif:lemma": "actress",
-      "nif:nextWord": {
-        "@id": "local:char=20,22"
-      },
-      "nif:posTag": "NN",
-      "nif:previousWord": {
-        "@id": "local:char=3,11"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=0,40"
-      }
+    "isString" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#isString"
     },
-    {
-      "@id": "local:char=0,62",
-      "@type": [
-        "nif:Context",
-        "nif:RFC5147String",
-        "nif:String"
-      ],
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "0"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "62"
-      },
-      "nif:isString": "My favorite actress is: Natalie Portman. She is very stunning."
-    }
-  ]
+    "xsd" : "http://www.w3.org/2001/XMLSchema#",
+    "nif" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#",
+    "local" : "http://127.0.0.1/stanfordnlp/ontology/"
+  }
 }
-

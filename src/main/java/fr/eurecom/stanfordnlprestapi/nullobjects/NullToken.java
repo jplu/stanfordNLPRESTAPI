@@ -67,7 +67,7 @@ public final class NullToken implements Token {
   }
 
   @Override
-  public Model rdfModel(final String tool) {
+  public Model rdfModel(final String tool, final String host) {
     return ModelFactory.createDefaultModel();
   }
 }

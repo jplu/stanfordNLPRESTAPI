@@ -22,20 +22,33 @@ import com.codahale.metrics.annotation.Timed;
 import fr.eurecom.stanfordnlprestapi.core.StanfordNlp;
 
 import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
+import io.dropwizard.validation.OneOf;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.riot.RDFFormat;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.URL;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,8 +57,11 @@ import org.slf4j.LoggerFactory;
  */
 @Path("/v1")
 public class PipelineResource {
-  static final Logger LOGGER = LoggerFactory.getLogger(PipelineResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PipelineResource.class);
   private final StanfordNlp pipeline;
+  private final String stanford;
+  private static final String TURTLE = "turtle";
+  private String previousSetting;
 
   /**
    * PipelineResource constructor.
@@ -56,6 +72,8 @@ public class PipelineResource {
     PipelineResource.LOGGER.info("PipelineResource init");
 
     this.pipeline = newPipeline;
+    this.previousSetting = "none";
+    this.stanford = this.pipeline.getName();
   }
 
   /**
@@ -63,9 +81,9 @@ public class PipelineResource {
    *
    * @param annotators List of annotators to use for StanfordNLP
    */
-  public PipelineResource(final String annotators) {
+  public PipelineResource(final String annotators, final String name) {
     final Properties props = new Properties();
-
+    
     props.setProperty("annotators", annotators);
     props.setProperty("pos.model",
         "edu/stanford/nlp/models/pos-tagger/english-bidirectional/"
@@ -79,11 +97,13 @@ public class PipelineResource {
     props.setProperty("coref.md.type", "rule");
     props.setProperty("coref.mode", "statistical");
 
-    this.pipeline = new StanfordNlp(props);
+    this.pipeline = new StanfordNlp(props, name);
+    this.previousSetting = "none";
+    this.stanford = name;
   }
 
   /**
-   * The API call for a NER process.
+   * The API call for a NER process via GET.
    *
    * @param text HTTP query
    *
@@ -93,40 +113,22 @@ public class PipelineResource {
   @Timed
   @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
   @Path("/ner/")
-  public final Response getNer(@QueryParam("text") final String text,
-                               @QueryParam("format") @DefaultValue("turtle") final String format) {
-    if (text == null) {
-      throw new WebApplicationException("Text parameter is not provided",
-          Response.Status.PRECONDITION_FAILED);
-    }
-
-    if (text.isEmpty()) {
-      throw new WebApplicationException("Text parameter is empty",
-          Response.Status.PRECONDITION_FAILED);
-    }
-
-    if (!"jsonld".equals(format) && !"turtle".equals(format) && !format.isEmpty()) {
-      throw new WebApplicationException("Format parameter " + format + " does not exists",
-          Response.Status.PRECONDITION_FAILED);
-    }
-
-    String res = "";
-
-    if ("turtle".equals(format) || format.isEmpty()) {
-      res = this.pipeline.run(text).rdfString("stanfordnlp",
-          RDFFormat.TURTLE_PRETTY, NlpProcess.NER);
-    }
-
-    if ("jsonld".equals(format)) {
-      res = this.pipeline.run(text).rdfString("stanfordnlp",
-          RDFFormat.JSONLD_PRETTY, NlpProcess.NER);
-    }
-
-    return Response.ok(res).build();
+  public final Response nerGet(@QueryParam("text") @Length(max = 200, min = 1, message =
+      "must be less than 200 characters long otherwise use the POST method") final String text,
+                               @QueryParam("format") @OneOf(value = {"turtle", "jsonld"}, message =
+                                   "must be turtle or jsonld")
+                                 @DefaultValue("turtle") final String format,
+                               @QueryParam("setting") @OneOf(value = {"none", "oke2015", "oke2016",
+                                   "neel2015", "neel2014", "neel2016"}, message = "must be "
+                                   + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
+                                 @DefaultValue("none") final String setting,
+                               @QueryParam("url") @URL final String url,
+                               @Context final HttpServletRequest request) throws IOException {
+    return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url);
   }
 
   /**
-   * The API call for a POS process.
+   * The API call for a POS process via GET.
    *
    * @param text HTTP query
    *
@@ -136,36 +138,114 @@ public class PipelineResource {
   @Timed
   @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
   @Path("/pos/")
-  public final Response getPos(@QueryParam("text") final String text,
-                               @QueryParam("format") @DefaultValue("turtle") final String format) {
-    if (text == null) {
-      throw new WebApplicationException("Text parameter is not provided",
+  public final Response posGet(@QueryParam("text") @Length(max = 200, min = 1, message =
+      "must be less than 200 characters long otherwise use the POST method") final String text,
+                               @QueryParam("format") @OneOf(value = {"turtle", "jsonld"}, message =
+                                   "must be turtle or jsonld")
+                                 @DefaultValue("turtle") final String format,
+                               @QueryParam("setting") @OneOf(value = {"none", "tweet"}, message =
+                                   "must be none or tweet")
+                                 @DefaultValue("none") final String setting,
+                               @QueryParam("url") @URL final String url,
+                               @Context final HttpServletRequest request) throws IOException {
+    return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url);
+  }
+  
+  /**
+   * The API call for a NER process via POST.
+   *
+   * @param text HTTP query
+   *
+   * @return The corresponding response of the query
+   */
+  @POST
+  @Timed
+  @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
+  @Path("/ner/")
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  public final Response nerPost(@FormParam("text") final String text,
+                                @FormParam("format") @OneOf(value = {"turtle", "jsonld"}, message =
+                                    "must be turtle or jsonld")
+                                  @DefaultValue("turtle") final String format,
+                                @FormParam("setting") @OneOf(value = {"none", "oke2015", "oke2016",
+                                    "neel2015", "neel2014", "neel2016"}, message = "must be "
+                                    + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
+                                  @DefaultValue("none") final String setting,
+                                @FormParam("url") @URL final String url,
+                                @Context final HttpServletRequest request) throws IOException {
+    return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url);
+  }
+  
+  /**
+   * The API call for a POS process via GET.
+   *
+   * @param text HTTP query
+   *
+   * @return The corresponding response of the query
+   */
+  @POST
+  @Timed
+  @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
+  @Path("/pos/")
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  public final Response posPost(@FormParam("text") final String text,
+                                @FormParam("format") @OneOf(value = {"turtle", "jsonld"}, message =
+                                    "must be turtle or jsonld")
+                                @DefaultValue("turtle") final String format,
+                                @FormParam("setting") @OneOf(value = {"none", "tweet"}, message =
+                                    "must be none or tweet")
+                                  @DefaultValue("none") final String setting,
+                                @FormParam("url") @URL final String url,
+                                @Context final HttpServletRequest request) throws IOException {
+    return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url);
+  }
+  
+  private Response task(final String text, final String format, final String setting,
+                       final String host, final NlpProcess process, final String url) throws
+      IOException {
+    if (text == null && url == null) {
+      throw new WebApplicationException("Text and Url parameters cannot be both empty.",
           Response.Status.PRECONDITION_FAILED);
     }
-
-    if (text.isEmpty()) {
-      throw new WebApplicationException("Text parameter is empty",
-          Response.Status.PRECONDITION_FAILED);
+    
+    final String finalText;
+    
+    if (url != null) {
+      final String tmp = IOUtils.toString(new java.net.URL(url), Charset.forName("UTF-8"));
+    
+      finalText = Jsoup.parse(tmp).text();
+    } else {
+      finalText = text;
     }
-
-    if (!"jsonld".equals(format) && !"turtle".equals(format) && !format.isEmpty()) {
-      throw new WebApplicationException("Format parameter " + format + " does not exists",
-          Response.Status.PRECONDITION_FAILED);
+    
+    if (!setting.equals(this.previousSetting)) {
+      this.pipeline.setPipeline(setting);
+      
+      this.previousSetting = setting;
     }
-
-    String res = "";
-
-    if ("turtle".equals(format) || format.isEmpty()) {
-      res = this.pipeline.run(text).rdfString("stanfordnlp",
-          RDFFormat.TURTLE_PRETTY, NlpProcess.POS);
+  
+    final String res;
+  
+    if (PipelineResource.TURTLE.equals(format)) {
+      res = this.pipeline.run(finalText).rdfString(this.stanford, RDFFormat.TURTLE_PRETTY,
+          process, host);
+    } else {
+      res = this.pipeline.run(finalText).rdfString(this.stanford, RDFFormat.JSONLD_PRETTY,
+          process, host);
     }
-
-    if ("jsonld".equals(format)) {
-      res = this.pipeline.run(text).rdfString("stanfordnlp",
-          RDFFormat.JSONLD_PRETTY, NlpProcess.POS);
-    }
-
+  
     return Response.ok(res).build();
+  }
+  
+  private String getHost(final HttpServletRequest request) {
+    if (request == null) {
+      return "http://127.0.0.1";
+    }
+    
+    final StringBuffer url = request.getRequestURL();
+    final String uri = request.getRequestURI();
+    
+    return url.substring(0, url.indexOf(uri));
   }
 
   @Override

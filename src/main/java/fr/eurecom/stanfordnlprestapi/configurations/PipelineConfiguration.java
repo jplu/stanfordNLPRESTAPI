@@ -44,10 +44,21 @@ public class PipelineConfiguration extends Configuration {
   @JsonProperty
   @NotNull
   private CorefConfiguration coref;
+  @JsonProperty
+  @NotNull
+  private String name;
 
   public PipelineConfiguration() {
   }
-
+  
+  public final String getName() {
+    return this.name;
+  }
+  
+  public final void setName(final String newName) {
+    this.name = newName;
+  }
+  
   public final ParseConfiguration getParse() {
     return this.parse;
   }
@@ -87,6 +98,7 @@ public class PipelineConfiguration extends Configuration {
         + ", ner=" + this.ner
         + ", parse=" + this.parse
         + ", parse=" + this.coref
+        + ", name=" + this.name
         + '}';
   }
 }

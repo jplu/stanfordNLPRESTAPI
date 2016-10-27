@@ -1,113 +1,77 @@
 {
-  "@context": {
-    "local": "http://127.0.0.1/stanfordnlp#",
-    "nif": "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#",
-    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-    "xsd": "http://www.w3.org/2001/XMLSchema#"
-  },
-  "@graph": [
-    {
-      "@id": "local:char=24,39",
-      "@type": [
-        "nif:Phrase",
-        "nif:String",
-        "nif:RFC5147String"
-      ],
-      "local:type": "PERSON",
-      "nif:anchorOf": "Natalie Portman",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "24"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "39"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      },
-      "nif:sentence": {
-        "@id": "local:char=0,40"
-      }
+  "@graph" : [ {
+    "@id" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "@type" : [ "nif:Context", "nif:RFC5147String", "nif:String" ],
+    "beginIndex" : "0",
+    "endIndex" : "62",
+    "isString" : "My favorite actress is: Natalie Portman. She is very stunning."
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/entity#char=24,39",
+    "@type" : [ "nif:Phrase", "nif:RFC5147String", "nif:String" ],
+    "type" : "PERSON",
+    "anchorOf" : "Natalie Portman",
+    "beginIndex" : "24",
+    "endIndex" : "39",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62",
+    "sentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40",
+    "@type" : [ "nif:String", "nif:RFC5147String", "nif:Sentence" ],
+    "entity" : "http://127.0.0.1/stanfordnlp/entity#char=24,39",
+    "anchorOf" : "My favorite actress is: Natalie Portman.",
+    "beginIndex" : "0",
+    "endIndex" : "40",
+    "nextSentence" : "http://127.0.0.1/stanfordnlp/sentence#char=41,62",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62"
+  }, {
+    "@id" : "http://127.0.0.1/stanfordnlp/sentence#char=41,62",
+    "@type" : [ "nif:String", "nif:RFC5147String", "nif:Sentence" ],
+    "anchorOf" : "She is very stunning.",
+    "beginIndex" : "41",
+    "endIndex" : "62",
+    "previousSentence" : "http://127.0.0.1/stanfordnlp/sentence#char=0,40",
+    "referenceContext" : "http://127.0.0.1/stanfordnlp/context#char=0,62"
+  } ],
+  "@context" : {
+    "type" : {
+      "@id" : "http://127.0.0.1/stanfordnlp/ontology/type"
     },
-    {
-      "@id": "local:char=41,62",
-      "@type": [
-        "nif:String",
-        "nif:RFC5147String",
-        "nif:Sentence"
-      ],
-      "nif:anchorOf": "She is very stunning.",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "41"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "62"
-      },
-      "nif:firstToken": {
-        "@id": "local:char=41,44"
-      },
-      "nif:lastToken": {
-        "@id": "local:char=61,62"
-      },
-      "nif:previousSentence": {
-        "@id": "local:char=0,40"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      }
+    "referenceContext" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#referenceContext",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=0,62",
-      "@type": [
-        "nif:RFC5147String",
-        "nif:String",
-        "nif:Context"
-      ],
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "0"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "62"
-      },
-      "nif:isString": "My favorite actress is: Natalie Portman. She is very stunning."
+    "sentence" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#sentence",
+      "@type" : "@id"
     },
-    {
-      "@id": "local:char=0,40",
-      "@type": [
-        "nif:RFC5147String",
-        "nif:String",
-        "nif:Sentence"
-      ],
-      "local:entity": {
-        "@id": "local:char=24,39"
-      },
-      "nif:anchorOf": "My favorite actress is: Natalie Portman.",
-      "nif:beginIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "0"
-      },
-      "nif:endIndex": {
-        "@type": "xsd:nonNegativeInteger",
-        "@value": "40"
-      },
-      "nif:firstToken": {
-        "@id": "local:char=0,2"
-      },
-      "nif:lastToken": {
-        "@id": "local:char=39,40"
-      },
-      "nif:nextSentence": {
-        "@id": "local:char=41,62"
-      },
-      "nif:referenceContext": {
-        "@id": "local:char=0,62"
-      }
-    }
-  ]
+    "anchorOf" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf"
+    },
+    "endIndex" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#endIndex",
+      "@type" : "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+    },
+    "beginIndex" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#beginIndex",
+      "@type" : "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+    },
+    "isString" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#isString"
+    },
+    "previousSentence" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#previousSentence",
+      "@type" : "@id"
+    },
+    "entity" : {
+      "@id" : "http://127.0.0.1/stanfordnlp/ontology/entity",
+      "@type" : "@id"
+    },
+    "nextSentence" : {
+      "@id" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#nextSentence",
+      "@type" : "@id"
+    },
+    "xsd" : "http://www.w3.org/2001/XMLSchema#",
+    "nif" : "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#",
+    "local" : "http://127.0.0.1/stanfordnlp/ontology/"
+  }
 }
