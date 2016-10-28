@@ -8,6 +8,12 @@
 This repository offer a REST API over [Stanford CoreNLP framework](http://stanfordnlp.github.io/CoreNLP/index.html)
 to get results in NIF format. The REST API is created via [Dropwizard](http://www.dropwizard.io/).
 
+# Libraries
+
+* Stanford CoreNLP 3.6.0
+* Dropwizard 1.0.2
+* Jena 3.1.0
+
 # Requirements
 
 Java 1.8 and Maven 3.0.5 minimum. Docker (1.6 or later) is optional.
@@ -49,7 +55,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.0.jar
+usage: java -jar stanfordNLPRESTAPI-2.0.1.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -73,7 +79,7 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.0.jar
+usage: java -jar stanfordNLPRESTAPI-2.0.1.jar
        ner [-f {turtle,jsonld}] [-s {neel2015,neel2016,oke2015,oke2016,none}] [-o OFILE] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 NER command on text
@@ -102,7 +108,7 @@ inputs:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.0.jar
+usage: java -jar stanfordNLPRESTAPI-2.0.1.jar
        pos [-f {turtle,jsonld}] [-s {none,tweet}] [-o OFILE] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 POS command on text
@@ -131,7 +137,7 @@ inputs:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.0.jar
+usage: java -jar stanfordNLPRESTAPI-2.0.1.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -160,7 +166,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:2.0.0
+docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:2.0.1
 ```
 
 Or with:
