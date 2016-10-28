@@ -8,6 +8,12 @@
 This repository offer a REST API over [Stanford CoreNLP framework](http://stanfordnlp.github.io/CoreNLP/index.html)
 to get results in NIF format. The REST API is created via [Dropwizard](http://www.dropwizard.io/).
 
+# Libraries
+
+* Stanford CoreNLP 3.6.0
+* Dropwizard 1.0.2
+* Jena 3.1.0
+
 # Requirements
 
 Java 1.8 and Maven 3.0.5 minimum. Docker (1.6 or later) is optional.
