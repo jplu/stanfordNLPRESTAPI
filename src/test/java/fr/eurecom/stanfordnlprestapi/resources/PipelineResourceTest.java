@@ -17,42 +17,18 @@
  */
 package fr.eurecom.stanfordnlprestapi.resources;
 
-import fr.eurecom.stanfordnlprestapi.configurations.CorefConfiguration;
-import fr.eurecom.stanfordnlprestapi.configurations.NerConfiguration;
-import fr.eurecom.stanfordnlprestapi.configurations.ParseConfiguration;
 import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfiguration;
-import fr.eurecom.stanfordnlprestapi.configurations.PosConfiguration;
-
 import fr.eurecom.stanfordnlprestapi.core.StanfordNlp;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+
 import java.nio.charset.Charset;
 
 import java.nio.file.FileSystems;
-import java.security.Principal;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.Map;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.DispatcherType;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpUpgradeHandler;
-import javax.servlet.http.Part;
+
 import javax.ws.rs.WebApplicationException;
 
 import org.apache.jena.rdf.model.Model;
@@ -61,7 +37,6 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 
-import org.apache.jena.riot.RDFFormat;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -81,34 +56,15 @@ public class PipelineResourceTest {
 
   @BeforeClass
   public static void setUpBeforeClass() {
-    final PipelineConfiguration pipeline = new PipelineConfiguration();
-
-    pipeline.setNer(new NerConfiguration());
-    pipeline.setPos(new PosConfiguration());
-    pipeline.setParse(new ParseConfiguration());
-    pipeline.setCoref(new CorefConfiguration());
-    pipeline.getNer().setApplyNumericClassifiers(false);
-    pipeline.getNer().setUseSuTime(false);
-    pipeline.getNer().setModel(
-        "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
-    pipeline.getPos().setModel(
-        "edu/stanford/nlp/models/pos-tagger/english-bidirectional/"
-            + "english-bidirectional-distsim.tagger");
-    pipeline.getParse().setModel("edu/stanford/nlp/models/lexparser/englishRNN.ser.gz");
-    pipeline.getCoref().setDoClustering(true);
-    pipeline.getCoref().setMdType("rule");
-    pipeline.getCoref().setMode("statistical");
-    pipeline.setName("stanfordnlp");
-
-    final StanfordNlp stanford = new StanfordNlp(pipeline);
-
-    PipelineResourceTest.resource = new PipelineResource(stanford);
+    PipelineResourceTest.resource = new PipelineResource(new StanfordNlp(
+        new PipelineConfiguration(), "en"));
+    PipelineResourceTest.resource = new PipelineResource("stanfordnlp", "fr");
   }
   
   /**
    * Test the response returned by the
-   * {@link PipelineResource#nerPost(String, String, String, String, HttpServletRequest)} method
-   * with Turtle format.
+   * {@link PipelineResource#nerPost(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format.
    */
   @Test
   public final void testNerResponseTurtleWithPost() throws IOException {
@@ -119,7 +75,7 @@ public class PipelineResourceTest {
         FileSystems.getDefault().getSeparator() + "ner.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.nerPost("My "
         + "favorite actress is: Natalie Portman. She is very stunning.", "turtle", "none", null,
-        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        "en", null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
     
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for NER",
         fileModel.isIsomorphicWith(testModel));
@@ -127,8 +83,8 @@ public class PipelineResourceTest {
   
   /**
    * Test the response returned by the
-   * {@link PipelineResource#posPost(String, String, String, String, HttpServletRequest)} method
-   * with Turtle format.
+   * {@link PipelineResource#posPost(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format.
    */
   @Test
   public final void testPosResponseTurtleWithPost() throws IOException {
@@ -139,7 +95,7 @@ public class PipelineResourceTest {
         FileSystems.getDefault().getSeparator() + "pos.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.posPost("My "
         + "favorite actress is: Natalie Portman. She is very stunning.", "turtle", "none", null,
-        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        "en", null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
     
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for POS",
         fileModel.isIsomorphicWith(testModel));
@@ -147,8 +103,8 @@ public class PipelineResourceTest {
 
   /**
    * Test the response returned by the
-   * {@link PipelineResource#nerGet(String, String, String, String, HttpServletRequest)} method
-   * with Turtle format.
+   * {@link PipelineResource#nerGet(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format.
    */
   @Test
   public final void testNerResponseTurtleWithGet() throws IOException {
@@ -159,7 +115,7 @@ public class PipelineResourceTest {
         FileSystems.getDefault().getSeparator() + "ner.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.nerGet("My "
         + "favorite actress is: Natalie Portman. She is very stunning.", "turtle", "none", null,
-        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        "en", null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
 
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for NER",
         fileModel.isIsomorphicWith(testModel));
@@ -167,8 +123,8 @@ public class PipelineResourceTest {
 
   /**
    * Test the response returned by the
-   * {@link PipelineResource#posGet(String, String, String, String, HttpServletRequest)} method
-   * with Turtle format.
+   * {@link PipelineResource#posGet(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format.
    */
   @Test
   public final void testPosResponseTurtleWithGet() throws IOException {
@@ -179,16 +135,36 @@ public class PipelineResourceTest {
         FileSystems.getDefault().getSeparator() + "pos.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.posGet("My "
         + "favorite actress is: Natalie Portman. She is very stunning.", "turtle", "none", null,
-        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        "en", null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
 
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for POS",
+        fileModel.isIsomorphicWith(testModel));
+  }
+  
+  /**
+   * Test the response returned by the
+   * {@link PipelineResource#posGet(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format in French.
+   */
+  @Test
+  public final void testPosFrenchResponseTurtleWithGet() throws IOException {
+    final Model fileModel = ModelFactory.createDefaultModel();
+    final Model testModel = ModelFactory.createDefaultModel();
+    
+    RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
+        FileSystems.getDefault().getSeparator() + "pos_fr.ttl"), Lang.TURTLE);
+    RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.posGet(
+        "Comment va-t-il depuis qu'il est en vacances ?", "turtle", "none", null, "fr",
+        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+    
+    Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for French POS",
         fileModel.isIsomorphicWith(testModel));
   }
 
   /**
    * Test the response returned by the
-   * {@link PipelineResource#nerGet(String, String, String, String, HttpServletRequest)} method
-   * with JSON-LD format.
+   * {@link PipelineResource#nerGet(String, String, String, String, String, HttpServletRequest)}
+   * method with JSON-LD format.
    */
   @Test
   public final void testNerResponseJsonldWithGet() throws IOException {
@@ -199,16 +175,16 @@ public class PipelineResourceTest {
         FileSystems.getDefault().getSeparator() + "ner.jsonld"), Lang.JSONLD);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.nerGet("My "
         + "favorite actress is: Natalie Portman. She is very stunning.", "jsonld", "none", null,
-        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.JSONLD);
-
+        "en", null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.JSONLD);
+    
     Assert.assertTrue("Issue to get the proper full RDF JSON-LD model of a context for NER",
         fileModel.isIsomorphicWith(testModel));
   }
 
   /**
    * Test the response returned by the
-   * {@link PipelineResource#posGet(String, String, String, String, HttpServletRequest)} method
-   * with JSON-LD format.
+   * {@link PipelineResource#posGet(String, String, String, String, String, HttpServletRequest)}
+   * method with JSON-LD format.
    */
   @Test
   public final void testPosResponseJsonldWithGet() throws IOException {
@@ -219,7 +195,7 @@ public class PipelineResourceTest {
         FileSystems.getDefault().getSeparator() + "pos.jsonld"), Lang.JSONLD);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.posGet("My "
         + "favorite actress is: Natalie Portman. She is very stunning.", "jsonld", "none", null,
-        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.JSONLD);
+        "en", null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.JSONLD);
 
     Assert.assertTrue("Issue to get the proper full RDF JSON-LD model of a context for POS",
         fileModel.isIsomorphicWith(testModel));
@@ -227,8 +203,8 @@ public class PipelineResourceTest {
   
   /**
    * Test the response returned by the
-   * {@link PipelineResource#nerGet(String, String, String, String, HttpServletRequest)} method
-   * with Turtle format for NEEL2016.
+   * {@link PipelineResource#nerGet(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format for NEEL2016.
    */
   @Test
   public final void testNerNeel2016ResponseTurtleWithGet() throws IOException {
@@ -238,8 +214,8 @@ public class PipelineResourceTest {
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "ner_tweet.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.nerGet(
-        "@julienplu Ready for the new #starwars #theforce", "turtle", "neel2016", null, null)
-        .getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        "@julienplu Ready for the new #starwars #theforce", "turtle", "neel2016", null, "en",
+        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
     
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for NER",
         fileModel.isIsomorphicWith(testModel));
@@ -247,8 +223,8 @@ public class PipelineResourceTest {
   
   /**
    * Test the response returned by the
-   * {@link PipelineResource#nerGet(String, String, String, String, HttpServletRequest)} method
-   * with Turtle format for NEEL2015.
+   * {@link PipelineResource#nerGet(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format for NEEL2015.
    */
   @Test
   public final void testNerNeel2015ResponseTurtleWithGet() throws IOException {
@@ -258,8 +234,8 @@ public class PipelineResourceTest {
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "ner_neel2015.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.nerGet(
-        "@julienplu Ready for the new #starwars #theforce", "turtle", "neel2015", null, null)
-        .getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        "@julienplu Ready for the new #starwars #theforce", "turtle", "neel2015", null, "en",
+        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
     
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for NER",
         fileModel.isIsomorphicWith(testModel));
@@ -267,8 +243,8 @@ public class PipelineResourceTest {
   
   /**
    * Test the response returned by the
-   * {@link PipelineResource#nerGet(String, String, String, String, HttpServletRequest)} method with
-   * Turtle format for OKE2016.
+   * {@link PipelineResource#nerGet(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format for OKE2016.
    */
   @Test
   public final void testNerOke2016ResponseTurtleWithGet() throws IOException {
@@ -279,7 +255,8 @@ public class PipelineResourceTest {
         FileSystems.getDefault().getSeparator() + "ner_oke.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.nerGet("My "
         + "favorite actress is: Natalie Portman. She is very stunning.", "turtle", "oke2016",
-        null, null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        null, "en", null).getEntity().toString().getBytes(Charset.forName("UTF-8"))),
+        Lang.TURTLE);
     
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for NER",
         fileModel.isIsomorphicWith(testModel));
@@ -287,8 +264,8 @@ public class PipelineResourceTest {
   
   /**
    * Test the response returned by the
-   * {@link PipelineResource#nerGet(String, String, String, String, HttpServletRequest)} method
-   * with Turtle format for OKE2015.
+   * {@link PipelineResource#nerGet(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format for OKE2015.
    */
   @Test
   public final void testNerOke2015ResponseTurtleWithGet() throws IOException {
@@ -298,8 +275,9 @@ public class PipelineResourceTest {
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "ner_oke.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.nerGet("My "
-        + "favorite actress is: Natalie Portman. She is very stunning.", "turtle", "oke2015",
-        null, null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        + "favorite actress is: Natalie Portman. She is very stunning.", "turtle", "oke2015", null,
+        "en", null).getEntity().toString().getBytes(Charset.forName("UTF-8"))),
+        Lang.TURTLE);
     
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for NER",
         fileModel.isIsomorphicWith(testModel));
@@ -307,8 +285,8 @@ public class PipelineResourceTest {
   
   /**
    * Test the response returned by the
-   * {@link PipelineResource#posGet(String, String, String, String, HttpServletRequest)} method
-   * with Turtle format for Tweets.
+   * {@link PipelineResource#posGet(String, String, String, String, String, HttpServletRequest)}
+   * method with Turtle format for Tweets.
    */
   @Test
   public final void testPosTweetResponseTurtleWithGet() throws IOException {
@@ -318,8 +296,8 @@ public class PipelineResourceTest {
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "pos_tweet.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.posGet(
-        "@julienplu Ready for the new #starwars #theforce", "turtle", "tweet", null, null)
-        .getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        "@julienplu Ready for the new #starwars #theforce", "turtle", "tweet", null, "en",
+        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
     
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for POS",
         fileModel.isIsomorphicWith(testModel));
@@ -327,18 +305,18 @@ public class PipelineResourceTest {
   
   /**
    * Test the response returned by the
-   * {@link PipelineResource#posGet(String, String, String, String, HttpServletRequest)} method
-   * when text and url are null.
+   * {@link PipelineResource#posGet(String, String, String, String, String, HttpServletRequest)}
+   * method when text and url are null.
    */
   @Test(expected = WebApplicationException.class)
   public final void testException() throws IOException {
-    PipelineResourceTest.resource.posGet(null, "turtle", "none", null, null);
+    PipelineResourceTest.resource.posGet(null, "turtle", "none", null, "en", null);
   }
   
   /**
    * Test the response returned by the
-   * {@link PipelineResource#posGet(String, String, String, String, HttpServletRequest)} method
-   * when the parameter url is given.
+   * {@link PipelineResource#posGet(String, String, String, String, String, HttpServletRequest)}
+   * method when the parameter url is given.
    */
   @Test
   public final void testPosUrlResponseTurtleWithGet() throws IOException {
@@ -348,8 +326,8 @@ public class PipelineResourceTest {
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
         FileSystems.getDefault().getSeparator() + "pos_tweet.ttl"), Lang.TURTLE);
     RDFDataMgr.read(testModel, new ByteArrayInputStream(PipelineResourceTest.resource.posGet(
-        null, "turtle", "tweet", "http://adel.eurecom.fr/test_pos_url.html", null).getEntity()
-        .toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
+        null, "turtle", "tweet", "http://adel.eurecom.fr/test_pos_url.html", "en",
+        null).getEntity().toString().getBytes(Charset.forName("UTF-8"))), Lang.TURTLE);
     Assert.assertTrue("Issue to get the proper full RDF Turtle model of a context for POS from a "
             + "URL",
         fileModel.isIsomorphicWith(testModel));

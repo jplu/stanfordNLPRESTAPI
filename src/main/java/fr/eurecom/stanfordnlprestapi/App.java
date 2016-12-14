@@ -63,12 +63,18 @@ public class App extends Application<PipelineConfiguration> {
   @Override
   public final void run(final PipelineConfiguration newT, final Environment newEnvironment)
       throws Exception {
-    this.pipeline = new StanfordNlp(newT);
-
-    newEnvironment.healthChecks().register("pos model", new ModelHealthCheck(
-        newT.getPos().getModel()));
-    newEnvironment.healthChecks().register("ner model", new ModelHealthCheck(
-        newT.getNer().getModel()));
+    this.pipeline = new StanfordNlp(newT, "en");
+    
+    newEnvironment.healthChecks().register("EN models", new ModelHealthCheck(
+        "properties/en.properties"));
+    newEnvironment.healthChecks().register("DE models", new ModelHealthCheck(
+        "properties/de.properties"));
+    newEnvironment.healthChecks().register("ZH models", new ModelHealthCheck(
+        "properties/zh.properties"));
+    newEnvironment.healthChecks().register("ES models", new ModelHealthCheck(
+        "properties/es.properties"));
+    newEnvironment.healthChecks().register("FR models", new ModelHealthCheck(
+        "properties/fr.properties"));
 
     newEnvironment.jersey().register(new PipelineResource(this.pipeline));
   }

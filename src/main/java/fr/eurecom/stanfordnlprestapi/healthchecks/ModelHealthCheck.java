@@ -19,10 +19,13 @@ package fr.eurecom.stanfordnlprestapi.healthchecks;
 
 import com.codahale.metrics.health.HealthCheck;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,20 +35,60 @@ import org.slf4j.LoggerFactory;
  */
 public class ModelHealthCheck extends HealthCheck {
   static final Logger LOGGER = LoggerFactory.getLogger(ModelHealthCheck.class);
-  private final String model;
+  private final String location;
 
-  public ModelHealthCheck(final String newModel) {
-    this.model = newModel;
+  public ModelHealthCheck(final String newLocation) {
+    this.location = newLocation;
   }
 
   @Override
   protected final HealthCheck.Result check() throws Exception {
-    final InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(
-        this.model);
-    final boolean exists = Files.exists(Paths.get(this.model));
-
+    if (!Files.exists(Paths.get(this.location))) {
+      return HealthCheck.Result.unhealthy("Properties file " + this.location + " does not exists");
+    }
+    
+    final Properties props = new Properties();
+  
+    try (FileInputStream fileInputStream = new FileInputStream(this.location)) {
+      props.load(fileInputStream);
+    } catch (final IOException ex) {
+      ModelHealthCheck.LOGGER.error("Error to load a property file.", ex);
+    }
+  
+    InputStream inputStream;
+    boolean exists;
+    
+    if (props.getProperty("ner.model") != null) {
+      inputStream = this.getClass().getClassLoader().getResourceAsStream(props.getProperty(
+          "ner.model"));
+      exists = Files.exists(Paths.get(props.getProperty("ner.model")));
+  
+      if (inputStream == null && !exists) {
+        return HealthCheck.Result.unhealthy("NER model " + props.getProperty("ner.model") + " does"
+            + " not exists");
+      }
+    }
+  
+    inputStream = this.getClass().getClassLoader().getResourceAsStream(props.getProperty(
+        "pos.model"));
+    exists = Files.exists(Paths.get(props.getProperty("pos.model")));
+  
     if (inputStream == null && !exists) {
-      return HealthCheck.Result.unhealthy("Model " + this.model + " does not exists");
+      return HealthCheck.Result.unhealthy("POS model " + props.getProperty("pos.model") + " does"
+          + " not exists");
+    }
+  
+    inputStream = this.getClass().getClassLoader().getResourceAsStream(props.getProperty(
+        "parse.model"));
+    exists = Files.exists(Paths.get(props.getProperty("parse.model")));
+  
+    if (inputStream == null && !exists) {
+      return HealthCheck.Result.unhealthy("Parse model " + props.getProperty("parse.model")
+          + " does not exists");
+    }
+    
+    if (inputStream != null) {
+      inputStream.close();
     }
 
     return HealthCheck.Result.healthy();
@@ -54,7 +97,7 @@ public class ModelHealthCheck extends HealthCheck {
   @Override
   public final String toString() {
     return "ModelHealthCheck{"
-        + "model='" + this.model + '\''
+        + "model='" + this.location + '\''
         + '}';
   }
 }

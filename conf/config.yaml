@@ -17,18 +17,6 @@
 #
 
 name: stanfordnlp
-pos:
-  model: edu/stanford/nlp/models/pos-tagger/english-bidirectional/english-bidirectional-distsim.tagger
-ner:
-  model: edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz,edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz,edu/stanford/nlp/models/ner/english.muc.7class.distsim.crf.ser.gz
-  useSuTime: false
-  applyNumericClassifiers: false
-parse:
-  model: edu/stanford/nlp/models/lexparser/englishRNN.ser.gz
-coref:
-  mdType: rule
-  mode: statistical
-  doClustering: true
 
 logging:
   level: INFO

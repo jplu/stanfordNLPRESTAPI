@@ -34,18 +34,6 @@ public class PipelineConfiguration extends Configuration {
   static final Logger LOGGER = LoggerFactory.getLogger(PipelineConfiguration.class);
   @JsonProperty
   @NotNull
-  private PosConfiguration pos;
-  @JsonProperty
-  @NotNull
-  private NerConfiguration ner;
-  @JsonProperty
-  @NotNull
-  private ParseConfiguration parse;
-  @JsonProperty
-  @NotNull
-  private CorefConfiguration coref;
-  @JsonProperty
-  @NotNull
   private String name;
 
   public PipelineConfiguration() {
@@ -58,47 +46,11 @@ public class PipelineConfiguration extends Configuration {
   public final void setName(final String newName) {
     this.name = newName;
   }
-  
-  public final ParseConfiguration getParse() {
-    return this.parse;
-  }
-
-  public final void setParse(final ParseConfiguration newParse) {
-    this.parse = newParse;
-  }
-
-  public final PosConfiguration getPos() {
-    return this.pos;
-  }
-
-  public final void setPos(final PosConfiguration newPos) {
-    this.pos = newPos;
-  }
-
-  public final NerConfiguration getNer() {
-    return this.ner;
-  }
-
-  public final void setNer(final NerConfiguration newNer) {
-    this.ner = newNer;
-  }
-
-  public final CorefConfiguration getCoref() {
-    return this.coref;
-  }
-
-  public final void setCoref(final CorefConfiguration newCoref) {
-    this.coref = newCoref;
-  }
 
   @Override
   public final String toString() {
     return "PipelineConfiguration{"
-        + "pos=" + this.pos
-        + ", ner=" + this.ner
-        + ", parse=" + this.parse
-        + ", parse=" + this.coref
-        + ", name=" + this.name
+        + "name=" + this.name
         + '}';
   }
 }

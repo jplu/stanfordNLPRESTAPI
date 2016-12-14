@@ -25,7 +25,6 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -52,13 +51,11 @@ public class PipelineEndpointTest {
   static final Logger LOGGER = LoggerFactory.getLogger(PipelineEndpointTest.class);
   @Rule
   public ResourceTestRule resources = ResourceTestRule.builder().addResource(
-      new PipelineResource("tokenize, ssplit, pos, lemma, ner, parse, mention, coref",
-          "stanfordnlp")).build();
+      new PipelineResource("stanfordnlp", "en")).build();
   
   @ClassRule
   public static final DropwizardClientRule DROPWIZARD = new DropwizardClientRule(
-      new PipelineResource("tokenize, ssplit, pos, lemma, ner, parse, mention, coref",
-          "stanfordnlp"));
+      new PipelineResource("stanfordnlp", "en"));
 
   public PipelineEndpointTest() {
   }

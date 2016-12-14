@@ -11,8 +11,8 @@ to get results in NIF format. The REST API is created via [Dropwizard](http://ww
 # Libraries
 
 * Stanford CoreNLP 3.6.0
-* Dropwizard 1.0.2
-* Jena 3.1.0
+* Dropwizard 1.0.5
+* Jena 3.1.1
 
 # Requirements
 
@@ -55,7 +55,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.2-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-3.0.0-SNAPSHOT.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -79,8 +79,8 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.2-SNAPSHOT.jar
-       ner [-f {turtle,jsonld}] [-s {neel2015,neel2016,oke2015,oke2016,none}] [-o OFILE] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+usage: java -jar stanfordNLPRESTAPI-3.0.0-SNAPSHOT.jar
+       ner [-f {turtle,jsonld}] [-s {neel2015,neel2016,oke2015,oke2016,none}] [-o OFILE] [-l {en,es,de,zh}] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 NER command on text
 
@@ -94,6 +94,8 @@ optional arguments:
                          neel2015, neel2016, oke2015, oke2016 or none (default: none)
   -o OFILE, --output-file OFILE
                          Output file name which will contain the annotations
+  -l {en,es,de,zh}, --language {en,es,de,zh}
+                         Select the language (default: en)
   -h, --help             show this help message and exit
 
 inputs:
@@ -108,8 +110,8 @@ inputs:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.2-SNAPSHOT.jar
-       pos [-f {turtle,jsonld}] [-s {none,tweet}] [-o OFILE] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+usage: java -jar stanfordNLPRESTAPI-3.0.0-SNAPSHOT.jar
+       pos [-f {turtle,jsonld}] [-s {none,tweet}] [-o OFILE] [-l {en,es,de,zh,fr}] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 POS command on text
 
@@ -123,6 +125,8 @@ optional arguments:
                          none or tweet (default: none)
   -o OFILE, --output-file OFILE
                          Output file name which will contain the annotations
+  -l {en,es,de,zh,fr}, --language {en,es,de,zh,fr}
+                         Select the language (default: en)
   -h, --help             show this help message and exit
 
 inputs:
@@ -137,7 +141,7 @@ inputs:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.2-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-3.0.0-SNAPSHOT.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -166,7 +170,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:2.0.2-SNAPSHOT
+docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:3.0.0-SNAPSHOT
 ```
 
 Or with:
@@ -184,10 +188,10 @@ The CLI commands and the Web service use the same [configuration file](https://g
 
 ## Used Models
 
-This application contains by default all the English models provided by Stanford CoreNLP team. In
-case you want to add models you will have to download and put them in the *models* folder. You can
-also download the jar files provided by Stanford with models for other languages. To use them you
-will have to include them in the CLASSPATH. We provide two models:
+This application contains by default all the models provided by Stanford CoreNLP team. In case you
+want to add models you will have to download and put them in the *models* folder. You can also 
+download the jar files provided by Stanford with models for other languages. To use them you will
+ have to include them in the CLASSPATH. We provide two models:
 
 * OKE2015 [1]: NER model trained with the OKE2015 challenge training dataset.
 * OKE2016 [2]: NER model trained with the OKE2016 challenge training dataset.

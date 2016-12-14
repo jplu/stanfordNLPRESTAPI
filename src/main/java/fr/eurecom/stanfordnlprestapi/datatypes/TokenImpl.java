@@ -136,12 +136,18 @@ public class TokenImpl implements Token {
         ResourceFactory.createProperty(nif + "referenceContext"),
         ResourceFactory.createResource(base + "/context#char=" + this.context.start() + ','
             + this.context.end()));
+    
+    
     model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
-        ResourceFactory.createProperty(nif + "posTag"),
-        ResourceFactory.createPlainLiteral(this.tag));
-    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
-        ResourceFactory.createProperty(nif + "lemma"),
-        ResourceFactory.createPlainLiteral(this.lemma));
+        ResourceFactory.createProperty(nif + "posTag"), ResourceFactory.createPlainLiteral(
+            this.tag));
+    
+    
+    if (this.lemma != null) {
+      model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
+          ResourceFactory.createProperty(nif + "lemma"), ResourceFactory.createPlainLiteral(
+              this.lemma));
+    }
 
     if (this.nextToken.index() != -1) {
       model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),

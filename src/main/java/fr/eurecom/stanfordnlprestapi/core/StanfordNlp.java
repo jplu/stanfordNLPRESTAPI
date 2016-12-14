@@ -29,6 +29,7 @@ import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfiguration;
 
 import fr.eurecom.stanfordnlprestapi.datatypes.Context;
 import fr.eurecom.stanfordnlprestapi.datatypes.Entity;
+import fr.eurecom.stanfordnlprestapi.datatypes.Languages;
 import fr.eurecom.stanfordnlprestapi.datatypes.SentenceImpl;
 import fr.eurecom.stanfordnlprestapi.datatypes.TokenImpl;
 
@@ -38,6 +39,8 @@ import fr.eurecom.stanfordnlprestapi.interfaces.Token;
 import fr.eurecom.stanfordnlprestapi.nullobjects.NullSentence;
 import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -54,22 +57,23 @@ import org.slf4j.LoggerFactory;
 public class StanfordNlp {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlp.class);
   private StanfordCoreNLP pipeline;
-  private final String ner;
-  private final String pos;
   private final String name;
+  private String lang;
 
   /**
    * StanfordNlp constructor.
    *
-   * @param props properties to configure the pipeline.
+   * @param newName a name.
+   * @param newLang a language.
    */
-  public StanfordNlp(final Properties props, final String newName) {
+  public StanfordNlp(final String newName, final String newLang) {
+    this.lang = newLang;
+    
+    final Properties props = this.getProperties();
+    
     StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", props);
     
-    this.ner = props.getProperty("ner.model");
-    this.pos = props.getProperty("pos.model");
     this.name = newName;
-    
     this.pipeline = new StanfordCoreNLP(props);
   }
 
@@ -77,28 +81,61 @@ public class StanfordNlp {
    * StanfordNlp constructor.
    *
    * @param conf a pipeline configuration.
+   * @param newLang a language.
    */
-  public StanfordNlp(final PipelineConfiguration conf) {
-    this.pos = conf.getPos().getModel();
-    this.ner = conf.getNer().getModel();
+  public StanfordNlp(final PipelineConfiguration conf, final String newLang) {
+    this.lang = newLang;
+    
+    final Properties props = this.getProperties();
+    
     this.name = conf.getName();
-    
-    final Properties props = new Properties();
-    
-    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
-    props.setProperty("pos.model", conf.getPos().getModel());
-    props.setProperty("ner.model", conf.getNer().getModel());
-    props.setProperty("ner.useSUTime", Boolean.toString(conf.getNer().getUseSuTime()));
-    props.setProperty("ner.applyNumericClassifiers", Boolean.toString(conf.getNer()
-        .getApplyNumericClassifiers()));
-    props.setProperty("parse.model", conf.getParse().getModel());
-    props.setProperty("coref.doClustering", Boolean.toString(conf.getCoref().getDoClustering()));
-    props.setProperty("coref.md.type", conf.getCoref().getMdType());
-    props.setProperty("coref.mode", conf.getCoref().getMode());
 
     StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", props);
 
     this.pipeline = new StanfordCoreNLP(props);
+  }
+  
+  private Properties getProperties() {
+    final Properties props = new Properties();
+    
+    if ("zh".equals(this.lang)) {
+      try (FileInputStream fileInputStream = new FileInputStream(Languages.ZH.getLocation())) {
+        props.load(fileInputStream);
+      } catch (final IOException ex) {
+        StanfordNlp.LOGGER.error("Error to load a property file: {}", Languages.ZH.getLocation(),
+            ex);
+      }
+    } else if ("fr".equals(this.lang)) {
+      try (FileInputStream fileInputStream = new FileInputStream(Languages.FR.getLocation())) {
+        props.load(fileInputStream);
+      } catch (final IOException ex) {
+        StanfordNlp.LOGGER.error("Error to load a property file: {}", Languages.FR.getLocation(),
+            ex);
+      }
+    } else if ("es".equals(this.lang)) {
+      try (FileInputStream fileInputStream = new FileInputStream(Languages.ES.getLocation())) {
+        props.load(fileInputStream);
+      } catch (final IOException ex) {
+        StanfordNlp.LOGGER.error("Error to load a property file: {}", Languages.ES.getLocation(),
+            ex);
+      }
+    } else if ("de".equals(this.lang)) {
+      try (FileInputStream fileInputStream = new FileInputStream(Languages.DE.getLocation())) {
+        props.load(fileInputStream);
+      } catch (final IOException ex) {
+        StanfordNlp.LOGGER.error("Error to load a property file: {}", Languages.DE.getLocation(),
+            ex);
+      }
+    } else {
+      try (FileInputStream fileInputStream = new FileInputStream(Languages.EN.getLocation())) {
+        props.load(fileInputStream);
+      } catch (final IOException ex) {
+        StanfordNlp.LOGGER.error("Error to load a property file: {}", Languages.EN.getLocation(),
+            ex);
+      }
+    }
+    
+    return props;
   }
   
   /**
@@ -111,31 +148,57 @@ public class StanfordNlp {
   }
   
   /**
+   * Set the language.
+   *
+   * @param newLang new language.
+   */
+  public final void setLang(final String newLang) {
+    this.lang = newLang;
+    
+    StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", this.getProperties());
+  
+    this.pipeline = new StanfordCoreNLP(this.getProperties());
+  }
+  
+  /**
+   * The name of the pipeline.
+   *
+   * @return language of the pipeline.
+   */
+  public final String getLang() {
+    return this.lang;
+  }
+  
+  /**
    * Change Stanford CoreNLP settings.
    *
    * @param setting new Settings.
    */
   public final void setPipeline(final String setting) {
-    if ("tweet".equals(setting) || "neel2015".equals(setting) || "neel2016".equals(setting)) {
-      this.pipeline.getProperties().setProperty("pos.model", "models/gate-EN-twitter.model");
+    if ("en".equals(this.lang)) {
+      if ("tweet".equals(setting) || "neel2015".equals(setting) || "neel2016".equals(setting)) {
+        this.pipeline.getProperties().setProperty("pos.model", "models/gate-EN-twitter.model");
+      }
+  
+      if ("neel2015".equals(setting)) {
+        this.pipeline.getProperties().setProperty("ner.model", "models/NEEL2015.ser.gz");
+      } else if ("neel2016".equals(setting)) {
+        this.pipeline.getProperties().setProperty("ner.model", "models/NEEL2016.ser.gz");
+      } else if ("oke2015".equals(setting)) {
+        this.pipeline.getProperties().setProperty("ner.model", "models/OKE2015.ser.gz");
+      } else if ("oke2016".equals(setting)) {
+        this.pipeline.getProperties().setProperty("ner.model", "models/OKE2016.ser.gz");
+      } else if ("none".equals(setting)) {
+        this.pipeline.getProperties().setProperty("ner.model", this.getProperties().getProperty(
+            "ner.model"));
+        this.pipeline.getProperties().setProperty("pos.model", this.getProperties().getProperty(
+            "pos.model"));
+      }
+  
+      StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", this.pipeline.getProperties());
+  
+      this.pipeline = new StanfordCoreNLP(this.pipeline.getProperties());
     }
-    
-    if ("neel2015".equals(setting)) {
-      this.pipeline.getProperties().setProperty("ner.model", "models/NEEL2015.ser.gz");
-    } else if ("neel2016".equals(setting)) {
-      this.pipeline.getProperties().setProperty("ner.model", "models/NEEL2016.ser.gz");
-    } else if ("oke2015".equals(setting)) {
-      this.pipeline.getProperties().setProperty("ner.model", "models/OKE2015.ser.gz");
-    } else if ("oke2016".equals(setting)) {
-      this.pipeline.getProperties().setProperty("ner.model", "models/OKE2016.ser.gz");
-    } else if ("none".equals(setting)) {
-      this.pipeline.getProperties().setProperty("ner.model", this.ner);
-      this.pipeline.getProperties().setProperty("pos.model", this.pos);
-    }
-    
-    StanfordNlp.LOGGER.info("Run Stanford core NLP with: {}", this.pipeline.getProperties());
-    
-    this.pipeline = new StanfordCoreNLP(this.pipeline.getProperties());
   }
 
   /**
