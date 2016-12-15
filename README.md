@@ -178,7 +178,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:3.0.1-SNAPSHOT
+docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/properties:/maven/properties -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:3.0.1-SNAPSHOT
 ```
 
 Or with:
