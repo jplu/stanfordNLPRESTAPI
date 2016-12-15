@@ -407,6 +407,16 @@ public class StanfordNlpTest {
   }
   
   /**
+   * Test the proper language set for Italian.
+   */
+  @Test
+  public final void testLanguageItProperties() throws Exception {
+    StanfordNlpTest.stanfordNlp.setLang("it");
+    
+    Assert.assertEquals("Issues to set in Italian", "it", StanfordNlpTest.stanfordNlp.getLang());
+  }
+  
+  /**
    * Test the proper name for a pipeline.
    */
   @Test
