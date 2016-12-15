@@ -61,22 +61,7 @@ public class StanfordNlpTest {
 
   @BeforeClass
   public static void setUpBeforeClass() {
-    final Properties props = new Properties();
-
-    props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
-    props.setProperty("pos.model",
-        "edu/stanford/nlp/models/pos-tagger/english-bidirectional/"
-            + "english-bidirectional-distsim.tagger");
-    props.setProperty("ner.model",
-        "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
-    props.setProperty("ner.useSUTime", "false");
-    props.setProperty("ner.applyNumericClassifiers", "false");
-    props.setProperty("parse.model", "edu/stanford/nlp/models/lexparser/englishRNN.ser.gz");
-    props.setProperty("coref.doClustering", "true");
-    props.setProperty("coref.md.type", "rule");
-    props.setProperty("coref.mode", "statistical");
-
-    StanfordNlpTest.stanfordNlp = new StanfordNlp(props, "stanfordnlp");
+    StanfordNlpTest.stanfordNlp = new StanfordNlp("stanfordnlp", "en");
   }
 
   /**
@@ -84,6 +69,10 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testRunWithPos() throws Exception {
+    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
+      StanfordNlpTest.stanfordNlp.setLang("en");
+    }
+    
     final Model fileModel = ModelFactory.createDefaultModel();
 
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
@@ -101,6 +90,10 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testRunWithNer() throws Exception {
+    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
+      StanfordNlpTest.stanfordNlp.setLang("en");
+    }
+    
     final Model fileModel = ModelFactory.createDefaultModel();
 
     RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
@@ -120,6 +113,10 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesEnd() throws Exception {
+    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
+      StanfordNlpTest.stanfordNlp.setLang("en");
+    }
+    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("I like Paris");
     final Context context = new Context("I like Paris", 0, 12);
     final Sentence sentence = new SentenceImpl("I like Paris", context, 0, 12, 0,
@@ -151,6 +148,10 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesMultipleEnd() throws Exception {
+    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
+      StanfordNlpTest.stanfordNlp.setLang("en");
+    }
+    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("I like Natalie Portman");
     final Context context = new Context("I like Natalie Portman", 0, 22);
     final Sentence sentence = new SentenceImpl("I like Natalie Portman", context, 0, 22, 0,
@@ -186,6 +187,10 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesStart() throws Exception {
+    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
+      StanfordNlpTest.stanfordNlp.setLang("en");
+    }
+    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("Paris is a nice city.");
     final Context context = new Context("Paris is a nice city.", 0, 21);
     final Sentence sentence = new SentenceImpl("Paris is a nice city.", context, 0, 21, 0,
@@ -225,6 +230,10 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesMultipleStart() throws Exception {
+    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
+      StanfordNlpTest.stanfordNlp.setLang("en");
+    }
+    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("Natalie Portman is a beautiful "
         + "girl.");
     final Context context = new Context("Natalie Portman is a beautiful girl.", 0, 36);
@@ -270,6 +279,10 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesMiddle() throws Exception {
+    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
+      StanfordNlpTest.stanfordNlp.setLang("en");
+    }
+    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("I support Paris very much.");
     final Context context = new Context("I support Paris very much.", 0, 26);
     final Sentence sentence = new SentenceImpl("I support Paris very much.", context, 0, 26, 0,
@@ -311,6 +324,10 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesMultipleMiddle() throws Exception {
+    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
+      StanfordNlpTest.stanfordNlp.setLang("en");
+    }
+    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("I love Natalie Portman a lot.");
     final Context context = new Context("I love Natalie Portman a lot.", 0, 29);
     final Sentence sentence = new SentenceImpl("I love Natalie Portman a lot.", context, 0, 29, 0,
@@ -347,6 +364,75 @@ public class StanfordNlpTest {
 
     Assert.assertTrue("Issue to build a multiple token entity in the middle of a sentence",
         contextTest.sentences().get(0).entities().contains(entity));
+  }
+  
+  /**
+   * Test the proper language set for Chinese.
+   */
+  @Test
+  public final void testLanguageZhProperties() throws Exception {
+    StanfordNlpTest.stanfordNlp.setLang("zh");
+    
+    Assert.assertEquals("Issues to set in Chinese", "zh", StanfordNlpTest.stanfordNlp.getLang());
+  }
+  
+  /**
+   * Test the proper language set for French.
+   */
+  @Test
+  public final void testLanguageFrProperties() throws Exception {
+    StanfordNlpTest.stanfordNlp.setLang("fr");
+    
+    Assert.assertEquals("Issues to set in French", "fr", StanfordNlpTest.stanfordNlp.getLang());
+  }
+  
+  /**
+   * Test the proper language set for Spanish.
+   */
+  @Test
+  public final void testLanguageEsProperties() throws Exception {
+    StanfordNlpTest.stanfordNlp.setLang("es");
+    
+    Assert.assertEquals("Issues to set in Spanish", "es", StanfordNlpTest.stanfordNlp.getLang());
+  }
+  
+  /**
+   * Test the proper language set for German.
+   */
+  @Test
+  public final void testLanguageDeProperties() throws Exception {
+    StanfordNlpTest.stanfordNlp.setLang("de");
+    
+    Assert.assertEquals("Issues to set in German", "de", StanfordNlpTest.stanfordNlp.getLang());
+  }
+  
+  /**
+   * Test the proper language set for Italian.
+   */
+  @Test
+  public final void testLanguageItProperties() throws Exception {
+    StanfordNlpTest.stanfordNlp.setLang("it");
+    
+    Assert.assertEquals("Issues to set in Italian", "it", StanfordNlpTest.stanfordNlp.getLang());
+  }
+  
+  /**
+   * Test the proper name for a pipeline.
+   */
+  @Test
+  public final void testGetName() throws Exception {
+    Assert.assertEquals("Issues to get the proper name", "stanfordnlp",
+        StanfordNlpTest.stanfordNlp.getName());
+  }
+  
+  /**
+   * Test the proper behavior of setting a new pipeline with another language than English.
+   */
+  @Test
+  public final void testPipelineWithAnotherLanguage() throws Exception {
+    StanfordNlpTest.stanfordNlp.setLang("fr");
+    StanfordNlpTest.stanfordNlp.setPipeline("oke2015");
+    Assert.assertEquals("Issues to set pipeline", "fr", StanfordNlpTest.stanfordNlp.getLang());
   }
 
   /**

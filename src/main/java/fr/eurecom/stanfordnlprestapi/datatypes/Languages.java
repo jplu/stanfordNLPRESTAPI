@@ -15,43 +15,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.eurecom.stanfordnlprestapi.configurations;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package fr.eurecom.stanfordnlprestapi.datatypes;
 
 /**
- * @author Julien Plu
+ * @author Julien Plu on 12/12/2016.
  */
-public class ParseConfiguration {
-  static final Logger LOGGER = LoggerFactory.getLogger(ParseConfiguration.class);
-  @NotEmpty
-  private String model;
-
-  /**
-   * ParseConfiguration constructor.
-   */
-  public ParseConfiguration() {
+public enum Languages {
+  EN("en", "properties/en.properties"),
+  ES("es", "properties/es.properties"),
+  DE("de", "properties/de.properties"),
+  FR("fr", "properties/fr.properties"),
+  ZH("zh", "properties/zh.properties"),
+  IT("it", "properties/it.properties");
+  
+  private String name;
+  private String location;
+  
+  Languages(final String newName, final String newLocation) {
+    this.name = newName;
+    this.location = newLocation;
   }
-
-  @JsonProperty
-  public final String getModel() {
-    return this.model;
-  }
-
-  @JsonProperty
-  public final void setModel(final String newModel) {
-    this.model = newModel;
-  }
-
-  @Override
-  public final String toString() {
-    return "NerConfiguration{"
-        + "model='" + this.model + '\''
-        + '}';
+  
+  public final String getLocation() {
+    return this.location;
   }
 }

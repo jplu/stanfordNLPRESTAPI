@@ -26,7 +26,6 @@ import io.dropwizard.validation.OneOf;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -62,6 +61,7 @@ public class PipelineResource {
   private final String stanford;
   private static final String TURTLE = "turtle";
   private String previousSetting;
+  private String lang;
 
   /**
    * PipelineResource constructor.
@@ -73,32 +73,21 @@ public class PipelineResource {
 
     this.pipeline = newPipeline;
     this.previousSetting = "none";
+    this.lang = "en";
     this.stanford = this.pipeline.getName();
   }
 
   /**
    * PipelineResource constructor.
    *
-   * @param annotators List of annotators to use for StanfordNLP
+   * @param name a name.
+   * @param newLang a language.
+   *
    */
-  public PipelineResource(final String annotators, final String name) {
-    final Properties props = new Properties();
-    
-    props.setProperty("annotators", annotators);
-    props.setProperty("pos.model",
-        "edu/stanford/nlp/models/pos-tagger/english-bidirectional/"
-            + "english-bidirectional-distsim.tagger");
-    props.setProperty("ner.model",
-        "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
-    props.setProperty("ner.useSUTime", "false");
-    props.setProperty("ner.applyNumericClassifiers", "false");
-    props.setProperty("parse.model", "edu/stanford/nlp/models/lexparser/englishRNN.ser.gz");
-    props.setProperty("coref.doClustering", "true");
-    props.setProperty("coref.md.type", "rule");
-    props.setProperty("coref.mode", "statistical");
-
-    this.pipeline = new StanfordNlp(props, name);
+  public PipelineResource(final String name, final String newLang) {
+    this.pipeline = new StanfordNlp(name, newLang);
     this.previousSetting = "none";
+    this.lang = newLang;
     this.stanford = name;
   }
 
@@ -123,8 +112,11 @@ public class PipelineResource {
                                    + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
                                  @DefaultValue("none") final String setting,
                                @QueryParam("url") @URL final String url,
+                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it"},
+                                   message = "must be en, es, de, zh or it")
+                                 @DefaultValue("en") final String lang,
                                @Context final HttpServletRequest request) throws IOException {
-    return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url);
+    return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url, lang);
   }
 
   /**
@@ -147,8 +139,11 @@ public class PipelineResource {
                                    "must be none or tweet")
                                  @DefaultValue("none") final String setting,
                                @QueryParam("url") @URL final String url,
+                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh", "fr",
+                                   "it"}, message = "must be en, es, de, fr, zh or it")
+                                 @DefaultValue("en") final String lang,
                                @Context final HttpServletRequest request) throws IOException {
-    return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url);
+    return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url, lang);
   }
   
   /**
@@ -172,8 +167,11 @@ public class PipelineResource {
                                     + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
                                   @DefaultValue("none") final String setting,
                                 @FormParam("url") @URL final String url,
+                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it"},
+                                    message = "must be en, es, de, zh or it")
+                                  @DefaultValue("en") final String lang,
                                 @Context final HttpServletRequest request) throws IOException {
-    return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url);
+    return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url, lang);
   }
   
   /**
@@ -196,13 +194,16 @@ public class PipelineResource {
                                     "must be none or tweet")
                                   @DefaultValue("none") final String setting,
                                 @FormParam("url") @URL final String url,
+                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh", "fr",
+                                    "it"}, message = "must be en, es, de, fr, zh or it")
+                                  @DefaultValue("en") final String lang,
                                 @Context final HttpServletRequest request) throws IOException {
-    return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url);
+    return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url, lang);
   }
   
   private Response task(final String text, final String format, final String setting,
-                       final String host, final NlpProcess process, final String url) throws
-      IOException {
+                        final String host, final NlpProcess process, final String url,
+                        final String lang) throws IOException {
     if (text == null && url == null) {
       throw new WebApplicationException("Text and Url parameters cannot be both empty.",
           Response.Status.PRECONDITION_FAILED);
@@ -216,6 +217,12 @@ public class PipelineResource {
       finalText = Jsoup.parse(tmp).text();
     } else {
       finalText = text;
+    }
+    
+    if (!lang.equals(this.lang)) {
+      this.pipeline.setLang(lang);
+      
+      this.lang = lang;
     }
     
     if (!setting.equals(this.previousSetting)) {

@@ -7,12 +7,20 @@
 # Introduction
 This repository offer a REST API over [Stanford CoreNLP framework](http://stanfordnlp.github.io/CoreNLP/index.html)
 to get results in NIF format. The REST API is created via [Dropwizard](http://www.dropwizard.io/).
+The system can handle multiple languages:
+
+* English
+* French
+* Chinese
+* German
+* Italian (thanks to [TINT](http://tint.fbk.eu/)[7])
+* Spanish
 
 # Libraries
 
 * Stanford CoreNLP 3.6.0
-* Dropwizard 1.0.2
-* Jena 3.1.0
+* Dropwizard 1.0.5
+* Jena 3.1.1
 
 # Requirements
 
@@ -55,7 +63,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-3.0.0.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -79,8 +87,8 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.1.jar
-       ner [-f {turtle,jsonld}] [-s {neel2015,neel2016,oke2015,oke2016,none}] [-o OFILE] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+usage: java -jar stanfordNLPRESTAPI-3.0.0.jar
+       ner [-f {turtle,jsonld}] [-s {neel2015,neel2016,oke2015,oke2016,none}] [-o OFILE] [-l {en,es,de,zh,it}] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 NER command on text
 
@@ -94,6 +102,8 @@ optional arguments:
                          neel2015, neel2016, oke2015, oke2016 or none (default: none)
   -o OFILE, --output-file OFILE
                          Output file name which will contain the annotations
+  -l {en,es,de,zh,it}, --language {en,es,de,zh,it}
+                         Select the language (default: en)
   -h, --help             show this help message and exit
 
 inputs:
@@ -108,8 +118,8 @@ inputs:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.1.jar
-       pos [-f {turtle,jsonld}] [-s {none,tweet}] [-o OFILE] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+usage: java -jar stanfordNLPRESTAPI-3.0.0.jar
+       pos [-f {turtle,jsonld}] [-s {none,tweet}] [-o OFILE] [-l {en,es,de,zh,fr,it}] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 POS command on text
 
@@ -123,6 +133,8 @@ optional arguments:
                          none or tweet (default: none)
   -o OFILE, --output-file OFILE
                          Output file name which will contain the annotations
+  -l {en,es,de,zh,fr,it}, --language {en,es,de,zh,fr,it}
+                         Select the language (default: en)
   -h, --help             show this help message and exit
 
 inputs:
@@ -137,7 +149,7 @@ inputs:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-2.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-3.0.0.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -166,7 +178,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:2.0.1
+docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:3.0.0
 ```
 
 Or with:
@@ -184,10 +196,10 @@ The CLI commands and the Web service use the same [configuration file](https://g
 
 ## Used Models
 
-This application contains by default all the English models provided by Stanford CoreNLP team. In
-case you want to add models you will have to download and put them in the *models* folder. You can
-also download the jar files provided by Stanford with models for other languages. To use them you
-will have to include them in the CLASSPATH. We provide two models:
+This application contains by default all the models provided by Stanford CoreNLP team. In case you
+want to add models you will have to download and put them in the *models* folder. You can also 
+download the jar files provided by Stanford with models for other languages. To use them you will
+ have to include them in the CLASSPATH. We provide two models:
 
 * OKE2015 [1]: NER model trained with the OKE2015 challenge training dataset.
 * OKE2016 [2]: NER model trained with the OKE2016 challenge training dataset.
@@ -234,3 +246,4 @@ All the content of this repository is licensed under the terms of the GPL v3 lic
 * [4]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015), Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
 * [5]: Rizzo G., van Erp M., Plu J., Troncy R. (2015), NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
 * [6]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013), Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria
+* [7]: Palmero Aprosio A., Moretti, G. (2016), Italy goes to Stanford: a collection of CoreNLP modules for Italian.

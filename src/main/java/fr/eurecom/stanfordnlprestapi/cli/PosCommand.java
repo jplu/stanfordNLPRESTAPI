@@ -105,6 +105,13 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
         .type(Arguments.fileType().verifyNotExists().verifyCanWriteParent())
         .required(false)
         .help("Output file name which will contain the annotations");
+    subparser.addArgument("-l", "--language")
+        .dest("lang")
+        .type(String.class)
+        .required(false)
+        .setDefault("en")
+        .choices("en", "es", "de", "zh", "fr", "it")
+        .help("Select the language");
   }
 
   @Override
@@ -113,10 +120,9 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
     PosCommand.LOGGER.info("POS analysis uses \"{}\" as configuration file", newNamespace.getString(
         "file"));
   
-    this.pipeline = new StanfordNlp(newT);
+    this.pipeline = new StanfordNlp(newT, newNamespace.getString("lang"));
   
-    if (newNamespace.getString("setting") != null && !"none".equals(newNamespace.getString(
-        "setting"))) {
+    if (!"none".equals(newNamespace.getString("setting"))) {
       this.pipeline.setPipeline(newNamespace.getString("setting"));
     }
   
@@ -151,7 +157,7 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
     if (newNamespace.getString("ofile") != null) {
       FileUtils.write(new File(newNamespace.getString("ofile")), result, Charset.forName("UTF-8"));
     } else {
-      NerCommand.LOGGER.info("{}{}", System.lineSeparator(), result);
+      PosCommand.LOGGER.info("{}{}", System.lineSeparator(), result);
     }
   }
 
