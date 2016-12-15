@@ -25,7 +25,8 @@ public enum Languages {
   ES("es", "properties/es.properties"),
   DE("de", "properties/de.properties"),
   FR("fr", "properties/fr.properties"),
-  ZH("zh", "properties/zh.properties");
+  ZH("zh", "properties/zh.properties"),
+  IT("it", "properties/it.properties");
   
   private String name;
   private String location;

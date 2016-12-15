@@ -126,6 +126,13 @@ public class StanfordNlp {
         StanfordNlp.LOGGER.error("Error to load a property file: {}", Languages.DE.getLocation(),
             ex);
       }
+    } else if ("it".equals(this.lang)) {
+      try (FileInputStream fileInputStream = new FileInputStream(Languages.IT.getLocation())) {
+        props.load(fileInputStream);
+      } catch (final IOException ex) {
+        StanfordNlp.LOGGER.error("Error to load a property file: {}", Languages.IT.getLocation(),
+            ex);
+      }
     } else {
       try (FileInputStream fileInputStream = new FileInputStream(Languages.EN.getLocation())) {
         props.load(fileInputStream);
@@ -226,7 +233,8 @@ public class StanfordNlp {
 
   private void buildSentencesFromContext(final List<CoreMap> stanfordSentences,
                                          final Context context) {
-    Sentence sentence = new SentenceImpl(stanfordSentences.get(0).toString(), context,
+    Sentence sentence = new SentenceImpl(stanfordSentences.get(0).get(
+        CoreAnnotations.TextAnnotation.class), context,
         stanfordSentences.get(0).get(CoreAnnotations.CharacterOffsetBeginAnnotation.class),
         stanfordSentences.get(0).get(CoreAnnotations.CharacterOffsetEndAnnotation.class),
         stanfordSentences.get(0).get(CoreAnnotations.SentenceIndexAnnotation.class),
@@ -242,7 +250,8 @@ public class StanfordNlp {
     this.buildEntitiesFromSentence(stanfordSentences.get(0), context, sentence);
 
     for (int i = 1; i < stanfordSentences.size(); i++) {
-      sentence = new SentenceImpl(stanfordSentences.get(i).toString(), context,
+      sentence = new SentenceImpl(stanfordSentences.get(i).get(
+          CoreAnnotations.TextAnnotation.class), context,
           stanfordSentences.get(i).get(CoreAnnotations.CharacterOffsetBeginAnnotation.class),
           stanfordSentences.get(i).get(CoreAnnotations.CharacterOffsetEndAnnotation.class),
           stanfordSentences.get(i).get(CoreAnnotations.SentenceIndexAnnotation.class),

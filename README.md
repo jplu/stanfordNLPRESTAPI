@@ -7,6 +7,14 @@
 # Introduction
 This repository offer a REST API over [Stanford CoreNLP framework](http://stanfordnlp.github.io/CoreNLP/index.html)
 to get results in NIF format. The REST API is created via [Dropwizard](http://www.dropwizard.io/).
+The system can handle multiple languages:
+
+* English
+* French
+* Chinese
+* German
+* Italian (thanks to [TINT](http://tint.fbk.eu/)[7])
+* Spanish
 
 # Libraries
 
@@ -238,3 +246,4 @@ All the content of this repository is licensed under the terms of the GPL v3 lic
 * [4]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015), Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
 * [5]: Rizzo G., van Erp M., Plu J., Troncy R. (2015), NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
 * [6]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013), Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria
+* [7]: Palmero Aprosio A., Moretti, G. (2016), Italy goes to Stanford: a collection of CoreNLP modules for Italian.

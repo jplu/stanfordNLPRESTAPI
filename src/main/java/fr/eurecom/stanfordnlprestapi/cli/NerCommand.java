@@ -110,7 +110,7 @@ public class NerCommand<T extends PipelineConfiguration> extends ConfiguredComma
         .type(String.class)
         .required(false)
         .setDefault("en")
-        .choices("en", "es", "de", "zh")
+        .choices("en", "es", "de", "zh", "it")
         .help("Select the language");
   }
 

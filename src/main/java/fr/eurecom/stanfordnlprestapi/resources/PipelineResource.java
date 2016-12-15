@@ -112,8 +112,8 @@ public class PipelineResource {
                                    + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
                                  @DefaultValue("none") final String setting,
                                @QueryParam("url") @URL final String url,
-                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh"},
-                                   message = "must be en, es, de or zh")
+                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it"},
+                                   message = "must be en, es, de, zh or it")
                                  @DefaultValue("en") final String lang,
                                @Context final HttpServletRequest request) throws IOException {
     return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url, lang);
@@ -139,8 +139,8 @@ public class PipelineResource {
                                    "must be none or tweet")
                                  @DefaultValue("none") final String setting,
                                @QueryParam("url") @URL final String url,
-                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh", "fr"},
-                                   message = "must be en, es, de, fr or zh")
+                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh", "fr",
+                                   "it"}, message = "must be en, es, de, fr, zh or it")
                                  @DefaultValue("en") final String lang,
                                @Context final HttpServletRequest request) throws IOException {
     return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url, lang);
@@ -167,8 +167,8 @@ public class PipelineResource {
                                     + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
                                   @DefaultValue("none") final String setting,
                                 @FormParam("url") @URL final String url,
-                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh"},
-                                    message = "must be en, es, de or zh")
+                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it"},
+                                    message = "must be en, es, de, zh or it")
                                   @DefaultValue("en") final String lang,
                                 @Context final HttpServletRequest request) throws IOException {
     return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url, lang);
@@ -194,8 +194,8 @@ public class PipelineResource {
                                     "must be none or tweet")
                                   @DefaultValue("none") final String setting,
                                 @FormParam("url") @URL final String url,
-                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh", "fr"},
-                                    message = "must be en, es, de, fr or zh")
+                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh", "fr",
+                                    "it"}, message = "must be en, es, de, fr, zh or it")
                                   @DefaultValue("en") final String lang,
                                 @Context final HttpServletRequest request) throws IOException {
     return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url, lang);

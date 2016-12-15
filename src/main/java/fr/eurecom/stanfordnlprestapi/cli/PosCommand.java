@@ -110,7 +110,7 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
         .type(String.class)
         .required(false)
         .setDefault("en")
-        .choices("en", "es", "de", "zh", "fr")
+        .choices("en", "es", "de", "zh", "fr", "it")
         .help("Select the language");
   }
 
@@ -157,7 +157,7 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
     if (newNamespace.getString("ofile") != null) {
       FileUtils.write(new File(newNamespace.getString("ofile")), result, Charset.forName("UTF-8"));
     } else {
-      NerCommand.LOGGER.info("{}{}", System.lineSeparator(), result);
+      PosCommand.LOGGER.info("{}{}", System.lineSeparator(), result);
     }
   }
 
