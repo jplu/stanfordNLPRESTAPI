@@ -363,8 +363,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
-                    <excludedGroups>fr.eurecom.stanfordnlprestapi.integrations.IntegrationTest
-                    </excludedGroups>
+                    <excludedGroups>fr.eurecom.stanfordnlprestapi.integrations.IntegrationTest</excludedGroups>
                     <argLine>${surefireArgLine} -Xmx6g</argLine>
                     <skipTests>${skip.unit.tests}</skipTests>
                     <parallel>classes</parallel>
@@ -377,7 +376,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
-                    <argLine>${failsafeArgLine} -Xmx4g</argLine>
+                    <argLine>${failsafeArgLine} -Xmx6g</argLine>
                     <skipTests>${skip.integration.tests}</skipTests>
                     <includes>
                         <include>**/*.java</include>
