@@ -1,6 +1,6 @@
 /**
  * StanfordNLPRESTAPI - Offering a REST API over Stanford CoreNLP to get results in NIF format.
- * Copyright © 2016 Julien Plu (julien.plu@redaction-developpez.com)
+ * Copyright © 2017 Julien Plu (julien.plu@redaction-developpez.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ public class NerCommand<T extends PipelineConfiguration> extends ConfiguredComma
         .type(String.class)
         .required(false)
         .setDefault("en")
-        .choices("en", "es", "de", "zh", "it")
+        .choices("en", "es", "de", "zh", "it", "fr")
         .help("Select the language");
   }
 
