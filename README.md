@@ -206,6 +206,7 @@ download the jar files provided by Stanford with models for other languages. To 
 * NEEL2015 [3][4]: NER model for tweets trained with the NEEL2015 challenge training dataset.
 * NEEL2016 [3][4][5]: NER model for tweets trained with the NEEL2016 challenge training dataset.
 * gate-EN-twitter [6]: POS tagger model for tagging tweets.
+* ETAPE [8]: NER model trained with the ETAPE challenge training dataset. 
 
 # How to contribute
 
@@ -242,8 +243,9 @@ All the content of this repository is licensed under the terms of the GPL v3 lic
 
 * [1]: Plu J., Rizzo G., Troncy R. (2015) A Hybrid Approach for Entity Recognition and Linking. In: 12th European Semantic Web Conference (ESWC'15), Open Extraction Challenge, Portoroz, Slovenia.
 * [2]: Plu J., Rizzo G., Troncy R. (2016) Enhancing Entity Linking by Combining NER Models. In: 13th Extended Semantic Web Conference (ESWC'16), Challenges Track, Heraklion, Greece.
-* [3]: Cano A.E., Rizzo G., Varga A., Rowe M., Stankovic M., Dadzie A.S. (2014), Making Sense of Microposts (#Microposts2014) Named Entity Extraction & Linking Challenge. In (WWW'14),4th International Workshop on Making Sense of Microposts (#Microposts'14), Seoul, Korea.
-* [4]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015), Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
-* [5]: Rizzo G., van Erp M., Plu J., Troncy R. (2015), NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
-* [6]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013), Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria
-* [7]: Palmero Aprosio A., Moretti, G. (2016), Italy goes to Stanford: a collection of CoreNLP modules for Italian.
+* [3]: Cano A.E., Rizzo G., Varga A., Rowe M., Stankovic M., Dadzie A.S. (2014) Making Sense of Microposts (#Microposts2014) Named Entity Extraction & Linking Challenge. In (WWW'14),4th International Workshop on Making Sense of Microposts (#Microposts'14), Seoul, Korea.
+* [4]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015) Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
+* [5]: Rizzo G., van Erp M., Plu J., Troncy R. (2015) NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
+* [6]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013) Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria
+* [7]: Palmero Aprosio A., Moretti, G. (2016) Italy goes to Stanford: a collection of CoreNLP modules for Italian.
+* [8]: Gravier G., Adda G.,Paulsson N., Carré M.,Giraudel A.,Galibert O. (2012) The ETAPE corpus for the evaluation of speech-based TV content processing in the French language.

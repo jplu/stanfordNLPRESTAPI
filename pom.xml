@@ -2,7 +2,7 @@
 <!--
 
     StanfordNLPRESTAPI - Offering a REST API over Stanford CoreNLP to get results in NIF format.
-    Copyright © 2016 Julien Plu (julien.plu@redaction-developpez.com)
+    Copyright © 2017 Julien Plu (julien.plu@redaction-developpez.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses />.
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -395,13 +395,13 @@
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>3.0.rc1</version>
+                <version>3.0</version>
                 <configuration>
                     <header>com/mycila/maven/plugin/license/templates/GPL-3.txt</header>
                     <properties>
                         <owner>Julien Plu</owner>
                         <email>julien.plu@redaction-developpez.com</email>
-                        <project.inceptionYear>2016</project.inceptionYear>
+                        <project.inceptionYear>2017</project.inceptionYear>
                         <project.description>
         Offering a REST API over Stanford CoreNLP to get results in NIF format.
                         </project.description>
@@ -685,7 +685,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.10.1</version>
+            <version>1.10.2</version>
         </dependency>
         <dependency>
             <groupId>eu.fbk.dh</groupId>

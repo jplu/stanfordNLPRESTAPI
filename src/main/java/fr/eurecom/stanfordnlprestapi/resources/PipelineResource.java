@@ -1,6 +1,6 @@
 /**
  * StanfordNLPRESTAPI - Offering a REST API over Stanford CoreNLP to get results in NIF format.
- * Copyright © 2016 Julien Plu (julien.plu@redaction-developpez.com)
+ * Copyright © 2017 Julien Plu (julien.plu@redaction-developpez.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,8 +112,8 @@ public class PipelineResource {
                                    + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
                                  @DefaultValue("none") final String setting,
                                @QueryParam("url") @URL final String url,
-                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it"},
-                                   message = "must be en, es, de, zh or it")
+                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it",
+                                   "fr"}, message = "must be en, es, de, zh, it or fr")
                                  @DefaultValue("en") final String lang,
                                @Context final HttpServletRequest request) throws IOException {
     return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url, lang);
@@ -167,8 +167,8 @@ public class PipelineResource {
                                     + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
                                   @DefaultValue("none") final String setting,
                                 @FormParam("url") @URL final String url,
-                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it"},
-                                    message = "must be en, es, de, zh or it")
+                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it",
+                                    "fr"}, message = "must be en, es, de, zh, it or fr")
                                   @DefaultValue("en") final String lang,
                                 @Context final HttpServletRequest request) throws IOException {
     return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url, lang);
