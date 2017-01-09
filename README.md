@@ -1,7 +1,7 @@
 # StanfordNLPRESTAPI
 
-[![Build status](https://travis-ci.org/jplu/stanfordNLPRESTAPI.svg?branch=master)](https://travis-ci.org/jplu/stanfordNLPRESTAPI)
-[![Coverage Status](https://coveralls.io/repos/github/jplu/stanfordNLPRESTAPI/badge.svg?branch=master)](https://coveralls.io/github/jplu/stanfordNLPRESTAPI?branch=master)
+[![Build status](https://travis-ci.org/jplu/stanfordNLPRESTAPI.svg?branch=develop)](https://travis-ci.org/jplu/stanfordNLPRESTAPI)
+[![Coverage Status](https://coveralls.io/repos/github/jplu/stanfordNLPRESTAPI/badge.svg?branch=develop)](https://coveralls.io/github/jplu/stanfordNLPRESTAPI?branch=develop)
 [![License (GPL version 3)](https://img.shields.io/badge/license-GNU%20GPL%20version%203-blue.svg?style=flat-square)](http://opensource.org/licenses/GPL-3.0)
 
 # Introduction
@@ -63,7 +63,7 @@ mvn clean verify -P all-tests
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-3.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-3.0.2-SNAPSHOT.jar
        [-h] [-v] {server,check,pos,ner} ...
 
 positional arguments:
@@ -87,7 +87,7 @@ The first way is via CLI with two possible sub-commands, **ner** and **pos**.
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-3.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-3.0.2-SNAPSHOT.jar
        ner [-f {turtle,jsonld}] [-s {neel2015,neel2016,oke2015,oke2016,none}] [-o OFILE] [-l {en,es,de,zh,it}] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 NER command on text
@@ -118,7 +118,7 @@ inputs:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-3.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-3.0.2-SNAPSHOT.jar
        pos [-f {turtle,jsonld}] [-s {none,tweet}] [-o OFILE] [-l {en,es,de,zh,fr,it}] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 POS command on text
@@ -149,7 +149,7 @@ inputs:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-3.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-3.0.2-SNAPSHOT.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -178,7 +178,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/properties:/maven/properties -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:3.0.1
+docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/properties:/maven/properties -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:3.0.2-SNAPSHOT
 ```
 
 Or with:
@@ -192,7 +192,7 @@ the loading of all the models of Stanford CoreNLP.
 
 ## Configuration
 
-The CLI commands and the Web service use the same [configuration file](https://github.com/jplu/stanfordNLPRESTAPI/blob/master/conf/config.yaml).
+The CLI commands and the Web service use the same [configuration file](https://github.com/jplu/stanfordNLPRESTAPI/blob/develop/conf/config.yaml).
 
 ## Used Models
 
@@ -210,7 +210,7 @@ download the jar files provided by Stanford with models for other languages. To 
 
 # How to contribute
 
-In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/master/CONTRIBUTING.md) file.
+In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/develop/CONTRIBUTING.md) file.
 
 # Opening an issue
 
