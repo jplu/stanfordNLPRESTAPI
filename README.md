@@ -285,7 +285,8 @@ optional arguments:
 ```
 
 The format in the HTTP header is respectively **text/turtle;charset=utf-8** for RDF Turtle and 
-**application/json;charset=utf-8** in case of errors and when the method profiles is queried.
+**application/json;charset=utf-8** in case of errors and when the method profiles is queried. The
+documentation for the API is available on the [wiki](https://github.com/jplu/stanfordNLPRESTAPI/wiki/API-documentation).
 
 ## Docker
 
