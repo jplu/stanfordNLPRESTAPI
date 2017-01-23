@@ -515,9 +515,9 @@ public class PipelineResource {
   private void loadAllProperties() {
     try {
       Files.list(Paths.get("properties")).forEach(file -> {
-        //final StanfordNlp pipeline = new StanfordNlp(file.toString(), this.stanford);
+        final StanfordNlp pipeline = new StanfordNlp(file.toString(), this.stanford);
         
-        //this.pipelines.put(file.getFileName().toString().split("\\.")[0], pipeline);
+        this.pipelines.put(file.getFileName().toString().split("\\.")[0], pipeline);
   
         try (FileInputStream fileInputStream = new FileInputStream(file.toString())) {
           final Properties props = new Properties();
