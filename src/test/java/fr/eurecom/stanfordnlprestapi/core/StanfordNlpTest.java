@@ -24,8 +24,6 @@ import fr.eurecom.stanfordnlprestapi.datatypes.Entity;
 import fr.eurecom.stanfordnlprestapi.datatypes.SentenceImpl;
 import fr.eurecom.stanfordnlprestapi.datatypes.TokenImpl;
 
-import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
-
 import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
 import fr.eurecom.stanfordnlprestapi.interfaces.Token;
 
@@ -34,18 +32,14 @@ import fr.eurecom.stanfordnlprestapi.nullobjects.NullToken;
 
 import java.nio.file.FileSystems;
 
-import java.util.Properties;
-
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
+import javax.ws.rs.WebApplicationException;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 
+import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,56 +49,16 @@ import org.slf4j.LoggerFactory;
 public class StanfordNlpTest {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlpTest.class);
   private static StanfordNlp stanfordNlp;
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   public StanfordNlpTest() {
   }
-
+  
   @BeforeClass
   public static void setUpBeforeClass() {
-    StanfordNlpTest.stanfordNlp = new StanfordNlp("stanfordnlp", "en");
-  }
-
-  /**
-   * Test {@link StanfordNlp} for the POS process.
-   */
-  @Test
-  public final void testRunWithPos() throws Exception {
-    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
-      StanfordNlpTest.stanfordNlp.setLang("en");
-    }
-    
-    final Model fileModel = ModelFactory.createDefaultModel();
-
-    RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
-        FileSystems.getDefault().getSeparator() + "pos.ttl"), Lang.TURTLE);
-
-    final String text = "My favorite actress is: Natalie Portman. She is very stunning.";
-
-    Assert.assertTrue("Issue to get the proper full RDF model of a context for POS",
-        fileModel.isIsomorphicWith(StanfordNlpTest.stanfordNlp.run(text).rdfModel("stanfordnlp",
-            NlpProcess.POS, "http://127.0.0.1")));
-  }
-
-  /**
-   * Test {@link StanfordNlp} for the NER process.
-   */
-  @Test
-  public final void testRunWithNer() throws Exception {
-    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
-      StanfordNlpTest.stanfordNlp.setLang("en");
-    }
-    
-    final Model fileModel = ModelFactory.createDefaultModel();
-
-    RDFDataMgr.read(fileModel, this.getClass().getResourceAsStream(
-        FileSystems.getDefault().getSeparator() + "ner.ttl"), Lang.TURTLE);
-
-    final String text = "My favorite actress is: Natalie Portman. She "
-        + "is very stunning.";
-
-    Assert.assertTrue("Issue to get the proper full RDF model of a context for NER",
-        fileModel.isIsomorphicWith(StanfordNlpTest.stanfordNlp.run(text).rdfModel("stanfordnlp",
-            NlpProcess.NER, "http://127.0.0.1")));
+    StanfordNlpTest.stanfordNlp = new StanfordNlp("properties"
+        + FileSystems.getDefault().getSeparator() + "ner_en_none.properties", "stanfordnlp");
   }
 
   /**
@@ -113,19 +67,15 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesEnd() throws Exception {
-    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
-      StanfordNlpTest.stanfordNlp.setLang("en");
-    }
-    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("I like Paris");
     final Context context = new Context("I like Paris", 0, 12);
     final Sentence sentence = new SentenceImpl("I like Paris", context, 0, 12, 0,
         NullSentence.getInstance());
     final Entity entity = new Entity("Paris", "LOCATION", sentence, context, 7, 12);
-    final Token token1 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token1 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token2 = new TokenImpl("like", "VBP", 2, 6, "like", token1, context, sentence, 2);
-    final Token token3 = new TokenImpl("Paris", "NNP", 7, 12, "Paris", token2, context, sentence,
+    final Token token2 = new TokenImpl("like", "VBP", 2, 6, token1, context, sentence, 2);
+    final Token token3 = new TokenImpl("Paris", "NNP", 7, 12, token2, context, sentence,
         3);
 
     token1.nextToken(token2);
@@ -148,21 +98,17 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesMultipleEnd() throws Exception {
-    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
-      StanfordNlpTest.stanfordNlp.setLang("en");
-    }
-    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("I like Natalie Portman");
     final Context context = new Context("I like Natalie Portman", 0, 22);
     final Sentence sentence = new SentenceImpl("I like Natalie Portman", context, 0, 22, 0,
         NullSentence.getInstance());
     final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 7, 22);
-    final Token token1 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token1 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token2 = new TokenImpl("like", "VBP", 2, 6, "like", token1, context, sentence, 2);
-    final Token token3 = new TokenImpl("Natalie", "NNP", 7, 14, "Natalie", token2, context,
+    final Token token2 = new TokenImpl("like", "VBP", 2, 6, token1, context, sentence, 2);
+    final Token token3 = new TokenImpl("Natalie", "NNP", 7, 14, token2, context,
         sentence, 3);
-    final Token token4 = new TokenImpl("Portman", "NNP", 15, 22, "Portman", token3, context,
+    final Token token4 = new TokenImpl("Portman", "NNP", 15, 22, token3, context,
         sentence, 4);
 
     token1.nextToken(token2);
@@ -187,22 +133,18 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesStart() throws Exception {
-    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
-      StanfordNlpTest.stanfordNlp.setLang("en");
-    }
-    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("Paris is a nice city.");
     final Context context = new Context("Paris is a nice city.", 0, 21);
     final Sentence sentence = new SentenceImpl("Paris is a nice city.", context, 0, 21, 0,
         NullSentence.getInstance());
     final Entity entity = new Entity("Paris", "LOCATION", sentence, context, 0, 5);
-    final Token token1 = new TokenImpl("Paris", "NNP", 0, 5, "Paris", NullToken.getInstance(),
+    final Token token1 = new TokenImpl("Paris", "NNP", 0, 5, NullToken.getInstance(),
         context, sentence, 1);
-    final Token token2 = new TokenImpl("is", "VBZ", 6, 8, "be", token1, context, sentence, 2);
-    final Token token3 = new TokenImpl("a", "DT", 9, 10, "a", token2, context, sentence, 3);
-    final Token token4 = new TokenImpl("nice", "JJ", 11, 15, "nice", token3, context, sentence, 4);
-    final Token token5 = new TokenImpl("city", "NN", 16, 20, "city", token4, context, sentence, 5);
-    final Token token6 = new TokenImpl(".", ".", 20, 21, ".", token5, context, sentence, 6);
+    final Token token2 = new TokenImpl("is", "VBZ", 6, 8, token1, context, sentence, 2);
+    final Token token3 = new TokenImpl("a", "DT", 9, 10, token2, context, sentence, 3);
+    final Token token4 = new TokenImpl("nice", "JJ", 11, 15, token3, context, sentence, 4);
+    final Token token5 = new TokenImpl("city", "NN", 16, 20, token4, context, sentence, 5);
+    final Token token6 = new TokenImpl(".", ".", 20, 21, token5, context, sentence, 6);
 
     token1.nextToken(token2);
     token2.nextToken(token3);
@@ -230,26 +172,22 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesMultipleStart() throws Exception {
-    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
-      StanfordNlpTest.stanfordNlp.setLang("en");
-    }
-    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("Natalie Portman is a beautiful "
         + "girl.");
     final Context context = new Context("Natalie Portman is a beautiful girl.", 0, 36);
     final Sentence sentence = new SentenceImpl("Natalie Portman is a beautiful girl.", context, 0,
         36, 0, NullSentence.getInstance());
     final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 0, 15);
-    final Token token1 = new TokenImpl("Natalie", "NNP", 0, 7, "Natalie", NullToken.getInstance(),
+    final Token token1 = new TokenImpl("Natalie", "NNP", 0, 7, NullToken.getInstance(),
         context, sentence, 1);
-    final Token token2 = new TokenImpl("Portman", "NNP", 8, 15, "Portman", token1, context,
+    final Token token2 = new TokenImpl("Portman", "NNP", 8, 15, token1, context,
         sentence, 2);
-    final Token token3 = new TokenImpl("is", "VBZ", 16, 18, "be", token2, context, sentence, 3);
-    final Token token4 = new TokenImpl("a", "DT", 19, 20, "a", token3, context, sentence, 4);
-    final Token token5 = new TokenImpl("beautiful", "NN", 21, 30, "beautiful", token4, context,
+    final Token token3 = new TokenImpl("is", "VBZ", 16, 18, token2, context, sentence, 3);
+    final Token token4 = new TokenImpl("a", "DT", 19, 20, token3, context, sentence, 4);
+    final Token token5 = new TokenImpl("beautiful", "NN", 21, 30, token4, context,
         sentence, 5);
-    final Token token6 = new TokenImpl("girl", "NN", 31, 35, "girl", token5, context, sentence, 6);
-    final Token token7 = new TokenImpl(".", ".", 35, 36, ".", token6, context, sentence, 7);
+    final Token token6 = new TokenImpl("girl", "NN", 31, 35, token5, context, sentence, 6);
+    final Token token7 = new TokenImpl(".", ".", 35, 36, token6, context, sentence, 7);
 
     token1.nextToken(token2);
     token2.nextToken(token3);
@@ -279,24 +217,20 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesMiddle() throws Exception {
-    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
-      StanfordNlpTest.stanfordNlp.setLang("en");
-    }
-    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("I support Paris very much.");
     final Context context = new Context("I support Paris very much.", 0, 26);
     final Sentence sentence = new SentenceImpl("I support Paris very much.", context, 0, 26, 0,
         NullSentence.getInstance());
     final Entity entity = new Entity("Paris", "LOCATION", sentence, context, 10, 15);
-    final Token token1 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token1 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token2 = new TokenImpl("support", "VBP", 2, 9, "support", token1, context, sentence,
+    final Token token2 = new TokenImpl("support", "VBP", 2, 9, token1, context, sentence,
         2);
-    final Token token3 = new TokenImpl("Paris", "NNP", 10, 15, "Paris", token2, context, sentence,
+    final Token token3 = new TokenImpl("Paris", "NNP", 10, 15, token2, context, sentence,
         3);
-    final Token token4 = new TokenImpl("very", "RB", 16, 20, "very", token3, context, sentence, 4);
-    final Token token5 = new TokenImpl("much", "RB", 21, 25, "much", token4, context, sentence, 5);
-    final Token token6 = new TokenImpl(".", ".", 25, 26, ".", token5, context, sentence, 6);
+    final Token token4 = new TokenImpl("very", "RB", 16, 20, token3, context, sentence, 4);
+    final Token token5 = new TokenImpl("much", "RB", 21, 25, token4, context, sentence, 5);
+    final Token token6 = new TokenImpl(".", ".", 25, 26, token5, context, sentence, 6);
 
     token1.nextToken(token2);
     token2.nextToken(token3);
@@ -324,25 +258,21 @@ public class StanfordNlpTest {
    */
   @Test
   public final void testBuildEntitiesMultipleMiddle() throws Exception {
-    if (!"en".equals(StanfordNlpTest.stanfordNlp.getLang())) {
-      StanfordNlpTest.stanfordNlp.setLang("en");
-    }
-    
     final Context contextTest = StanfordNlpTest.stanfordNlp.run("I love Natalie Portman a lot.");
     final Context context = new Context("I love Natalie Portman a lot.", 0, 29);
     final Sentence sentence = new SentenceImpl("I love Natalie Portman a lot.", context, 0, 29, 0,
         NullSentence.getInstance());
     final Entity entity = new Entity("Natalie Portman", "PERSON", sentence, context, 7, 22);
-    final Token token1 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(),
+    final Token token1 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(),
         context, sentence, 1);
-    final Token token2 = new TokenImpl("love", "VBP", 2, 6, "love", token1, context, sentence, 2);
-    final Token token3 = new TokenImpl("Natalie", "NNP", 7, 14, "Natalie", token2, context,
+    final Token token2 = new TokenImpl("love", "VBP", 2, 6, token1, context, sentence, 2);
+    final Token token3 = new TokenImpl("Natalie", "NNP", 7, 14, token2, context,
         sentence, 3);
-    final Token token4 = new TokenImpl("Portman", "NNP", 15, 22, "Portman", token3, context,
+    final Token token4 = new TokenImpl("Portman", "NNP", 15, 22, token3, context,
         sentence, 4);
-    final Token token5 = new TokenImpl("a", "DT", 23, 24, "a", token4, context, sentence, 5);
-    final Token token6 = new TokenImpl("lot", "NN", 25, 28, "lot", token5, context, sentence, 6);
-    final Token token7 = new TokenImpl(".", ".", 28, 29, ".", token6, context, sentence, 7);
+    final Token token5 = new TokenImpl("a", "DT", 23, 24, token4, context, sentence, 5);
+    final Token token6 = new TokenImpl("lot", "NN", 25, 28, token5, context, sentence, 6);
+    final Token token7 = new TokenImpl(".", ".", 28, 29, token6, context, sentence, 7);
 
     token1.nextToken(token2);
     token2.nextToken(token3);
@@ -367,53 +297,14 @@ public class StanfordNlpTest {
   }
   
   /**
-   * Test the proper language set for Chinese.
+   * Test non-existent settings usage.
    */
   @Test
-  public final void testLanguageZhProperties() throws Exception {
-    StanfordNlpTest.stanfordNlp.setLang("zh");
-    
-    Assert.assertEquals("Issues to set in Chinese", "zh", StanfordNlpTest.stanfordNlp.getLang());
-  }
-  
-  /**
-   * Test the proper language set for French.
-   */
-  @Test
-  public final void testLanguageFrProperties() throws Exception {
-    StanfordNlpTest.stanfordNlp.setLang("fr");
-    
-    Assert.assertEquals("Issues to set in French", "fr", StanfordNlpTest.stanfordNlp.getLang());
-  }
-  
-  /**
-   * Test the proper language set for Spanish.
-   */
-  @Test
-  public final void testLanguageEsProperties() throws Exception {
-    StanfordNlpTest.stanfordNlp.setLang("es");
-    
-    Assert.assertEquals("Issues to set in Spanish", "es", StanfordNlpTest.stanfordNlp.getLang());
-  }
-  
-  /**
-   * Test the proper language set for German.
-   */
-  @Test
-  public final void testLanguageDeProperties() throws Exception {
-    StanfordNlpTest.stanfordNlp.setLang("de");
-    
-    Assert.assertEquals("Issues to set in German", "de", StanfordNlpTest.stanfordNlp.getLang());
-  }
-  
-  /**
-   * Test the proper language set for Italian.
-   */
-  @Test
-  public final void testLanguageItProperties() throws Exception {
-    StanfordNlpTest.stanfordNlp.setLang("it");
-    
-    Assert.assertEquals("Issues to set in Italian", "it", StanfordNlpTest.stanfordNlp.getLang());
+  public final void testNonExistentSettings() {
+    this.thrown.expect(WebApplicationException.class);
+    this.thrown.expectMessage("The profile: pos_unexistent_settings does not exists");
+    new StanfordNlp("properties" + FileSystems.getDefault().getSeparator()
+        + "pos_unexistent_settings.properties", "stanfordnlp");
   }
   
   /**
@@ -423,24 +314,5 @@ public class StanfordNlpTest {
   public final void testGetName() throws Exception {
     Assert.assertEquals("Issues to get the proper name", "stanfordnlp",
         StanfordNlpTest.stanfordNlp.getName());
-  }
-  
-  /**
-   * Test the proper behavior of setting a new pipeline with another language than English.
-   */
-  @Test
-  public final void testPipelineWithAnotherLanguage() throws Exception {
-    StanfordNlpTest.stanfordNlp.setLang("fr");
-    StanfordNlpTest.stanfordNlp.setPipeline("oke2015");
-    Assert.assertEquals("Issues to set pipeline", "fr", StanfordNlpTest.stanfordNlp.getLang());
-  }
-
-  /**
-   * Test{@link StanfordNlp#toString()} method.
-   */
-  @Test
-  public final void testToString() {
-    Assert.assertEquals("Issue to get the proper toString value", "StanfordNlp{}",
-        StanfordNlpTest.stanfordNlp.toString());
   }
 }

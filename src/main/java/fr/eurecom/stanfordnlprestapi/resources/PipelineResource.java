@@ -18,35 +18,48 @@
 package fr.eurecom.stanfordnlprestapi.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.eurecom.stanfordnlprestapi.core.StanfordNlp;
 
+import fr.eurecom.stanfordnlprestapi.datatypes.Query;
 import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
-import io.dropwizard.validation.OneOf;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.riot.RDFFormat;
 
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,209 +67,473 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Julien Plu
  */
-@Path("/v1")
+@Path("/v4")
 public class PipelineResource {
   private static final Logger LOGGER = LoggerFactory.getLogger(PipelineResource.class);
-  private final StanfordNlp pipeline;
+  private final Map<String, StanfordNlp> pipelines;
   private final String stanford;
-  private static final String TURTLE = "turtle";
-  private String previousSetting;
-  private String lang;
+  private final Map<String, Map> profiles = new HashMap<>();
 
   /**
    * PipelineResource constructor.
    *
-   * @param newPipeline The pipeline that will be used
+   * @param name a name.
    */
-  public PipelineResource(final StanfordNlp newPipeline) {
+  public PipelineResource(final String name) {
     PipelineResource.LOGGER.info("PipelineResource init");
-
-    this.pipeline = newPipeline;
-    this.previousSetting = "none";
-    this.lang = "en";
-    this.stanford = this.pipeline.getName();
+    
+    this.pipelines = new HashMap<>();
+    
+    this.loadAllProperties();
+    
+    this.stanford = name;
   }
 
   /**
    * PipelineResource constructor.
    *
    * @param name a name.
-   * @param newLang a language.
+   * @param propertyFile Stanford property file to load.
    *
    */
-  public PipelineResource(final String name, final String newLang) {
-    this.pipeline = new StanfordNlp(name, newLang);
-    this.previousSetting = "none";
-    this.lang = newLang;
+  public PipelineResource(final String name, final String propertyFile) {
+    this.pipelines = new HashMap<>();
+    
+    this.pipelines.put(propertyFile, new StanfordNlp("properties"
+        + FileSystems.getDefault().getSeparator() + propertyFile + ".properties", name));
+    
     this.stanford = name;
   }
-
+  
   /**
-   * The API call for a NER process via GET.
+   * The API call to get all the loaded profiles.
    *
-   * @param text HTTP query
-   *
-   * @return The corresponding response of the query
+   * @return All the loaded profiles.
    */
   @GET
   @Timed
-  @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
-  @Path("/ner/")
-  public final Response nerGet(@QueryParam("text") @Length(max = 200, min = 1, message =
-      "must be less than 200 characters long otherwise use the POST method") final String text,
-                               @QueryParam("format") @OneOf(value = {"turtle", "jsonld"}, message =
-                                   "must be turtle or jsonld")
-                                 @DefaultValue("turtle") final String format,
-                               @QueryParam("setting") @OneOf(value = {"none", "oke2015", "oke2016",
-                                   "neel2015", "neel2014", "neel2016"}, message = "must be "
-                                   + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
-                                 @DefaultValue("none") final String setting,
-                               @QueryParam("url") @URL final String url,
-                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it",
-                                   "fr"}, message = "must be en, es, de, zh, it or fr")
-                                 @DefaultValue("en") final String lang,
-                               @Context final HttpServletRequest request) throws IOException {
-    return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url, lang);
+  @Produces("application/json;charset=utf-8")
+  @Path("/profiles/")
+  public final Response profiles() {
+    final String json;
+    
+    try {
+      json = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(
+          this.profiles.keySet());
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Issue for reading the profiles", ex,
+          Response.Status.PRECONDITION_FAILED);
+    }
+    
+    return Response.ok(json).build();
   }
-
+  
   /**
-   * The API call for a POS process via GET.
+   * The API call to get a specific loaded profile.
    *
-   * @param text HTTP query
-   *
-   * @return The corresponding response of the query
+   * @return The loaded profile.
    */
   @GET
   @Timed
-  @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
-  @Path("/pos/")
-  public final Response posGet(@QueryParam("text") @Length(max = 200, min = 1, message =
-      "must be less than 200 characters long otherwise use the POST method") final String text,
-                               @QueryParam("format") @OneOf(value = {"turtle", "jsonld"}, message =
-                                   "must be turtle or jsonld")
-                                 @DefaultValue("turtle") final String format,
-                               @QueryParam("setting") @OneOf(value = {"none", "tweet"}, message =
-                                   "must be none or tweet")
-                                 @DefaultValue("none") final String setting,
-                               @QueryParam("url") @URL final String url,
-                               @QueryParam("lang") @OneOf(value = {"en", "es", "de", "zh", "fr",
-                                   "it"}, message = "must be en, es, de, fr, zh or it")
-                                 @DefaultValue("en") final String lang,
-                               @Context final HttpServletRequest request) throws IOException {
-    return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url, lang);
+  @Produces("application/json;charset=utf-8")
+  @Path("/profile/{name}")
+  public final Response profile(@PathParam("name") final String name) {
+    final String json;
+    
+    try {
+      if (this.profiles.containsKey(name)) {
+        json = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(
+            this.profiles.get(name));
+      } else {
+        throw new WebApplicationException("The profile " + name + " does not exists.",
+            Response.Status.PRECONDITION_FAILED);
+      }
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Issue for reading the profiles", ex,
+          Response.Status.PRECONDITION_FAILED);
+    }
+    
+    return Response.ok(json).build();
   }
   
   /**
    * The API call for a NER process via POST.
    *
-   * @param text HTTP query
-   *
    * @return The corresponding response of the query
    */
   @POST
   @Timed
-  @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
+  @Produces({"application/json;charset=utf-8", "text/turtle;charset=utf-8"})
+  @Consumes("application/json;charset=utf-8")
   @Path("/ner/")
-  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-  public final Response nerPost(@FormParam("text") final String text,
-                                @FormParam("format") @OneOf(value = {"turtle", "jsonld"}, message =
-                                    "must be turtle or jsonld")
-                                  @DefaultValue("turtle") final String format,
-                                @FormParam("setting") @OneOf(value = {"none", "oke2015", "oke2016",
-                                    "neel2015", "neel2014", "neel2016"}, message = "must be "
-                                    + "none, oke2015, oke2016, neel2014, neel2015 or neel2016")
-                                  @DefaultValue("none") final String setting,
-                                @FormParam("url") @URL final String url,
-                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh", "it",
-                                    "fr"}, message = "must be en, es, de, zh, it or fr")
-                                  @DefaultValue("en") final String lang,
-                                @Context final HttpServletRequest request) throws IOException {
-    return this.task(text, format, setting, this.getHost(request), NlpProcess.NER, url, lang);
+  public final Response ner(@Context final HttpServletRequest request,
+                            @QueryParam("setting") @DefaultValue("none") final String setting,
+                            @QueryParam("lang") @DefaultValue("en") final String newLang) {
+    final Response result;
+    final StringWriter writer = new StringWriter();
+    final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    final Validator validator = factory.getValidator();
+  
+    try {
+      IOUtils.copy(request.getInputStream(), writer, Charset.forName("UTF-8"));
+      
+      final ObjectMapper mapper = new ObjectMapper();
+      
+      mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+      
+      final Query query = mapper.readValue(writer.toString(), Query.class);
+      final Set<ConstraintViolation<Query>> violations = validator.validate(query);
+    
+      if (!violations.isEmpty()) {
+        final StringBuilder sb = new StringBuilder();
+      
+        violations.forEach(error -> sb.append(error.getPropertyPath()
+            + error.getMessage()).append("\n"));
+      
+        throw new WebApplicationException(sb.toString(), Response.Status.PRECONDITION_FAILED);
+      }
+    
+      result = this.task(query, setting, this.getHost(request), NlpProcess.NER, newLang);
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Failed to read the HTTP request " + writer, ex,
+          Response.Status.PRECONDITION_FAILED);
+    }
+  
+    return result;
   }
   
   /**
-   * The API call for a POS process via GET.
-   *
-   * @param text HTTP query
+   * The API call for a POS process via POST.
    *
    * @return The corresponding response of the query
    */
   @POST
   @Timed
-  @Produces({"text/turtle;charset=utf-8", "application/json;charset=utf-8"})
+  @Produces({"application/json;charset=utf-8", "text/turtle;charset=utf-8"})
+  @Consumes("application/json;charset=utf-8")
   @Path("/pos/")
-  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-  public final Response posPost(@FormParam("text") final String text,
-                                @FormParam("format") @OneOf(value = {"turtle", "jsonld"}, message =
-                                    "must be turtle or jsonld")
-                                @DefaultValue("turtle") final String format,
-                                @FormParam("setting") @OneOf(value = {"none", "tweet"}, message =
-                                    "must be none or tweet")
-                                  @DefaultValue("none") final String setting,
-                                @FormParam("url") @URL final String url,
-                                @FormParam("lang") @OneOf(value = {"en", "es", "de", "zh", "fr",
-                                    "it"}, message = "must be en, es, de, fr, zh or it")
-                                  @DefaultValue("en") final String lang,
-                                @Context final HttpServletRequest request) throws IOException {
-    return this.task(text, format, setting, this.getHost(request), NlpProcess.POS, url, lang);
+  public final Response pos(@Context final HttpServletRequest request,
+                            @QueryParam("setting") @DefaultValue("none") final String setting,
+                            @QueryParam("lang") @DefaultValue("en") final String newLang) {
+    final Response result;
+    final StringWriter writer = new StringWriter();
+    final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    final Validator validator = factory.getValidator();
+  
+    try {
+      IOUtils.copy(request.getInputStream(), writer, Charset.forName("UTF-8"));
+    
+      final ObjectMapper mapper = new ObjectMapper();
+    
+      mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+      
+      final Query query = mapper.readValue(writer.toString(), Query.class);
+      final Set<ConstraintViolation<Query>> violations = validator.validate(query);
+    
+      if (!violations.isEmpty()) {
+        final StringBuilder sb = new StringBuilder();
+      
+        violations.forEach(error -> sb.append(error.getPropertyPath()
+            + error.getMessage()).append("\n"));
+      
+        throw new WebApplicationException(sb.toString(), Response.Status.PRECONDITION_FAILED);
+      }
+    
+      result = this.task(query, setting, this.getHost(request), NlpProcess.POS, newLang);
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Failed to read the HTTP request " + writer, ex,
+          Response.Status.PRECONDITION_FAILED);
+    }
+  
+    return result;
   }
   
-  private Response task(final String text, final String format, final String setting,
-                        final String host, final NlpProcess process, final String url,
-                        final String lang) throws IOException {
-    if (text == null && url == null) {
-      throw new WebApplicationException("Text and Url parameters cannot be both empty.",
+  /**
+   * The API call for a tokenize process via POST.
+   *
+   * @return The corresponding response of the query
+   */
+  @POST
+  @Timed
+  @Produces({"application/json;charset=utf-8", "text/turtle;charset=utf-8"})
+  @Consumes("application/json;charset=utf-8")
+  @Path("/tokenize/")
+  public final Response tokenize(@Context final HttpServletRequest request,
+                                 @QueryParam("setting") @DefaultValue("none") final String setting,
+                                 @QueryParam("lang") @DefaultValue("en") final String newLang) {
+    final Response result;
+    final StringWriter writer = new StringWriter();
+    final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    final Validator validator = factory.getValidator();
+    
+    try {
+      IOUtils.copy(request.getInputStream(), writer, Charset.forName("UTF-8"));
+      
+      final ObjectMapper mapper = new ObjectMapper();
+      
+      mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+      
+      final Query query = mapper.readValue(writer.toString(), Query.class);
+      final Set<ConstraintViolation<Query>> violations = validator.validate(query);
+      
+      if (!violations.isEmpty()) {
+        final StringBuilder sb = new StringBuilder();
+        
+        violations.forEach(error -> sb.append(error.getPropertyPath()
+            + error.getMessage()).append("\n"));
+        
+        throw new WebApplicationException(sb.toString(), Response.Status.PRECONDITION_FAILED);
+      }
+      
+      result = this.task(query, setting, this.getHost(request), NlpProcess.TOKENIZE, newLang);
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Failed to read the HTTP request " + writer, ex,
           Response.Status.PRECONDITION_FAILED);
     }
     
+    return result;
+  }
+  
+  /**
+   * The API call for a coref process via POST.
+   *
+   * @return The corresponding response of the query
+   */
+  @POST
+  @Timed
+  @Produces({"application/json;charset=utf-8", "text/turtle;charset=utf-8"})
+  @Consumes("application/json;charset=utf-8")
+  @Path("/coref/")
+  public final Response coref(@Context final HttpServletRequest request,
+                              @QueryParam("setting") @DefaultValue("none") final String setting,
+                              @QueryParam("lang") @DefaultValue("en") final String newLang) {
+    final Response result;
+    final StringWriter writer = new StringWriter();
+    final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    final Validator validator = factory.getValidator();
+    
+    try {
+      IOUtils.copy(request.getInputStream(), writer, Charset.forName("UTF-8"));
+      
+      final ObjectMapper mapper = new ObjectMapper();
+      
+      mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+      
+      final Query query = mapper.readValue(writer.toString(), Query.class);
+      final Set<ConstraintViolation<Query>> violations = validator.validate(query);
+      
+      if (!violations.isEmpty()) {
+        final StringBuilder sb = new StringBuilder();
+        
+        violations.forEach(error -> sb.append(error.getPropertyPath()
+            + error.getMessage()).append("\n"));
+        
+        throw new WebApplicationException(sb.toString(), Response.Status.PRECONDITION_FAILED);
+      }
+      
+      result = this.task(query, setting, this.getHost(request), NlpProcess.COREF, newLang);
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Failed to read the HTTP request " + writer, ex,
+          Response.Status.PRECONDITION_FAILED);
+    }
+    
+    return result;
+  }
+  
+  /**
+   * The API call for a date process via POST.
+   *
+   * @return The corresponding response of the query
+   */
+  @POST
+  @Timed
+  @Produces({"application/json;charset=utf-8", "text/turtle;charset=utf-8"})
+  @Consumes("application/json;charset=utf-8")
+  @Path("/date/")
+  public final Response date(@Context final HttpServletRequest request,
+                             @QueryParam("setting") @DefaultValue("none") final String setting,
+                             @QueryParam("lang") @DefaultValue("en") final String newLang) {
+    final Response result;
+    final StringWriter writer = new StringWriter();
+    final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    final Validator validator = factory.getValidator();
+    
+    try {
+      IOUtils.copy(request.getInputStream(), writer, Charset.forName("UTF-8"));
+      
+      final ObjectMapper mapper = new ObjectMapper();
+      
+      mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+      
+      final Query query = mapper.readValue(writer.toString(), Query.class);
+      final Set<ConstraintViolation<Query>> violations = validator.validate(query);
+      
+      if (!violations.isEmpty()) {
+        final StringBuilder sb = new StringBuilder();
+        
+        violations.forEach(error -> sb.append(error.getPropertyPath()
+            + error.getMessage()).append("\n"));
+        
+        throw new WebApplicationException(sb.toString(), Response.Status.PRECONDITION_FAILED);
+      }
+      
+      result = this.task(query, setting, this.getHost(request), NlpProcess.DATE, newLang);
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Failed to read the HTTP request " + writer, ex,
+          Response.Status.PRECONDITION_FAILED);
+    }
+    
+    return result;
+  }
+  
+  /**
+   * The API call for a number process via POST.
+   *
+   * @return The corresponding response of the query
+   */
+  @POST
+  @Timed
+  @Produces({"application/json;charset=utf-8", "text/turtle;charset=utf-8"})
+  @Consumes("application/json;charset=utf-8")
+  @Path("/number/")
+  public final Response number(@Context final HttpServletRequest request,
+                               @QueryParam("setting") @DefaultValue("none") final String setting,
+                               @QueryParam("lang") @DefaultValue("en") final String newLang) {
+    final Response result;
+    final StringWriter writer = new StringWriter();
+    final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    final Validator validator = factory.getValidator();
+    
+    try {
+      IOUtils.copy(request.getInputStream(), writer, Charset.forName("UTF-8"));
+      
+      final ObjectMapper mapper = new ObjectMapper();
+      
+      mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+      
+      final Query query = mapper.readValue(writer.toString(), Query.class);
+      final Set<ConstraintViolation<Query>> violations = validator.validate(query);
+      
+      if (!violations.isEmpty()) {
+        final StringBuilder sb = new StringBuilder();
+        
+        violations.forEach(error -> sb.append(error.getPropertyPath()
+            + error.getMessage()).append("\n"));
+        
+        throw new WebApplicationException(sb.toString(), Response.Status.PRECONDITION_FAILED);
+      }
+      
+      result = this.task(query, setting, this.getHost(request), NlpProcess.NUMBER, newLang);
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Failed to read the HTTP request " + writer, ex,
+          Response.Status.PRECONDITION_FAILED);
+    }
+    
+    return result;
+  }
+  
+  /**
+   * The API call for a gazetteer process via POST.
+   *
+   * @return The corresponding response of the query
+   */
+  @POST
+  @Timed
+  @Produces({"application/json;charset=utf-8", "text/turtle;charset=utf-8"})
+  @Consumes("application/json;charset=utf-8")
+  @Path("/gazetteer/")
+  public final Response gazetteer(@Context final HttpServletRequest request,
+                               @QueryParam("setting") @DefaultValue("none") final String setting,
+                               @QueryParam("lang") @DefaultValue("en") final String newLang) {
+    final Response result;
+    final StringWriter writer = new StringWriter();
+    final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    final Validator validator = factory.getValidator();
+    
+    try {
+      IOUtils.copy(request.getInputStream(), writer, Charset.forName("UTF-8"));
+      
+      final ObjectMapper mapper = new ObjectMapper();
+      
+      mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+      
+      final Query query = mapper.readValue(writer.toString(), Query.class);
+      final Set<ConstraintViolation<Query>> violations = validator.validate(query);
+      
+      if (!violations.isEmpty()) {
+        final StringBuilder sb = new StringBuilder();
+        
+        violations.forEach(error -> sb.append(error.getPropertyPath()
+            + error.getMessage()).append("\n"));
+        
+        throw new WebApplicationException(sb.toString(), Response.Status.PRECONDITION_FAILED);
+      }
+      
+      result = this.task(query, setting, this.getHost(request), NlpProcess.GAZETTEER, newLang);
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Failed to read the HTTP request " + writer, ex,
+          Response.Status.PRECONDITION_FAILED);
+    }
+    
+    return result;
+  }
+  
+  private Response task(final Query query, final String setting, final String host,
+                        final NlpProcess process, final String lang) throws IOException {
     final String finalText;
     
-    if (url != null) {
-      final String tmp = IOUtils.toString(new java.net.URL(url), Charset.forName("UTF-8"));
+    if (query.getUrl() != null) {
+      final String tmp = IOUtils.toString(new URL(query.getUrl()), Charset.forName("UTF-8"));
     
       finalText = Jsoup.parse(tmp).text();
     } else {
-      finalText = text;
-    }
-    
-    if (!lang.equals(this.lang)) {
-      this.pipeline.setLang(lang);
-      
-      this.lang = lang;
-    }
-    
-    if (!setting.equals(this.previousSetting)) {
-      this.pipeline.setPipeline(setting);
-      
-      this.previousSetting = setting;
+      finalText = query.getContent();
     }
   
     final String res;
-  
-    if (PipelineResource.TURTLE.equals(format)) {
-      res = this.pipeline.run(finalText).rdfString(this.stanford, RDFFormat.TURTLE_PRETTY,
-          process, host);
+    
+    if (this.pipelines.containsKey(process.toString().toLowerCase(Locale.ENGLISH) + '_' + lang
+        + '_' + setting)) {
+      res = this.pipelines.get(process.toString().toLowerCase(Locale.ENGLISH) + '_'
+          + lang + '_' + setting).run(finalText).rdfString(this.stanford, process, host);
     } else {
-      res = this.pipeline.run(finalText).rdfString(this.stanford, RDFFormat.JSONLD_PRETTY,
-          process, host);
+      throw new WebApplicationException("The profile: " + process.toString().toLowerCase(
+          Locale.ENGLISH) + '_' + lang + '_' + setting + " does not exists",
+          Response.Status.PRECONDITION_FAILED);
     }
-  
+    
     return Response.ok(res).build();
   }
   
   private String getHost(final HttpServletRequest request) {
-    if (request == null) {
-      return "http://127.0.0.1";
-    }
-    
     final StringBuffer url = request.getRequestURL();
     final String uri = request.getRequestURI();
     
     return url.substring(0, url.indexOf(uri));
   }
-
-  @Override
-  public final String toString() {
-    return "PipelineResource{}";
+  
+  private void loadAllProperties() {
+    try {
+      Files.list(Paths.get("properties")).forEach(file -> {
+        //final StanfordNlp pipeline = new StanfordNlp(file.toString(), this.stanford);
+        
+        //this.pipelines.put(file.getFileName().toString().split("\\.")[0], pipeline);
+  
+        try (FileInputStream fileInputStream = new FileInputStream(file.toString())) {
+          final Properties props = new Properties();
+          
+          props.load(fileInputStream);
+  
+          this.profiles.put(file.getFileName().toString().split("\\.")[0], props);
+        } catch (final IOException ex) {
+          throw new WebApplicationException("Failed to read the profile " + file, ex,
+              Response.Status.PRECONDITION_FAILED);
+        }
+        
+      });
+    } catch (final IOException ex) {
+      throw new WebApplicationException("Failed to read the directory properties", ex,
+          Response.Status.PRECONDITION_FAILED);
+    }
   }
 }

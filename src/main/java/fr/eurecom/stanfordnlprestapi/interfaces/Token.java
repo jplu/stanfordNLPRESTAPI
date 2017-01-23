@@ -17,6 +17,8 @@
  */
 package fr.eurecom.stanfordnlprestapi.interfaces;
 
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
+
 import org.apache.jena.rdf.model.Model;
 
 /**
@@ -35,5 +37,5 @@ public interface Token {
 
   int end();
 
-  Model rdfModel(final String tool, final String host);
+  Model rdfModel(final String tool, final NlpProcess process, final String host);
 }

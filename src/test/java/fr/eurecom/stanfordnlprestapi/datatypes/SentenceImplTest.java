@@ -19,8 +19,6 @@ package fr.eurecom.stanfordnlprestapi.datatypes;
 
 import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 
-import fr.eurecom.stanfordnlprestapi.exceptions.InexistentNlpProcessException;
-
 import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
 import fr.eurecom.stanfordnlprestapi.interfaces.Token;
 
@@ -161,7 +159,7 @@ public class SentenceImplTest {
         + "stunning.", 0, 62);
     final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
-    final Token token = new TokenImpl("My", "PRP$", 0, 2, "my", NullToken.getInstance(), context,
+    final Token token = new TokenImpl("My", "PRP$", 0, 2, NullToken.getInstance(), context,
         sentence, 1);
 
     sentence.addToken(token);
@@ -202,10 +200,67 @@ public class SentenceImplTest {
     model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
         ResourceFactory.createProperty(nif + "word"), ResourceFactory.createResource(base
             + "/token#char=" + token.start() + ',' + token.end()));
-    model.add(token.rdfModel("stanfordnlp", "http://127.0.0.1"));
+    model.add(token.rdfModel("stanfordnlp", NlpProcess.POS, "http://127.0.0.1"));
 
     Assert.assertTrue("Issue to create the model for a Sentence for POS",
         model.isIsomorphicWith(sentence.rdfModel("stanfordnlp", NlpProcess.POS,
+            "http://127.0.0.1")));
+  }
+  
+  /**
+   * Test the {@link SentenceImpl#rdfModel(String, NlpProcess, String)} method with a
+   * {@link Sentence} that has a tokenize annotation.
+   */
+  @Test
+  public final void testRdfModelforTokenize() {
+    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Token token = new TokenImpl("My", 0, 2, NullToken.getInstance(), context, sentence, 1);
+    
+    sentence.addToken(token);
+    
+    final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
+    final String base = "http://127.0.0.1/stanfordnlp";
+    final Model model = ModelFactory.createDefaultModel();
+    
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        RDF.type, ResourceFactory.createResource(nif + "String"));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        RDF.type, ResourceFactory.createResource(nif + "RFC5147String"));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        RDF.type, ResourceFactory.createResource(nif + "Sentence"));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "beginIndex"),
+        ResourceFactory.createTypedLiteral("0",
+            XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "endIndex"),
+        ResourceFactory.createTypedLiteral("40",
+            XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "firstToken"),
+        ResourceFactory.createResource(base + "/token#char=" + token.start() + ','
+            + token.end()));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "lastToken"),
+        ResourceFactory.createResource(base + "/token#char=" + token.start() + ','
+            + token.end()));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "referenceContext"),
+        ResourceFactory.createResource(base + "/context#char=" + context.start() + ','
+            + context.end()));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "anchorOf"),
+        ResourceFactory.createTypedLiteral("My favorite actress is: Natalie Portman."));
+    model.add(ResourceFactory.createResource(base + "/sentence#char=0,40"),
+        ResourceFactory.createProperty(nif + "word"), ResourceFactory.createResource(base
+            + "/token#char=" + token.start() + ',' + token.end()));
+    model.add(token.rdfModel("stanfordnlp", NlpProcess.TOKENIZE, "http://127.0.0.1"));
+    
+    Assert.assertTrue("Issue to create the model for a Sentence for tokenize",
+        model.isIsomorphicWith(sentence.rdfModel("stanfordnlp", NlpProcess.TOKENIZE,
             "http://127.0.0.1")));
   }
 
@@ -220,8 +275,9 @@ public class SentenceImplTest {
         0, 40, 1, NullSentence.getInstance());
 
     Assert.assertEquals("Issue to get the proper toString value", "SentenceImpl{text='My favorite "
-        + "actress is: Natalie Portman.', context=[0,62], tokens=[], entities=[], nextSentence=-1, "
-        + "previousSentence=-1, firstToken=null, lastToken=null, start=0, end=40, index=1}",
+        + "actress is: Natalie Portman.', context=[0,62], tokens=[], corefs=[], entities=[], "
+        + "nextSentence=-1, previousSentence=-1, firstToken=null, lastToken=null, start=0, end=40, "
+        + "index=1}",
         sentence.toString());
   }
 
@@ -250,20 +306,6 @@ public class SentenceImplTest {
 
     Assert.assertEquals("The next sentence property has changed", sentence.toString(),
         tmpSentence.toString());
-  }
-
-  /**
-   * Test that {@link SentenceImpl#rdfModel(String, NlpProcess, String)} raise properly the
-   * {@link InexistentNlpProcessException} exception in case of inexistent NLP process.
-   */
-  @Test(expected = InexistentNlpProcessException.class)
-  public final void testInexistentNlpProcess() {
-    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
-        + "stunning.", 0, 62);
-    final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
-        0, 40, 1, NullSentence.getInstance());
-
-    sentence.rdfModel("stanfordnlp", null, "http://127.0.0.1");
   }
 
   /**
@@ -313,12 +355,15 @@ public class SentenceImplTest {
         0, 44, 1, NullSentence.getInstance());
     final Sentence sentence10 = new SentenceImpl("My favorite actress is: Natalie Portman.",
         context, 0, 40, 2, NullSentence.getInstance());
+    final Sentence sentence11 = new SentenceImpl("My favorite actress is: Natalie Portman.",
+        context, 0, 40, 1, NullSentence.getInstance());
 
-    sentence4.addToken(new TokenImpl("like", "VBP", 2, 6, "like", NullToken.getInstance(), context,
+    sentence4.addToken(new TokenImpl("like", "VBP", 2, 6, NullToken.getInstance(), context,
         sentence, 2));
     sentence5.addEntity(new Entity("Natalie Portman", "PERSON", sentence, context, 7, 22));
     sentence6.nextSentence(new SentenceImpl("Paris is a nice city.", context, 0, 21, 0,
         NullSentence.getInstance()));
+    sentence11.addCoref(new Coref("", "", 0, 0, sentence11, context));
 
     Assert.assertFalse("Issue with equals on the property text", sentence.equals(sentence2));
     Assert.assertFalse("Issue with equals on the property context", sentence.equals(sentence3));
@@ -334,5 +379,6 @@ public class SentenceImplTest {
     Assert.assertEquals("Issue with equals on the same object", sentence, sentence);
     Assert.assertFalse("Issue with equals on null", sentence.equals(null));
     Assert.assertFalse("Issue with equals on different object", sentence.equals(context));
+    Assert.assertFalse("Issue with equals on the property coref", sentence.equals(sentence11));
   }
 }

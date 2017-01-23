@@ -21,8 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.dropwizard.Configuration;
 
-import javax.validation.constraints.NotNull;
-
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class PipelineConfiguration extends Configuration {
   static final Logger LOGGER = LoggerFactory.getLogger(PipelineConfiguration.class);
   @JsonProperty
-  @NotNull
+  @NotEmpty
   private String name;
 
   public PipelineConfiguration() {

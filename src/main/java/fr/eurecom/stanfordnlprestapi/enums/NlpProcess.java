@@ -24,5 +24,10 @@ package fr.eurecom.stanfordnlprestapi.enums;
  */
 public enum NlpProcess {
   NER,
-  POS
+  POS,
+  TOKENIZE,
+  COREF,
+  DATE,
+  NUMBER,
+  GAZETTEER
 }

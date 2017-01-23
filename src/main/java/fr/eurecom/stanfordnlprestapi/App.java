@@ -17,12 +17,15 @@
  */
 package fr.eurecom.stanfordnlprestapi;
 
+import fr.eurecom.stanfordnlprestapi.cli.CorefCommand;
+import fr.eurecom.stanfordnlprestapi.cli.DateCommand;
+import fr.eurecom.stanfordnlprestapi.cli.GazetteerCommand;
 import fr.eurecom.stanfordnlprestapi.cli.NerCommand;
+import fr.eurecom.stanfordnlprestapi.cli.NumberCommand;
 import fr.eurecom.stanfordnlprestapi.cli.PosCommand;
 
+import fr.eurecom.stanfordnlprestapi.cli.TokenizeCommand;
 import fr.eurecom.stanfordnlprestapi.configurations.PipelineConfiguration;
-
-import fr.eurecom.stanfordnlprestapi.core.StanfordNlp;
 
 import fr.eurecom.stanfordnlprestapi.healthchecks.ModelHealthCheck;
 import fr.eurecom.stanfordnlprestapi.resources.PipelineResource;
@@ -42,7 +45,6 @@ import org.slf4j.LoggerFactory;
  */
 public class App extends Application<PipelineConfiguration> {
   static final Logger LOGGER = LoggerFactory.getLogger(App.class);
-  private StanfordNlp pipeline;
 
   public App() {
   }
@@ -58,25 +60,28 @@ public class App extends Application<PipelineConfiguration> {
     // add pos and ner commands on cli
     bootstrap.addCommand((Command) new PosCommand());
     bootstrap.addCommand((Command) new NerCommand());
+    bootstrap.addCommand((Command) new TokenizeCommand());
+    bootstrap.addCommand((Command) new CorefCommand());
+    bootstrap.addCommand((Command) new DateCommand());
+    bootstrap.addCommand((Command) new NumberCommand());
+    bootstrap.addCommand((Command) new GazetteerCommand());
   }
 
   @Override
   public final void run(final PipelineConfiguration newT, final Environment newEnvironment)
       throws Exception {
-    this.pipeline = new StanfordNlp(newT, "en");
-    
-    newEnvironment.healthChecks().register("EN models", new ModelHealthCheck(
-        "properties/en.properties"));
-    newEnvironment.healthChecks().register("DE models", new ModelHealthCheck(
-        "properties/de.properties"));
-    newEnvironment.healthChecks().register("ZH models", new ModelHealthCheck(
-        "properties/zh.properties"));
-    newEnvironment.healthChecks().register("ES models", new ModelHealthCheck(
-        "properties/es.properties"));
-    newEnvironment.healthChecks().register("FR models", new ModelHealthCheck(
-        "properties/fr.properties"));
+    newEnvironment.healthChecks().register("EN models for NER and POS", new ModelHealthCheck(
+        "properties/ner_en.properties"));
+    newEnvironment.healthChecks().register("DE models for NER and POS", new ModelHealthCheck(
+        "properties/ner_de.properties"));
+    newEnvironment.healthChecks().register("ZH models for NER and POS", new ModelHealthCheck(
+        "properties/ner_zh.properties"));
+    newEnvironment.healthChecks().register("ES models for NER and POS", new ModelHealthCheck(
+        "properties/ner_es.properties"));
+    newEnvironment.healthChecks().register("FR models for NER and POS", new ModelHealthCheck(
+        "properties/ner_fr.properties"));
 
-    newEnvironment.jersey().register(new PipelineResource(this.pipeline));
+    newEnvironment.jersey().register(new PipelineResource(newT.getName()));
   }
 
   /**
@@ -92,8 +97,6 @@ public class App extends Application<PipelineConfiguration> {
 
   @Override
   public final String toString() {
-    return "App{"
-        + "pipeline=" + this.pipeline
-        + '}';
+    return "App{}";
   }
 }

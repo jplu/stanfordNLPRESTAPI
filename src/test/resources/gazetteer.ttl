@@ -1,0 +1,26 @@
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+@prefix local: <http://localhost:9998/stanfordnlp/ontology/> .
+
+<http://localhost:9998/stanfordnlp/sentence#char=0,22>
+        a                     nif:String , nif:RFC5147String , nif:Sentence ;
+        local:entity          <http://localhost:9998/stanfordnlp/entity#char=5,8> ;
+        nif:anchorOf          "This guy is a teacher." ;
+        nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "22"^^xsd:nonNegativeInteger ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,22> .
+
+<http://localhost:9998/stanfordnlp/entity#char=5,8>
+        a                     nif:Phrase , nif:RFC5147String , nif:String ;
+        local:type            "ROLE" ;
+        nif:anchorOf          "guy" ;
+        nif:beginIndex        "5"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "8"^^xsd:nonNegativeInteger ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,22> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,22> .
+
+<http://localhost:9998/stanfordnlp/context#char=0,22>
+        a               nif:Context , nif:RFC5147String , nif:String ;
+        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "22"^^xsd:nonNegativeInteger ;
+        nif:isString    "This guy is a teacher." .

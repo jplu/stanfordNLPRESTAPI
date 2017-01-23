@@ -40,7 +40,6 @@ import net.sourceforge.argparse4j.inf.Subparser;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.riot.RDFFormat;
 
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -85,32 +84,23 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
         .type(String.class)
         .action(urlAction)
         .help("URL to process");
-  
-    subparser.addArgument("-f", "--format")
-        .dest("format")
-        .type(String.class)
-        .required(false)
-        .setDefault("turtle")
-        .choices("turtle", "jsonld")
-        .help("turtle or jsonld");
+    
     subparser.addArgument("-s", "--setting")
         .dest("setting")
         .type(String.class)
         .required(false)
         .setDefault("none")
-        .choices("none", "tweet")
-        .help("none or tweet");
+        .help("Select the setting");
     subparser.addArgument("-o", "--output-file")
         .dest("ofile")
         .type(Arguments.fileType().verifyNotExists().verifyCanWriteParent())
         .required(false)
         .help("Output file name which will contain the annotations");
-    subparser.addArgument("-l", "--language")
+    subparser.addArgument("-l", "--lang")
         .dest("lang")
         .type(String.class)
         .required(false)
         .setDefault("en")
-        .choices("en", "es", "de", "zh", "fr", "it")
         .help("Select the language");
   }
 
@@ -120,20 +110,13 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
     PosCommand.LOGGER.info("POS analysis uses \"{}\" as configuration file", newNamespace.getString(
         "file"));
   
-    this.pipeline = new StanfordNlp(newT, newNamespace.getString("lang"));
-  
-    if (!"none".equals(newNamespace.getString("setting"))) {
-      this.pipeline.setPipeline(newNamespace.getString("setting"));
-    }
-  
-    if ("turtle".equals(newNamespace.getString("format"))) {
-      this.process(newNamespace, newT, RDFFormat.TURTLE_PRETTY);
-    } else {
-      this.process(newNamespace, newT, RDFFormat.JSONLD_PRETTY);
-    }
+    this.pipeline = new StanfordNlp("properties/pos_" +  newNamespace.getString("lang") + '_'
+        + newNamespace.getString("setting") + ".properties", newT.getName());
+    
+    this.process(newNamespace, newT);
   }
   
-  private void process(final Namespace newNamespace, final T newT, final RDFFormat format)
+  private void process(final Namespace newNamespace, final T newT)
       throws Exception {
     final String text;
     
@@ -151,7 +134,7 @@ public class PosCommand<T extends PipelineConfiguration> extends ConfiguredComma
   
     PosCommand.LOGGER.info("POS analysis on \"{}\" :", newNamespace.getString("text"));
     
-    final String result = this.pipeline.run(text).rdfString(newT.getName(), format, NlpProcess.POS,
+    final String result = this.pipeline.run(text).rdfString(newT.getName(), NlpProcess.POS,
         "http://127.0.0.1");
     
     if (newNamespace.getString("ofile") != null) {

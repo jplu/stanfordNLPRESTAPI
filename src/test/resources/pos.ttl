@@ -1,183 +1,170 @@
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
-@prefix local: <http://127.0.0.1/stanfordnlp/ontology/> .
+@prefix local: <http://localhost:9998/stanfordnlp/ontology/> .
 
-<http://127.0.0.1/stanfordnlp/token#char=3,11>
+<http://localhost:9998/stanfordnlp/token#char=53,61>
         a                     nif:Word , nif:RFC5147String , nif:String ;
-        nif:anchorOf          "favorite" ;
-        nif:beginIndex        "3"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "11"^^xsd:nonNegativeInteger ;
-        nif:lemma             "favorite" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=12,19> ;
+        nif:anchorOf          "stunning" ;
+        nif:beginIndex        "53"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "61"^^xsd:nonNegativeInteger ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=61,62> ;
         nif:posTag            "JJ" ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=0,2> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=0,40> .
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=48,52> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=41,62> .
 
-<http://127.0.0.1/stanfordnlp/token#char=45,47>
-        a                     nif:Word , nif:String , nif:RFC5147String ;
-        nif:anchorOf          "is" ;
-        nif:beginIndex        "45"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "47"^^xsd:nonNegativeInteger ;
-        nif:lemma             "be" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=48,52> ;
-        nif:posTag            "VBZ" ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=41,44> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=41,62> .
+<http://localhost:9998/stanfordnlp/token#char=39,40>
+        a                     nif:Word , nif:RFC5147String , nif:String ;
+        nif:anchorOf          "." ;
+        nif:beginIndex        "39"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "40"^^xsd:nonNegativeInteger ;
+        nif:posTag            "." ;
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=32,39> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,40> .
 
-<http://127.0.0.1/stanfordnlp/token#char=41,44>
-        a                     nif:RFC5147String , nif:Word , nif:String ;
-        nif:anchorOf          "She" ;
-        nif:beginIndex        "41"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "44"^^xsd:nonNegativeInteger ;
-        nif:lemma             "she" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=45,47> ;
-        nif:posTag            "PRP" ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=41,62> .
-
-<http://127.0.0.1/stanfordnlp/token#char=24,31>
-        a                     nif:RFC5147String , nif:String , nif:Word ;
-        nif:anchorOf          "Natalie" ;
-        nif:beginIndex        "24"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "31"^^xsd:nonNegativeInteger ;
-        nif:lemma             "Natalie" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=32,39> ;
-        nif:posTag            "NNP" ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=22,23> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=0,40> .
-
-<http://127.0.0.1/stanfordnlp/token#char=0,2>
-        a                     nif:RFC5147String , nif:Word , nif:String ;
+<http://localhost:9998/stanfordnlp/token#char=0,2>
+        a                     nif:String , nif:RFC5147String , nif:Word ;
         nif:anchorOf          "My" ;
         nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
         nif:endIndex          "2"^^xsd:nonNegativeInteger ;
-        nif:lemma             "my" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=3,11> ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=3,11> ;
         nif:posTag            "PRP$" ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=0,40> .
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,40> .
 
-<http://127.0.0.1/stanfordnlp/token#char=20,22>
-        a                     nif:RFC5147String , nif:String , nif:Word ;
-        nif:anchorOf          "is" ;
-        nif:beginIndex        "20"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "22"^^xsd:nonNegativeInteger ;
-        nif:lemma             "be" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=22,23> ;
-        nif:posTag            "VBZ" ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=12,19> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=0,40> .
+<http://localhost:9998/stanfordnlp/token#char=32,39>
+        a                     nif:Word , nif:RFC5147String , nif:String ;
+        nif:anchorOf          "Portman" ;
+        nif:beginIndex        "32"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "39"^^xsd:nonNegativeInteger ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=39,40> ;
+        nif:posTag            "NNP" ;
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=24,31> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,40> .
 
-<http://127.0.0.1/stanfordnlp/sentence#char=41,62>
-        a                     nif:RFC5147String , nif:Sentence , nif:String ;
+<http://localhost:9998/stanfordnlp/sentence#char=41,62>
+        a                     nif:RFC5147String , nif:String , nif:Sentence ;
         nif:anchorOf          "She is very stunning." ;
         nif:beginIndex        "41"^^xsd:nonNegativeInteger ;
         nif:endIndex          "62"^^xsd:nonNegativeInteger ;
-        nif:firstToken        <http://127.0.0.1/stanfordnlp/token#char=41,44> ;
-        nif:lastToken         <http://127.0.0.1/stanfordnlp/token#char=61,62> ;
-        nif:previousSentence  <http://127.0.0.1/stanfordnlp/sentence#char=0,40> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:word              <http://127.0.0.1/stanfordnlp/token#char=61,62> , <http://127.0.0.1/stanfordnlp/token#char=41,44> , <http://127.0.0.1/stanfordnlp/token#char=53,61> , <http://127.0.0.1/stanfordnlp/token#char=48,52> , <http://127.0.0.1/stanfordnlp/token#char=45,47> .
+        nif:firstToken        <http://localhost:9998/stanfordnlp/token#char=41,44> ;
+        nif:lastToken         <http://localhost:9998/stanfordnlp/token#char=61,62> ;
+        nif:previousSentence  <http://localhost:9998/stanfordnlp/sentence#char=0,40> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:word              <http://localhost:9998/stanfordnlp/token#char=48,52> , <http://localhost:9998/stanfordnlp/token#char=41,44> , <http://localhost:9998/stanfordnlp/token#char=61,62> , <http://localhost:9998/stanfordnlp/token#char=53,61> , <http://localhost:9998/stanfordnlp/token#char=45,47> .
 
-<http://127.0.0.1/stanfordnlp/sentence#char=0,40>
-        a                     nif:RFC5147String , nif:String , nif:Sentence ;
+<http://localhost:9998/stanfordnlp/token#char=48,52>
+        a                     nif:RFC5147String , nif:String , nif:Word ;
+        nif:anchorOf          "very" ;
+        nif:beginIndex        "48"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "52"^^xsd:nonNegativeInteger ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=53,61> ;
+        nif:posTag            "RB" ;
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=45,47> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=41,62> .
+
+<http://localhost:9998/stanfordnlp/token#char=45,47>
+        a                     nif:RFC5147String , nif:Word , nif:String ;
+        nif:anchorOf          "is" ;
+        nif:beginIndex        "45"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "47"^^xsd:nonNegativeInteger ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=48,52> ;
+        nif:posTag            "VBZ" ;
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=41,44> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=41,62> .
+
+<http://localhost:9998/stanfordnlp/sentence#char=0,40>
+        a                     nif:String , nif:RFC5147String , nif:Sentence ;
         nif:anchorOf          "My favorite actress is: Natalie Portman." ;
         nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
         nif:endIndex          "40"^^xsd:nonNegativeInteger ;
-        nif:firstToken        <http://127.0.0.1/stanfordnlp/token#char=0,2> ;
-        nif:lastToken         <http://127.0.0.1/stanfordnlp/token#char=39,40> ;
-        nif:nextSentence      <http://127.0.0.1/stanfordnlp/sentence#char=41,62> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:word              <http://127.0.0.1/stanfordnlp/token#char=3,11> , <http://127.0.0.1/stanfordnlp/token#char=32,39> , <http://127.0.0.1/stanfordnlp/token#char=12,19> , <http://127.0.0.1/stanfordnlp/token#char=24,31> , <http://127.0.0.1/stanfordnlp/token#char=0,2> , <http://127.0.0.1/stanfordnlp/token#char=20,22> , <http://127.0.0.1/stanfordnlp/token#char=39,40> , <http://127.0.0.1/stanfordnlp/token#char=22,23> .
+        nif:firstToken        <http://localhost:9998/stanfordnlp/token#char=0,2> ;
+        nif:lastToken         <http://localhost:9998/stanfordnlp/token#char=39,40> ;
+        nif:nextSentence      <http://localhost:9998/stanfordnlp/sentence#char=41,62> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:word              <http://localhost:9998/stanfordnlp/token#char=0,2> , <http://localhost:9998/stanfordnlp/token#char=24,31> , <http://localhost:9998/stanfordnlp/token#char=39,40> , <http://localhost:9998/stanfordnlp/token#char=12,19> , <http://localhost:9998/stanfordnlp/token#char=22,23> , <http://localhost:9998/stanfordnlp/token#char=20,22> , <http://localhost:9998/stanfordnlp/token#char=32,39> , <http://localhost:9998/stanfordnlp/token#char=3,11> .
 
-<http://127.0.0.1/stanfordnlp/context#char=0,62>
+<http://localhost:9998/stanfordnlp/token#char=24,31>
+        a                     nif:Word , nif:RFC5147String , nif:String ;
+        nif:anchorOf          "Natalie" ;
+        nif:beginIndex        "24"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "31"^^xsd:nonNegativeInteger ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=32,39> ;
+        nif:posTag            "NNP" ;
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=22,23> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,40> .
+
+<http://localhost:9998/stanfordnlp/token#char=12,19>
+        a                     nif:RFC5147String , nif:Word , nif:String ;
+        nif:anchorOf          "actress" ;
+        nif:beginIndex        "12"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "19"^^xsd:nonNegativeInteger ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=20,22> ;
+        nif:posTag            "NN" ;
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=3,11> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,40> .
+
+<http://localhost:9998/stanfordnlp/token#char=20,22>
+        a                     nif:String , nif:Word , nif:RFC5147String ;
+        nif:anchorOf          "is" ;
+        nif:beginIndex        "20"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "22"^^xsd:nonNegativeInteger ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=22,23> ;
+        nif:posTag            "VBZ" ;
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=12,19> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,40> .
+
+<http://localhost:9998/stanfordnlp/token#char=61,62>
+        a                     nif:String , nif:RFC5147String , nif:Word ;
+        nif:anchorOf          "." ;
+        nif:beginIndex        "61"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "62"^^xsd:nonNegativeInteger ;
+        nif:posTag            "." ;
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=53,61> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=41,62> .
+
+<http://localhost:9998/stanfordnlp/context#char=0,62>
         a               nif:Context , nif:RFC5147String , nif:String ;
         nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
         nif:endIndex    "62"^^xsd:nonNegativeInteger ;
         nif:isString    "My favorite actress is: Natalie Portman. She is very stunning." .
 
-<http://127.0.0.1/stanfordnlp/token#char=61,62>
-        a                     nif:String , nif:RFC5147String , nif:Word ;
-        nif:anchorOf          "." ;
-        nif:beginIndex        "61"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "62"^^xsd:nonNegativeInteger ;
-        nif:lemma             "." ;
-        nif:posTag            "." ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=53,61> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=41,62> .
+<http://localhost:9998/stanfordnlp/token#char=3,11>
+        a                     nif:Word , nif:String , nif:RFC5147String ;
+        nif:anchorOf          "favorite" ;
+        nif:beginIndex        "3"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "11"^^xsd:nonNegativeInteger ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=12,19> ;
+        nif:posTag            "JJ" ;
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=0,2> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,40> .
 
-<http://127.0.0.1/stanfordnlp/token#char=22,23>
+<http://localhost:9998/stanfordnlp/token#char=22,23>
         a                     nif:RFC5147String , nif:Word , nif:String ;
         nif:anchorOf          ":" ;
         nif:beginIndex        "22"^^xsd:nonNegativeInteger ;
         nif:endIndex          "23"^^xsd:nonNegativeInteger ;
-        nif:lemma             ":" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=24,31> ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=24,31> ;
         nif:posTag            ":" ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=20,22> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=0,40> .
+        nif:previousWord      <http://localhost:9998/stanfordnlp/token#char=20,22> ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,40> .
 
-<http://127.0.0.1/stanfordnlp/token#char=12,19>
-        a                     nif:String , nif:RFC5147String , nif:Word ;
-        nif:anchorOf          "actress" ;
-        nif:beginIndex        "12"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "19"^^xsd:nonNegativeInteger ;
-        nif:lemma             "actress" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=20,22> ;
-        nif:posTag            "NN" ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=3,11> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=0,40> .
-
-<http://127.0.0.1/stanfordnlp/token#char=53,61>
-        a                     nif:RFC5147String , nif:String , nif:Word ;
-        nif:anchorOf          "stunning" ;
-        nif:beginIndex        "53"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "61"^^xsd:nonNegativeInteger ;
-        nif:lemma             "stunning" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=61,62> ;
-        nif:posTag            "JJ" ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=48,52> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=41,62> .
-
-<http://127.0.0.1/stanfordnlp/token#char=39,40>
-        a                     nif:Word , nif:String , nif:RFC5147String ;
-        nif:anchorOf          "." ;
-        nif:beginIndex        "39"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "40"^^xsd:nonNegativeInteger ;
-        nif:lemma             "." ;
-        nif:posTag            "." ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=32,39> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=0,40> .
-
-<http://127.0.0.1/stanfordnlp/token#char=32,39>
-        a                     nif:Word , nif:RFC5147String , nif:String ;
-        nif:anchorOf          "Portman" ;
-        nif:beginIndex        "32"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "39"^^xsd:nonNegativeInteger ;
-        nif:lemma             "Portman" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=39,40> ;
-        nif:posTag            "NNP" ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=24,31> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=0,40> .
-
-<http://127.0.0.1/stanfordnlp/token#char=48,52>
+<http://localhost:9998/stanfordnlp/token#char=41,44>
         a                     nif:RFC5147String , nif:Word , nif:String ;
-        nif:anchorOf          "very" ;
-        nif:beginIndex        "48"^^xsd:nonNegativeInteger ;
-        nif:endIndex          "52"^^xsd:nonNegativeInteger ;
-        nif:lemma             "very" ;
-        nif:nextWord          <http://127.0.0.1/stanfordnlp/token#char=53,61> ;
-        nif:posTag            "RB" ;
-        nif:previousWord      <http://127.0.0.1/stanfordnlp/token#char=45,47> ;
-        nif:referenceContext  <http://127.0.0.1/stanfordnlp/context#char=0,62> ;
-        nif:sentence          <http://127.0.0.1/stanfordnlp/sentence#char=41,62> .
+        nif:anchorOf          "She" ;
+        nif:beginIndex        "41"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "44"^^xsd:nonNegativeInteger ;
+        nif:nextWord          <http://localhost:9998/stanfordnlp/token#char=45,47> ;
+        nif:posTag            "PRP" ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,62> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=41,62> .

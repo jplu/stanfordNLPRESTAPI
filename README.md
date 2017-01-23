@@ -13,12 +13,12 @@ The system can handle multiple languages:
 * French
 * Chinese
 * German
-* Italian (thanks to [TINT](http://tint.fbk.eu/)[7])
+* Arabic
 * Spanish
 
 # Libraries
 
-* Stanford CoreNLP 3.6.0
+* Stanford CoreNLP 3.7.0
 * Dropwizard 1.0.5
 * Jena 3.1.1
 
@@ -45,29 +45,17 @@ The fat JAR will be available in the *target* directory.
 To run the unit tests, use the following Maven command:
 
 ```
-mvn clean verify -P unit-tests
-```
-
-To run the integration tests, use the following Maven command:
-
-```
-mvn clean verify -P integration-test
-```
-
-To run the integration and the unit tests in same time, use the following Maven command:
-
-```
-mvn clean verify -P all-tests
+mvn clean test
 ```
 
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-3.0.1.jar
-       [-h] [-v] {server,check,pos,ner} ...
+usage: java -jar stanfordNLPRESTAPI-4.0.0.jar
+       [-h] [-v] {server,check,pos,ner,tokenize,coref,date,number,gazetteer} ...
 
 positional arguments:
-  {server,check,pos,ner}
+  {server,check,pos,ner,tokenize,coref,date,number,gazetteer}
                          available commands
 
 optional arguments:
@@ -80,15 +68,16 @@ JSON-LD format on both CLI and Web Service modes
 
 ## CLI
 
-The first way is via CLI with two possible sub-commands, **ner** and **pos**.
+The first way is via CLI with six possible sub-commands, **ner**, **pos**, **tokenize**, **coref**, 
+**date** and **number**.
 
 ### NER
 
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-3.0.1.jar
-       ner [-f {turtle,jsonld}] [-s {neel2015,neel2016,oke2015,oke2016,none}] [-o OFILE] [-l {en,es,de,zh,it}] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+usage: java -jar stanfordNLPRESTAPI-4.0.0.jar
+       ner [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 NER command on text
 
@@ -96,13 +85,10 @@ positional arguments:
   file                   application configuration file
 
 optional arguments:
-  -f {turtle,jsonld}, --format {turtle,jsonld}
-                         turtle or jsonld (default: turtle)
-  -s {neel2015,neel2016,oke2015,oke2016,none}, --setting {neel2015,neel2016,oke2015,oke2016,none}
-                         neel2015, neel2016, oke2015, oke2016 or none (default: none)
+  -s, --setting          Select the setting (default: none)
   -o OFILE, --output-file OFILE
                          Output file name which will contain the annotations
-  -l {en,es,de,zh,it,fr}, --language {en,es,de,zh,it,fr}
+  -l, --lang
                          Select the language (default: en)
   -h, --help             show this help message and exit
 
@@ -118,8 +104,8 @@ inputs:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-3.0.1.jar
-       pos [-f {turtle,jsonld}] [-s {none,tweet}] [-o OFILE] [-l {en,es,de,zh,fr,it}] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+usage: java -jar stanfordNLPRESTAPI-4.0.0.jar
+       pos [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 POS command on text
 
@@ -127,13 +113,150 @@ positional arguments:
   file                   application configuration file
 
 optional arguments:
-  -f {turtle,jsonld}, --format {turtle,jsonld}
-                         turtle or jsonld (default: turtle)
-  -s {none,tweet}, --setting {none,tweet}
-                         none or tweet (default: none)
+  -s, --setting          Select the setting (default: none)
   -o OFILE, --output-file OFILE
                          Output file name which will contain the annotations
-  -l {en,es,de,zh,fr,it}, --language {en,es,de,zh,fr,it}
+  -l, --lang
+                         Select the language (default: en)
+  -h, --help             show this help message and exit
+
+inputs:
+  -t TEXT, --text TEXT   text to analyse
+  -i IFILE, --input-file IFILE
+                         Input file name which contain the text to process
+  -u URL, --url URL      URL to process
+```
+
+### Tokenize
+
+To use the **tokenize** CLI:
+
+```
+usage: java -jar stanfordNLPRESTAPI-4.0.0.jar
+       tokenize [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+
+Tokenize command on text
+
+positional arguments:
+  file                   application configuration file
+
+optional arguments:
+  -s, --setting          Select the setting (default: none)
+  -o OFILE, --output-file OFILE
+                         Output file name which will contain the annotations
+  -l, --lang
+                         Select the language (default: en)
+  -h, --help             show this help message and exit
+
+inputs:
+  -t TEXT, --text TEXT   text to analyse
+  -i IFILE, --input-file IFILE
+                         Input file name which contain the text to process
+  -u URL, --url URL      URL to process
+```
+
+### Coref
+
+To use the **coref** CLI:
+
+```
+usage: java -jar stanfordNLPRESTAPI-4.0.0.jar
+       coref [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+
+Coref command on text
+
+positional arguments:
+  file                   application configuration file
+
+optional arguments:
+  -s, --setting          Select the setting (default: none)
+  -o OFILE, --output-file OFILE
+                         Output file name which will contain the annotations
+  -l, --lang
+                         Select the language (default: en)
+  -h, --help             show this help message and exit
+
+inputs:
+  -t TEXT, --text TEXT   text to analyse
+  -i IFILE, --input-file IFILE
+                         Input file name which contain the text to process
+  -u URL, --url URL      URL to process
+```
+
+### Date
+
+To use the **date** CLI:
+
+```
+usage: java -jar stanfordNLPRESTAPI-4.0.0.jar
+       date [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+
+Date command on text
+
+positional arguments:
+  file                   application configuration file
+
+optional arguments:
+  -s, --setting          Select the setting (default: none)
+  -o OFILE, --output-file OFILE
+                         Output file name which will contain the annotations
+  -l, --lang
+                         Select the language (default: en)
+  -h, --help             show this help message and exit
+
+inputs:
+  -t TEXT, --text TEXT   text to analyse
+  -i IFILE, --input-file IFILE
+                         Input file name which contain the text to process
+  -u URL, --url URL      URL to process
+```
+
+### Number
+
+To use the **number** CLI:
+
+```
+usage: java -jar stanfordNLPRESTAPI-4.0.0.jar
+       number [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+
+Number command on text
+
+positional arguments:
+  file                   application configuration file
+
+optional arguments:
+  -s, --setting          Select the setting (default: none)
+  -o OFILE, --output-file OFILE
+                         Output file name which will contain the annotations
+  -l, --lang
+                         Select the language (default: en)
+  -h, --help             show this help message and exit
+
+inputs:
+  -t TEXT, --text TEXT   text to analyse
+  -i IFILE, --input-file IFILE
+                         Input file name which contain the text to process
+  -u URL, --url URL      URL to process
+```
+
+### Gazetteer
+
+To use the **gazetteer** CLI:
+
+```
+usage: java -jar stanfordNLPRESTAPI-4.0.0.jar
+       gazetteer [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
+
+Gazetteer command on text
+
+positional arguments:
+  file                   application configuration file
+
+optional arguments:
+  -s, --setting          Select the setting (default: none)
+  -o OFILE, --output-file OFILE
+                         Output file name which will contain the annotations
+  -l, --lang
                          Select the language (default: en)
   -h, --help             show this help message and exit
 
@@ -149,7 +272,7 @@ inputs:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-3.0.1.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.0.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -161,8 +284,9 @@ optional arguments:
   -h, --help             show this help message and exit
 ```
 
-The format in the HTTP header are respectively **text/turtle** for RDF Turtle or
-**application/json** for RDF JSON-LD.
+The format in the HTTP header is respectively **text/turtle;charset=utf-8** for RDF Turtle and 
+**application/json;charset=utf-8** in case of errors and when the method profiles is queried. The
+documentation for the API is available on the [wiki](https://github.com/jplu/stanfordNLPRESTAPI/wiki/API-documentation).
 
 ## Docker
 
@@ -178,7 +302,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/properties:/maven/properties -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:3.0.1
+docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/properties:/maven/properties -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:4.0.0
 ```
 
 Or with:
@@ -194,6 +318,15 @@ the loading of all the models of Stanford CoreNLP.
 
 The CLI commands and the Web service use the same [configuration file](https://github.com/jplu/stanfordNLPRESTAPI/blob/master/conf/config.yaml).
 
+## Create a New Profile
+
+In order to create your own Stanford CoreNLP settings you need to put your properties file into
+the folder [properties](https://github.com/jplu/stanfordNLPRESTAPI/tree/master/properties) and you
+must respect the following naming **extractor_language_name**. Where **extractor** is one among:
+*pos*, *ner*, *tokenize*, *coref*, *date*, *number* or *gazetteer*. Next, **language** must be the
+language for which Stanford CoreNLP will be set, and **name** is the name you want to give to this
+setting.
+
 ## Used Models
 
 This application contains by default all the models provided by Stanford CoreNLP team. In case you
@@ -206,7 +339,7 @@ download the jar files provided by Stanford with models for other languages. To 
 * NEEL2015 [3][4]: NER model for tweets trained with the NEEL2015 challenge training dataset.
 * NEEL2016 [3][4][5]: NER model for tweets trained with the NEEL2016 challenge training dataset.
 * gate-EN-twitter [6]: POS tagger model for tagging tweets.
-* ETAPE [8]: NER model trained with the ETAPE challenge training dataset. 
+* ETAPE [7]: NER model trained with the ETAPE challenge training dataset. 
 
 # How to contribute
 
@@ -247,5 +380,4 @@ All the content of this repository is licensed under the terms of the GPL v3 lic
 * [4]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015) Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
 * [5]: Rizzo G., van Erp M., Plu J., Troncy R. (2015) NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
 * [6]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013) Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria
-* [7]: Palmero Aprosio A., Moretti, G. (2016) Italy goes to Stanford: a collection of CoreNLP modules for Italian.
-* [8]: Gravier G., Adda G.,Paulsson N., Carré M.,Giraudel A.,Galibert O. (2012) The ETAPE corpus for the evaluation of speech-based TV content processing in the French language.
+* [7]: Gravier G., Adda G.,Paulsson N., Carré M.,Giraudel A.,Galibert O. (2012) The ETAPE corpus for the evaluation of speech-based TV content processing in the French language.

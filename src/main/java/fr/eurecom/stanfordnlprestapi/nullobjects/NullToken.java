@@ -17,6 +17,7 @@
  */
 package fr.eurecom.stanfordnlprestapi.nullobjects;
 
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 import fr.eurecom.stanfordnlprestapi.interfaces.Token;
 
 import org.apache.jena.rdf.model.Model;
@@ -67,7 +68,7 @@ public final class NullToken implements Token {
   }
 
   @Override
-  public Model rdfModel(final String tool, final String host) {
+  public Model rdfModel(final String tool, final NlpProcess process, final String host) {
     return ModelFactory.createDefaultModel();
   }
 }
