@@ -1,0 +1,342 @@
+swagger: '2.0'
+info:
+  version: "4.0.0"
+  description: |
+    REST API over Stanford CoreNLP framework to get results in NIF format. This
+    API uses a system of profiles respecting the following pattern:
+    extractor_language_setting. Where extractor correspond to one of the
+    available methods. Next, language must be the language for which Stanford
+    CoreNLP will be set, and name is the name of the setting.
+  title: StanfordNLPRESTAPI
+  contact:
+    name: Julien Plu
+    url: https://jplu.github.io
+
+host: localhost:7000
+basePath: /v4
+schemes:
+  - http
+paths:
+  /ner:
+    post:
+      description: |
+        Extract and type entities from a document by using the NER annotator. In
+        order to know which profiles are available you have to retrive the list
+        by querying the /profiles method.
+      consumes:
+        - application/json;charset=utf-8
+      produces:
+        - text/turtle;charset=utf-8
+        - application/json;charset=utf-8
+      parameters:
+        - name: document
+          in: body
+          description: The document or URL (pointing to a HTML document) to process
+          schema:
+            $ref: '#/definitions/Document'
+          required: true
+        - name: setting
+          in: query
+          description: Setting to use to extract the entities
+          type: string
+          default: none
+          required: false
+        - name: lang
+          in: query
+          description: Language of the submited document
+          type: string
+          default: en
+          required: false
+      tags:
+        - NER
+      responses:
+        200:
+          description: Successful response in NIF format
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /pos:
+    post:
+      description: |
+        Extract and type entities from a document by using the POS annotator. In
+        order to know which profiles are available you have to retrive the list
+        by querying the /profiles method.
+      consumes:
+        - application/json;charset=utf-8
+      produces:
+        - text/turtle;charset=utf-8
+        - application/json;charset=utf-8
+      parameters:
+        - name: document
+          in: body
+          description: The document or URL (pointing to a HTML document) to process
+          schema:
+            $ref: '#/definitions/Document'
+          required: true
+        - name: setting
+          in: query
+          description: Setting to use to extract the entities
+          type: string
+          default: none
+          required: false
+        - name: lang
+          in: query
+          description: Language of the submited document
+          type: string
+          default: en
+          required: false
+      tags:
+        - POS
+      responses:
+        200:
+          description: Successful response in NIF format
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /tokenize:
+    post:
+      description: |
+        Extract and type entities from a document by using the Tokenize
+        annotator. In order to know which profiles are available you have to
+        retrive the list by querying the /profiles method.
+      consumes:
+        - application/json;charset=utf-8
+      produces:
+        - text/turtle;charset=utf-8
+        - application/json;charset=utf-8
+      parameters:
+        - name: document
+          in: body
+          description: The document or URL (pointing to a HTML document) to process
+          schema:
+            $ref: '#/definitions/Document'
+          required: true
+        - name: setting
+          in: query
+          description: Setting to use to extract the entities
+          type: string
+          default: none
+          required: false
+        - name: lang
+          in: query
+          description: Language of the submited document
+          type: string
+          default: en
+          required: false
+      tags:
+        - Tokenize
+      responses:
+        200:
+          description: Successful response in NIF format
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /coref:
+    post:
+      description: |
+        Extract and type entities from a document by using the Coref annotator.
+        In order to know which profiles are available you have to retrive the
+        list by querying the /profiles method.
+      consumes:
+        - application/json;charset=utf-8
+      produces:
+        - text/turtle;charset=utf-8
+        - application/json;charset=utf-8
+      parameters:
+        - name: document
+          in: body
+          description: The document or URL (pointing to a HTML document) to process
+          schema:
+            $ref: '#/definitions/Document'
+          required: true
+        - name: setting
+          in: query
+          description: Setting to use to extract the entities
+          type: string
+          default: none
+          required: false
+        - name: lang
+          in: query
+          description: Language of the submited document
+          type: string
+          default: en
+          required: false
+      tags:
+        - Coref
+      responses:
+        200:
+          description: Successful response in NIF format
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /date:
+    post:
+      description: |
+        Extract and type entities from a document by using the Date annotator.
+        In order to know which profiles are available you have to retrive the
+        list by querying the /profiles method.
+      consumes:
+        - application/json;charset=utf-8
+      produces:
+        - text/turtle;charset=utf-8
+        - application/json;charset=utf-8
+      parameters:
+        - name: document
+          in: body
+          description: The document or URL (pointing to a HTML document) to process
+          schema:
+            $ref: '#/definitions/Document'
+          required: true
+        - name: setting
+          in: query
+          description: Setting to use to extract the entities
+          type: string
+          default: none
+          required: false
+        - name: lang
+          in: query
+          description: Language of the submited document
+          type: string
+          default: en
+          required: false
+      tags:
+        - Date
+      responses:
+        200:
+          description: Successful response in NIF format
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /number:
+    post:
+      description: |
+        Extract and type entities from a document by using the Number annotator.
+        In order to know which profiles are available you have to retrive the
+        list by querying the /profiles method.
+      consumes:
+        - application/json;charset=utf-8
+      produces:
+        - text/turtle;charset=utf-8
+        - application/json;charset=utf-8
+      parameters:
+        - name: document
+          in: body
+          description: The document or URL (pointing to a HTML document) to process
+          schema:
+            $ref: '#/definitions/Document'
+          required: true
+        - name: setting
+          in: query
+          description: Setting to use to extract the entities
+          type: string
+          default: none
+          required: false
+        - name: lang
+          in: query
+          description: Language of the submited document
+          type: string
+          default: en
+          required: false
+      tags:
+        - Number
+      responses:
+        200:
+          description: Successful response in NIF format
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /gazetteer:
+    post:
+      description: |
+        Extract and type entities from a document by using the Gazetteer
+        annotator. In order to know which profiles are available you have to
+        retrive the list by querying the /profiles method.
+      consumes:
+        - application/json;charset=utf-8
+      produces:
+        - text/turtle;charset=utf-8
+        - application/json;charset=utf-8
+      parameters:
+        - name: document
+          in: body
+          description: The document or URL (pointing to a HTML document) to process
+          schema:
+            $ref: '#/definitions/Document'
+          required: true
+        - name: setting
+          in: query
+          description: Setting to use to extract the entities
+          type: string
+          default: none
+          required: false
+        - name: lang
+          in: query
+          description: Language of the submited document
+          type: string
+          default: en
+          required: false
+      tags:
+        - Gazetteer
+      responses:
+        200:
+          description: Successful response in NIF format
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /profiles:
+    get:
+      description: Get the list of all the available profiles.
+      produces:
+        - application/json;charset=utf-8
+      tags:
+        - Profiles
+      responses:
+        200:
+          description: Successful response in JSON format
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /profile/{fullName}:
+    get:
+      parameters:
+        - name: fullName
+          in: path
+          type: string
+          description: |
+            Full name of a profile respecting the format: extractor_language_name
+          required: true
+      responses:
+        200:
+          description: Successful response in JSON format
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Document:
+    type: object
+    properties:
+      content:
+        type: string
+        description: |
+          Content of the processed document (content XOR URL must be specified)
+      url:
+        type: string
+        description: |
+          Valid URL of a HTML document (content XOR URL must be specified)
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

@@ -17,6 +17,7 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
 import fr.eurecom.stanfordnlprestapi.interfaces.Token;
 
@@ -44,7 +45,6 @@ public class TokenImpl implements Token {
   private final String tag;
   private final int start;
   private final int end;
-  private final String lemma;
   private final Token previousToken;
   private Token nextToken;
   private final Context context;
@@ -58,20 +58,43 @@ public class TokenImpl implements Token {
    * @param newTag           Tag of the token.
    * @param newStart         The start offset of the token.
    * @param newEnd           The end offset of the token.
-   * @param newLemma         Lemma of the token.
    * @param newPreviousToken Previous token in the sentence. Null token if none exists.
    * @param newContext       The context where the token is.
    * @param newSentence      The sentence where the token is.
    * @param newIndex         Index of the token in the sentence.
    */
   public TokenImpl(final String newText, final String newTag, final int newStart, final int newEnd,
-                   final String newLemma, final Token newPreviousToken, final Context newContext,
+                   final Token newPreviousToken, final Context newContext,
                    final Sentence newSentence, final int newIndex) {
     this.text = newText;
     this.tag = newTag;
     this.start = newStart;
     this.end = newEnd;
-    this.lemma = newLemma;
+    this.previousToken = newPreviousToken;
+    this.nextToken = NullToken.getInstance();
+    this.context = newContext;
+    this.sentence = newSentence;
+    this.index = newIndex;
+  }
+  
+  /**
+   * TokenImpl constructor.
+   *
+   * @param newText          Text of the token.
+   * @param newStart         The start offset of the token.
+   * @param newEnd           The end offset of the token.
+   * @param newPreviousToken Previous token in the sentence. Null token if none exists.
+   * @param newContext       The context where the token is.
+   * @param newSentence      The sentence where the token is.
+   * @param newIndex         Index of the token in the sentence.
+   */
+  public TokenImpl(final String newText, final int newStart, final int newEnd,
+                   final Token newPreviousToken, final Context newContext,
+                   final Sentence newSentence, final int newIndex) {
+    this.text = newText;
+    this.tag = "";
+    this.start = newStart;
+    this.end = newEnd;
     this.previousToken = newPreviousToken;
     this.nextToken = NullToken.getInstance();
     this.context = newContext;
@@ -107,7 +130,7 @@ public class TokenImpl implements Token {
   }
 
   @Override
-  public final Model rdfModel(final String tool, final String host) {
+  public final Model rdfModel(final String tool, final NlpProcess process, final String host) {
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
     final String base = host + '/' + tool;
     final Model model = ModelFactory.createDefaultModel();
@@ -137,16 +160,10 @@ public class TokenImpl implements Token {
         ResourceFactory.createResource(base + "/context#char=" + this.context.start() + ','
             + this.context.end()));
     
-    
-    model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
-        ResourceFactory.createProperty(nif + "posTag"), ResourceFactory.createPlainLiteral(
-            this.tag));
-    
-    
-    if (this.lemma != null) {
+    if (process == NlpProcess.POS) {
       model.add(ResourceFactory.createResource(base + "/token#char=" + this.start + ',' + this.end),
-          ResourceFactory.createProperty(nif + "lemma"), ResourceFactory.createPlainLiteral(
-              this.lemma));
+          ResourceFactory.createProperty(nif + "posTag"), ResourceFactory.createPlainLiteral(
+              this.tag));
     }
 
     if (this.nextToken.index() != -1) {
@@ -196,10 +213,6 @@ public class TokenImpl implements Token {
       return false;
     }
 
-    if (!this.lemma.equals(token.lemma)) {
-      return false;
-    }
-
     if (!this.previousToken.equals(token.previousToken)) {
       return false;
     }
@@ -223,7 +236,6 @@ public class TokenImpl implements Token {
     result = 31 * (result + this.tag.hashCode());
     result = 31 * (result + this.start);
     result = 31 * (result + this.end);
-    result = 31 * (result + this.lemma.hashCode());
     result = 31 * (result + this.previousToken.hashCode());
     result = 31 * (result + this.nextToken.hashCode());
     result = 31 * (result + this.context.hashCode());
@@ -240,7 +252,6 @@ public class TokenImpl implements Token {
         + ", tag='" + this.tag + '\''
         + ", start=" + this.start
         + ", end=" + this.end
-        + ", lemma='" + this.lemma + '\''
         + ", previousToken=" + this.previousToken.text()
         + ", nextToken=" + this.nextToken.text()
         + ", context=[" + this.context.start() + ',' + this.context.end() + ']'

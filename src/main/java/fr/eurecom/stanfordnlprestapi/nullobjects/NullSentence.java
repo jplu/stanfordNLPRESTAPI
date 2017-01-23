@@ -17,6 +17,7 @@
  */
 package fr.eurecom.stanfordnlprestapi.nullobjects;
 
+import fr.eurecom.stanfordnlprestapi.datatypes.Coref;
 import fr.eurecom.stanfordnlprestapi.datatypes.Entity;
 
 import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
@@ -55,6 +56,11 @@ public final class NullSentence implements Sentence {
 
   @Override
   public void addEntity(final Entity newEntity) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+  
+  @Override
+  public void addCoref(final Coref newCoref) {
     throw new UnsupportedOperationException("Not implemented");
   }
 

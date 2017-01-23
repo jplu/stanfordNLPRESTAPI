@@ -142,17 +142,15 @@ public class Context {
    * Turn the context into RDF string.
    *
    * @param tool    Tool used to extract the context.
-   * @param format  Required RDF format.
    * @param process Process required as RDF model (pos or ner).
    * @param host from where comes from the request.
    *
-   * @return RDF string in NIF following the given format.
+   * @return RDF string in Turtle NIF.
    */
-  public final String rdfString(final String tool, final RDFFormat format,
-                                final NlpProcess process, final String host) {
+  public final String rdfString(final String tool, final NlpProcess process, final String host) {
     final StringWriter rdf = new StringWriter();
 
-    RDFDataMgr.write(rdf, this.rdfModel(tool, process, host), format);
+    RDFDataMgr.write(rdf, this.rdfModel(tool, process, host), RDFFormat.TURTLE_PRETTY);
 
     return rdf.toString();
   }

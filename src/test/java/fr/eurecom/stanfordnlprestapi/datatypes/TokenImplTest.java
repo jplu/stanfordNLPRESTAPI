@@ -17,6 +17,7 @@
  */
 package fr.eurecom.stanfordnlprestapi.datatypes;
 
+import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
 import fr.eurecom.stanfordnlprestapi.interfaces.Token;
 
@@ -47,8 +48,8 @@ public class TokenImplTest {
   }
 
   /**
-   * Test {@link TokenImpl#rdfModel(String, String)} method of a {@link Token} with a next
-   * {@link Token}.
+   * Test {@link TokenImpl#rdfModel(String, NlpProcess, String)} method of a {@link Token} with a
+   * next {@link Token}.
    */
   @Test
   public final void testRdfModelWithNextToken() {
@@ -56,9 +57,9 @@ public class TokenImplTest {
         + "stunning.", 0, 62);
     final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
-    final Token token = new TokenImpl("My", "PRP$", 0, 2, "my", NullToken.getInstance(), context,
+    final Token token = new TokenImpl("My", "PRP$", 0, 2, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token2 = new TokenImpl("favorite", "JJ", 3, 11, "favorite", NullToken.getInstance(),
+    final Token token2 = new TokenImpl("favorite", "JJ", 3, 11, NullToken.getInstance(),
         context, sentence, 2);
 
     token.nextToken(token2);
@@ -92,19 +93,17 @@ public class TokenImplTest {
     model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
         ResourceFactory.createProperty(nif + "posTag"), ResourceFactory.createPlainLiteral("PRP$"));
     model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
-        ResourceFactory.createProperty(nif + "lemma"), ResourceFactory.createPlainLiteral("my"));
-    model.add(ResourceFactory.createResource(base + "/token#char=0,2"),
         ResourceFactory.createProperty(nif + "nextWord"),
         ResourceFactory.createResource(base + "/token#char=" + token2.start() + ','
             + token2.end()));
 
     Assert.assertTrue("Issue to create the model for a Token with a next Token",
-        model.isIsomorphicWith(token.rdfModel("stanfordnlp", "http://127.0.0.1")));
+        model.isIsomorphicWith(token.rdfModel("stanfordnlp", NlpProcess.POS, "http://127.0.0.1")));
   }
 
   /**
-   * Test {@link TokenImpl#rdfModel(String, String)} method of a {@link Token} with a previous
-   * {@link Token}.
+   * Test {@link TokenImpl#rdfModel(String, NlpProcess, String)} method of a {@link Token} with a
+   * previous {@link Token}.
    */
   @Test
   public final void testRdfModelWithPreviousToken() {
@@ -112,9 +111,9 @@ public class TokenImplTest {
         + "stunning.", 0, 62);
     final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
-    final Token token = new TokenImpl("My", "PRP$", 0, 2, "my", NullToken.getInstance(), context,
+    final Token token = new TokenImpl("My", "PRP$", 0, 2, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token2 = new TokenImpl("favorite", "JJ", 3, 11, "favorite", token,
+    final Token token2 = new TokenImpl("favorite", "JJ", 3, 11, token,
         context, sentence, 2);
 
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
@@ -148,14 +147,61 @@ public class TokenImplTest {
     model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
         ResourceFactory.createProperty(nif + "posTag"), ResourceFactory.createPlainLiteral("JJ"));
     model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
-        ResourceFactory.createProperty(nif + "lemma"),
-        ResourceFactory.createPlainLiteral("favorite"));
-    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
         ResourceFactory.createProperty(nif + "previousWord"),
         ResourceFactory.createResource(base + "/token#char=" + token.start() + ',' + token.end()));
 
     Assert.assertTrue("Issue to create the model for a Token with a previous Token",
-        model.isIsomorphicWith(token2.rdfModel("stanfordnlp", "http://127.0.0.1")));
+        model.isIsomorphicWith(token2.rdfModel("stanfordnlp", NlpProcess.POS, "http://127.0.0.1")));
+  }
+  
+  /**
+   * Test {@link TokenImpl#rdfModel(String, NlpProcess, String)} method of a {@link Token} for
+   * tokenize.
+   */
+  @Test
+  public final void testRdfModelForTokenize() {
+    final Context context = new Context("My favorite actress is: Natalie Portman. She is very "
+        + "stunning.", 0, 62);
+    final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
+        0, 40, 1, NullSentence.getInstance());
+    final Token token = new TokenImpl("My", 0, 2, NullToken.getInstance(), context, sentence, 1);
+    final Token token2 = new TokenImpl("favorite", 3, 11, token, context, sentence, 2);
+    
+    final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
+    final String base = "http://127.0.0.1/stanfordnlp";
+    final Model model = ModelFactory.createDefaultModel();
+    
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"), RDF.type,
+        ResourceFactory.createResource(nif + "String"));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"), RDF.type,
+        ResourceFactory.createResource(nif + "RFC5147String"));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"), RDF.type,
+        ResourceFactory.createResource(nif + "Word"));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "beginIndex"),
+        ResourceFactory.createTypedLiteral(Integer.toString(3), XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "endIndex"),
+        ResourceFactory.createTypedLiteral(Integer.toString(11),
+            XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "anchorOf"),
+        ResourceFactory.createPlainLiteral("favorite"));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "sentence"),
+        ResourceFactory.createResource(base + "/sentence#char=" + sentence.start() + ','
+            + sentence.end()));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "referenceContext"),
+        ResourceFactory.createResource(base + "/context#char=" + context.start() + ','
+            + context.end()));
+    model.add(ResourceFactory.createResource(base + "/token#char=3,11"),
+        ResourceFactory.createProperty(nif + "previousWord"),
+        ResourceFactory.createResource(base + "/token#char=" + token.start() + ',' + token.end()));
+    
+    Assert.assertTrue("Issue to create the model for a Token with a previous Token",
+        model.isIsomorphicWith(token2.rdfModel("stanfordnlp", NlpProcess.TOKENIZE,
+            "http://127.0.0.1")));
   }
 
 
@@ -169,18 +215,16 @@ public class TokenImplTest {
         + "stunning.", 0, 62);
     final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
-    final Token token = new TokenImpl("My", "PRP$", 0, 2, "my", NullToken.getInstance(), context,
+    final Token token = new TokenImpl("My", "PRP$", 0, 2, NullToken.getInstance(), context,
         sentence, 1);
-    final Token tmpToken = new TokenImpl("My", "PRP$", 0, 2, "my", NullToken.getInstance(), context,
+    final Token tmpToken = new TokenImpl("My", "PRP$", 0, 2, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token2 = new TokenImpl("favorite", "JJ", 3, 11, "favorite", token, context,
-        sentence, 2);
+    final Token token2 = new TokenImpl("favorite", "JJ", 3, 11, token, context, sentence, 2);
 
     token.nextToken(token2);
     tmpToken.nextToken(token2);
 
-    final Token token3 = new TokenImpl("actress", "NN", 12, 19, "actress", token, context,
-        sentence, 2);
+    final Token token3 = new TokenImpl("actress", "NN", 12, 19, token, context, sentence, 2);
 
     token.nextToken(token3);
 
@@ -197,12 +241,12 @@ public class TokenImplTest {
         + "stunning.", 0, 62);
     final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
-    final Token token = new TokenImpl("My", "PRP$", 0, 2, "my", NullToken.getInstance(), context,
+    final Token token = new TokenImpl("My", "PRP$", 0, 2,  NullToken.getInstance(), context,
         sentence, 1);
 
     Assert.assertEquals("Issue to get the proper toString value", "TokenImpl{text='My', tag='PRP$',"
-        + " start=0, end=2, lemma='my', previousToken=null, nextToken=null, context=[0,62], "
-        + "sentence=1, index=1}",
+        + " start=0, end=2, previousToken=null, nextToken=null, context=[0,62], sentence=1,"
+        + " index=1}",
         token.toString());
   }
 
@@ -215,7 +259,7 @@ public class TokenImplTest {
         + "stunning.", 0, 62);
     final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
-    final Token token = new TokenImpl("My", "PRP$", 0, 2, "my", NullToken.getInstance(), context,
+    final Token token = new TokenImpl("My", "PRP$", 0, 2, NullToken.getInstance(), context,
         sentence, 1);
 
     Assert.assertEquals("Issue to get the proper text from a Token", "My", token.text());
@@ -229,9 +273,9 @@ public class TokenImplTest {
     final Context context = new Context("I like Natalie Portman", 0, 22);
     final Sentence sentence = new SentenceImpl("I like Natalie Portman", context, 0, 22, 0,
         NullSentence.getInstance());
-    final Token token1 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token1 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token2 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token2 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
 
     Assert.assertNotSame("The two sentences are the same", token1, token2);
@@ -251,39 +295,38 @@ public class TokenImplTest {
         NullSentence.getInstance());
     final Sentence sentence2 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
-    final Token token1 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token1 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token2 = new TokenImpl("A", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token2 = new TokenImpl("A", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token3 = new TokenImpl("I", "PRP", 1, 1, "I", NullToken.getInstance(), context,
+    final Token token3 = new TokenImpl("I", "PRP", 1, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token4 = new TokenImpl("I", "VBZ", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token4 = new TokenImpl("I", "VBZ", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token5 = new TokenImpl("I", "PRP", 0, 2, "I", NullToken.getInstance(), context,
+    final Token token5 = new TokenImpl("I", "PRP", 0, 2, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token6 = new TokenImpl("I", "PRP", 0, 1, "A", NullToken.getInstance(), context,
+    final Token token6 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token7 = new TokenImpl("I", "PRP", 0, 1, "I", new TokenImpl("like", "VBP", 2, 6,
-        "like", NullToken.getInstance(), context, sentence, 2), context, sentence, 1);
-    final Token token8 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token7 = new TokenImpl("I", "PRP", 0, 1, new TokenImpl("like", "VBP", 2, 6,
+        NullToken.getInstance(), context, sentence, 2), context, sentence, 1);
+    final Token token8 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
-    final Token token9 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context2,
+    final Token token9 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context2,
         sentence, 1);
-    final Token token10 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token10 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence2, 1);
-    final Token token11 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token11 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 2);
-    final Token token12 = new TokenImpl("I", "PRP", 0, 1, "I", NullToken.getInstance(), context,
+    final Token token12 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
 
-    token8.nextToken(new TokenImpl("like", "VBP", 2, 6, "like", NullToken.getInstance(), context,
+    token8.nextToken(new TokenImpl("like", "VBP", 2, 6, NullToken.getInstance(), context,
         sentence, 2));
 
     Assert.assertFalse("Issue with equals on the property text", token1.equals(token2));
     Assert.assertFalse("Issue with equals on the property start", token1.equals(token3));
     Assert.assertFalse("Issue with equals on the property tag", token1.equals(token4));
     Assert.assertFalse("Issue with equals on the property end", token1.equals(token5));
-    Assert.assertFalse("Issue with equals on the property lemma", token1.equals(token6));
     Assert.assertFalse("Issue with equals on the property previousToken", token1.equals(token7));
     Assert.assertFalse("Issue with equals on the property nextToken", token1.equals(token8));
     Assert.assertFalse("Issue with equals on the property context", token1.equals(token9));

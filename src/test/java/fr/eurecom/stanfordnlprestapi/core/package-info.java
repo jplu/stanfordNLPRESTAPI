@@ -16,6 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @author Julien Plu on 09/01/2016.
+ * @author Julien Plu
  */
 package fr.eurecom.stanfordnlprestapi.core;

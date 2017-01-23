@@ -1,0 +1,26 @@
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+@prefix local: <http://localhost:9998/stanfordnlp/ontology/> .
+
+<http://localhost:9998/stanfordnlp/entity#char=14,18>
+        a                     nif:Phrase , nif:RFC5147String , nif:String ;
+        local:type            "DATE" ;
+        nif:anchorOf          "1987" ;
+        nif:beginIndex        "14"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "18"^^xsd:nonNegativeInteger ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,18> ;
+        nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=0,18> .
+
+<http://localhost:9998/stanfordnlp/sentence#char=0,18>
+        a                     nif:String , nif:RFC5147String , nif:Sentence ;
+        local:entity          <http://localhost:9998/stanfordnlp/entity#char=14,18> ;
+        nif:anchorOf          "I was born in 1987" ;
+        nif:beginIndex        "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "18"^^xsd:nonNegativeInteger ;
+        nif:referenceContext  <http://localhost:9998/stanfordnlp/context#char=0,18> .
+
+<http://localhost:9998/stanfordnlp/context#char=0,18>
+        a               nif:Context , nif:RFC5147String , nif:String ;
+        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "18"^^xsd:nonNegativeInteger ;
+        nif:isString    "I was born in 1987" .

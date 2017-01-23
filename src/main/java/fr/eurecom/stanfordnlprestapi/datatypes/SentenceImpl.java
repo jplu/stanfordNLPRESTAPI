@@ -19,8 +19,6 @@ package fr.eurecom.stanfordnlprestapi.datatypes;
 
 import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
 
-import fr.eurecom.stanfordnlprestapi.exceptions.InexistentNlpProcessException;
-
 import fr.eurecom.stanfordnlprestapi.interfaces.Sentence;
 import fr.eurecom.stanfordnlprestapi.interfaces.Token;
 
@@ -54,6 +52,7 @@ public class SentenceImpl implements Sentence {
   private final Context context;
   private final List<Token> tokens;
   private final List<Entity> entities;
+  private final List<Coref> corefs;
   private Sentence nextSentence;
   private final Sentence previousSentence;
   private Token firstToken;
@@ -77,6 +76,7 @@ public class SentenceImpl implements Sentence {
                       final int newEnd, final int newIndex, final Sentence newPreviousSentence) {
     this.tokens = new ArrayList<>();
     this.entities = new ArrayList<>();
+    this.corefs = new ArrayList<>();
     this.nextSentence = NullSentence.getInstance();
     this.previousSentence = newPreviousSentence;
     this.text = newText;
@@ -102,7 +102,12 @@ public class SentenceImpl implements Sentence {
   public final void addEntity(final Entity newEntity) {
     this.entities.add(newEntity);
   }
-
+  
+  @Override
+  public final void addCoref(final Coref newCoref) {
+    this.corefs.add(newCoref);
+  }
+  
   @Override
   public final void nextSentence(final Sentence newNextSentence) {
     if (this.nextSentence.index() == -1) {
@@ -166,13 +171,13 @@ public class SentenceImpl implements Sentence {
         ResourceFactory.createProperty(nif + "anchorOf"),
         ResourceFactory.createTypedLiteral(this.text));
 
-    if (process == NlpProcess.POS) {
+    if (process == NlpProcess.POS || process == NlpProcess.TOKENIZE) {
       for (final Token token : this.tokens) {
         model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
                 + this.end),
             ResourceFactory.createProperty(nif + "word"), ResourceFactory.createResource(base
                 + "/token#char=" + token.start() + ',' + token.end()));
-        model.add(token.rdfModel(tool, host));
+        model.add(token.rdfModel(tool, process, host));
       }
   
       model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
@@ -187,7 +192,8 @@ public class SentenceImpl implements Sentence {
           ResourceFactory.createProperty(nif + "lastToken"),
           ResourceFactory.createResource(base + "/token#char=" + this.lastToken.start() + ','
               + this.lastToken.end()));
-    } else if (process == NlpProcess.NER) {
+    } else if (process == NlpProcess.NER || process == NlpProcess.DATE
+        || process == NlpProcess.NUMBER || process == NlpProcess.GAZETTEER) {
       for (final Entity entity : this.entities) {
         model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
                 + this.end),
@@ -196,7 +202,13 @@ public class SentenceImpl implements Sentence {
         model.add(entity.rdfModel(tool, host));
       }
     } else {
-      throw new InexistentNlpProcessException(process + " is not a valid NLP Process");
+      for (final Coref coref : this.corefs) {
+        model.add(ResourceFactory.createResource(base + "/sentence#char=" + this.start + ','
+                + this.end),
+            ResourceFactory.createProperty(local + "coref"), ResourceFactory.createResource(base
+                + "/coref#char=" + coref.start() + ',' + coref.end()));
+        model.add(coref.rdfModel(tool, host));
+      }
     }
 
     if (this.nextSentence.index() != -1) {
@@ -260,6 +272,10 @@ public class SentenceImpl implements Sentence {
     if (!this.nextSentence.equals(sentence.nextSentence)) {
       return false;
     }
+  
+    if (!this.corefs.equals(sentence.corefs)) {
+      return false;
+    }
 
     return this.previousSentence.equals(sentence.previousSentence);
   }
@@ -271,6 +287,7 @@ public class SentenceImpl implements Sentence {
     result = 31 * (result + this.context.hashCode());
     result = 31 * (result + this.tokens.hashCode());
     result = 31 * (result + this.entities.hashCode());
+    result = 31 * (result + this.corefs.hashCode());
     result = 31 * (result + this.nextSentence.hashCode());
     result = 31 * (result + this.previousSentence.hashCode());
     result = 31 * (result + this.firstToken.hashCode());
@@ -288,6 +305,7 @@ public class SentenceImpl implements Sentence {
         + "text='" + this.text + '\''
         + ", context=[" + this.context.start() + ',' + this.context.end() + ']'
         + ", tokens=" + this.tokens
+        + ", corefs=" + this.corefs
         + ", entities=" + this.entities
         + ", nextSentence=" + this.nextSentence.index()
         + ", previousSentence=" + this.previousSentence.index()

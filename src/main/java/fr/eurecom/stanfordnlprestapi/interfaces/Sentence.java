@@ -17,6 +17,7 @@
  */
 package fr.eurecom.stanfordnlprestapi.interfaces;
 
+import fr.eurecom.stanfordnlprestapi.datatypes.Coref;
 import fr.eurecom.stanfordnlprestapi.datatypes.Entity;
 
 import fr.eurecom.stanfordnlprestapi.enums.NlpProcess;
@@ -33,7 +34,9 @@ import org.apache.jena.rdf.model.Model;
 public interface Sentence {
   void addToken(final Token newToken);
 
-  void addEntity(Entity newEntity);
+  void addEntity(final Entity newEntity);
+  
+  void addCoref(final Coref newCoref);
 
   void nextSentence(final Sentence newNextSentence);
 
