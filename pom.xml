@@ -420,10 +420,11 @@
                                     <volume>/maven/conf</volume>
                                     <volume>/maven/models</volume>
                                     <volume>/maven/properties</volume>
+                                    <volume>/maven/gazetteers</volume>
                                 </volumes>
                                 <workdir>/maven</workdir>
                                 <cmd>
-                                    <shell>java -Xmx6g -jar ${project.build.finalName}.jar server conf/config.yaml</shell>
+                                    <shell>java -Xmx30g -jar ${project.build.finalName}.jar server conf/config.yaml</shell>
                                 </cmd>
                             </build>
                             <run>
@@ -436,6 +437,7 @@
                                         <volume>${project.basedir}/conf:/maven/conf</volume>
                                         <volume>${project.basedir}/models:/maven/models</volume>
                                         <volume>${project.basedir}/properties:/maven/properties</volume>
+                                        <volume>${project.basedir}/properties:/maven/gazetteers</volume>
                                     </bind>
                                 </volumes>
                                 <wait>
