@@ -324,7 +324,7 @@
                         <email>julien.plu@redaction-developpez.com</email>
                         <project.inceptionYear>2017</project.inceptionYear>
                         <project.description>
-        Offering a REST API over Stanford CoreNLP to get results in NIF format.
+                            Offering a REST API over Stanford CoreNLP to get results in NIF format.
                         </project.description>
                     </properties>
                     <excludes>
@@ -455,7 +455,7 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>xml-apis</groupId>
@@ -482,7 +482,7 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.0</version>
             <classifier>models-english</classifier>
             <exclusions>
                 <exclusion>
@@ -502,7 +502,7 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.0</version>
             <classifier>models-spanish</classifier>
             <exclusions>
                 <exclusion>
@@ -522,7 +522,7 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.0</version>
             <classifier>models-german</classifier>
             <exclusions>
                 <exclusion>
@@ -542,7 +542,7 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.0</version>
             <classifier>models-french</classifier>
             <exclusions>
                 <exclusion>
@@ -562,7 +562,7 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.0</version>
             <classifier>models-chinese</classifier>
             <exclusions>
                 <exclusion>
@@ -582,7 +582,7 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.0</version>
             <classifier>models-arabic</classifier>
             <exclusions>
                 <exclusion>
@@ -603,7 +603,7 @@
             <groupId>org.apache.jena</groupId>
             <artifactId>apache-jena-libs</artifactId>
             <type>pom</type>
-            <version>3.1.1</version>
+            <version>3.3.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.httpcomponents</groupId>
@@ -638,12 +638,12 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.2</version>
+            <version>4.5.3</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-testing</artifactId>
-            <version>1.0.5</version>
+            <version>1.1.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -661,6 +661,43 @@
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-annotations</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>joda-time</groupId>
+                    <artifactId>joda-time</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-validator</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.validation</groupId>
+                    <artifactId>validation-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.4.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>22.0-android</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.code.findbugs</groupId>
+                    <artifactId>jsr305</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -671,12 +708,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.8.6</version>
+            <version>2.9.0.pr3</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.10.2</version>
+            <version>1.10.3</version>
         </dependency>
         <dependency>
             <groupId>eu.fbk.dh</groupId>

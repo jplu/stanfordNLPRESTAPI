@@ -18,13 +18,23 @@ The system can handle multiple languages:
 
 # Libraries
 
-* Stanford CoreNLP 3.7.0
-* Dropwizard 1.0.5
-* Jena 3.1.1
+* Stanford CoreNLP 3.8.0
+* Dropwizard 1.1.1
+* Jena 3.3.0
 
 # Requirements
 
-Java 1.8 and Maven 3.0.5 minimum. Docker (1.6 or later) is optional.
+Java 1.8 and Maven 3.0.5 minimum. Docker (1.6 or later) is optional. The ```progressbar2``` python 
+package to set up the environment.
+
+# Set up the environment
+
+In order to be able to run StanfordNLPRESTAPI you need to set up the environment by downloading the
+models, gazetteers and properties by running the following command line:
+
+```
+python setupenv.py
+```
 
 # Maven
 
@@ -51,7 +61,7 @@ mvn clean test
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.2-SNAPHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.1-SNAPSHOT.jar
        [-h] [-v] {server,check,pos,ner,tokenize,coref,date,number,gazetteer} ...
 
 positional arguments:
@@ -76,7 +86,7 @@ The first way is via CLI with six possible sub-commands, **ner**, **pos**, **tok
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.2-SNAPHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.1-SNAPSHOT.jar
        ner [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 NER command on text
@@ -104,7 +114,7 @@ inputs:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.2-SNAPHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.1-SNAPSHOT.jar
        pos [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 POS command on text
@@ -132,7 +142,7 @@ inputs:
 To use the **tokenize** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.2-SNAPHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.1-SNAPSHOT.jar
        tokenize [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Tokenize command on text
@@ -160,7 +170,7 @@ inputs:
 To use the **coref** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.2-SNAPHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.1-SNAPSHOT.jar
        coref [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Coref command on text
@@ -188,7 +198,7 @@ inputs:
 To use the **date** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.2-SNAPHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.1-SNAPSHOT.jar
        date [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Date command on text
@@ -216,7 +226,7 @@ inputs:
 To use the **number** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.2-SNAPHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.1-SNAPSHOT.jar
        number [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Number command on text
@@ -244,7 +254,7 @@ inputs:
 To use the **gazetteer** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.2-SNAPHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.1-SNAPSHOT.jar
        gazetteer [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Gazetteer command on text
@@ -272,7 +282,7 @@ inputs:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.2-SNAPHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.1-SNAPSHOT.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -302,7 +312,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/properties:/maven/properties -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:4.0.2-SNAPHOT
+docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/models:/maven/models -v $PWD/properties:/maven/properties -v $PWD/conf:/maven/conf jplu/stanford-nlp-rest-api:4.0.1-SNAPSHOT
 ```
 
 Or with:
@@ -336,6 +346,9 @@ download the jar files provided by Stanford with models for other languages. To 
 
 * OKE2015 [1]: NER model trained with the OKE2015 challenge training dataset.
 * OKE2016 [2]: NER model trained with the OKE2016 challenge training dataset.
+* OKE2017_1 [8]: NER model trained with the OKE2017 Task 1 challenge training dataset.
+* OKE2017_2 [8]: NER model trained with the OKE2017 Task 2 challenge training dataset.
+* OKE2017_3 [8]: NER model trained with the OKE2017 Task 3 challenge training dataset.
 * NEEL2015 [3][4]: NER model for tweets trained with the NEEL2015 challenge training dataset.
 * NEEL2016 [3][4][5]: NER model for tweets trained with the NEEL2016 challenge training dataset.
 * gate-EN-twitter [6]: POS tagger model for tagging tweets.
@@ -380,4 +393,5 @@ All the content of this repository is licensed under the terms of the GPL v3 lic
 * [4]: Rizzo G., Cano A.E., Pereira B., Varga A. (2015) Making Sense of Microposts (#Microposts2015) Named Entity rEcognition & Linking Challenge. In (WWW'15), 5th International Workshop on Making Sense of Microposts (#Microposts'15), Florence, Italy.
 * [5]: Rizzo G., van Erp M., Plu J., Troncy R. (2015) NEEL 2016: Named Entity rEcognition & Linking Challenge Report. In (WWW'16), 6th International Workshop on Making Sense of Microposts (#Microposts'16), Montréal, Québec, Canada.
 * [6]: Derczynski L., Ritter A., Clark S., Bontcheva K. (2013) Twitter Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data. In: Association for Computational Linguistics (ACL'13), Sofia, Bulgaria
-* [7]: Gravier G., Adda G.,Paulsson N., Carré M.,Giraudel A.,Galibert O. (2012) The ETAPE corpus for the evaluation of speech-based TV content processing in the French language.
+* [7]: Gravier G., Adda G., Paulsson N., Carré M., Giraudel A., Galibert O. (2012) The ETAPE corpus for the evaluation of speech-based TV content processing in the French language.
+* [8]: Plu J., Troncy R., Rizzo G. (2017) ADEL@OKE 2017: A Generic Method for Indexing Knowlege Bases for Entity Linking. In: 14th European Semantic Web Conference (ESWC'17), Open Extraction Challenge, Portoroz, Slovenia.
