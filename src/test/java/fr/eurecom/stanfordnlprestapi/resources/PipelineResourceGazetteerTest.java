@@ -31,6 +31,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFFormat;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -59,7 +60,7 @@ public class PipelineResourceGazetteerTest {
   public final void testGazetteerResponseWithContent() {
     final Response response = PipelineResourceGazetteerTest.RESOURCES.getJerseyTest().target(
         "/v4/gazetteer").queryParam("setting", "oke2015").request("text/turtle;charset=utf-8").post(
-            Entity.entity("{\"content\":\"This guy is a teacher.\"}",
+            Entity.entity("{\"content\":\"This guy is cool.\"}",
                 MediaType.APPLICATION_JSON_TYPE));
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model testModel = ModelFactory.createDefaultModel();

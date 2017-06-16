@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 public class StanfordNlpTest {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlpTest.class);
   private static StanfordNlp stanfordNlp;
+  private StanfordNlp stanfordNlp2;
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -250,6 +251,46 @@ public class StanfordNlpTest {
 
     Assert.assertTrue("Issue to build a one token entity in the middle of a sentence",
         contextTest.sentences().get(0).entities().contains(entity));
+  }
+  
+  /**
+   * Test {@link StanfordNlp#buildEntitiesFollowingDifferentEntities(CoreMap, Context, Sentence)}
+   * method with two different entities that follow each other.
+   */
+  @Test
+  public final void buildEntitiesFollowingDifferentEntities() throws Exception {
+    this.stanfordNlp2 = new StanfordNlp(this.getClass().getResource(
+        FileSystems.getDefault().getSeparator() + "gazetteer_en_test.properties").getFile(),
+        "stanfordnlp");
+    final Context contextTest = this.stanfordNlp2.run("This album.");
+    final Context context = new Context("This album.", 0, 11);
+    final Sentence sentence = new SentenceImpl("This album.", context, 0, 11, 0,
+        NullSentence.getInstance());
+    final Entity entity = new Entity("This", "http://purl.org/ontology/mo/MusicArtist", sentence,
+        context, 0, 4);
+    final Entity entity2 = new Entity("album", "http://purl.org/ontology/mo/SignalGroup", sentence,
+        context, 5, 10);
+    final Token token1 = new TokenImpl("This", "PRP", 0, 4, NullToken.getInstance(), context,
+        sentence, 1);
+    final Token token2 = new TokenImpl("album", "NN", 5, 10, token1, context, sentence,
+        2);
+    final Token token3 = new TokenImpl(".", ".", 10, 15, token2, context, sentence,
+        3);
+    
+    token1.nextToken(token2);
+    token2.nextToken(token3);
+    
+    sentence.addToken(token1);
+    sentence.addToken(token2);
+    sentence.addToken(token3);
+    sentence.addEntity(entity);
+    sentence.addEntity(entity2);
+    
+    context.addSentence(sentence);
+    
+    Assert.assertTrue("Issue to build a one token entity in the middle of a sentence",
+        contextTest.sentences().get(0).entities().contains(entity)
+            && contextTest.sentences().get(0).entities().contains(entity2));
   }
 
   /**

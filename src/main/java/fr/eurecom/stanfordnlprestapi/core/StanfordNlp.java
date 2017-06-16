@@ -78,8 +78,11 @@ public class StanfordNlp {
    */
   public StanfordNlp(final String propertyFile, final String newName) {
     this.name = newName;
-    this.process = NlpProcess.valueOf(propertyFile.split("_")[0].split(
-        FileSystems.getDefault().getSeparator())[1].toUpperCase(Locale.ENGLISH));
+    
+    this.process = NlpProcess.valueOf(propertyFile.split(
+        FileSystems.getDefault().getSeparator())[propertyFile.split(
+        FileSystems.getDefault().getSeparator()).length - 1].split("_")[0].toUpperCase(
+            Locale.ENGLISH));
     
     this.createPipelineProperties(propertyFile);
   }
@@ -352,7 +355,8 @@ public class StanfordNlp {
           type = "";
         }
       } else if (token.get(CoreAnnotations.NamedEntityTagAnnotation.class) != null
-          && !"O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))) {
+          && !"O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))
+          && type.equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))) {
         sb.append(' ');
         sb.append(token.get(CoreAnnotations.TextAnnotation.class));
 
@@ -361,6 +365,23 @@ public class StanfordNlp {
           sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start,
               token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
         }
+      } else if (!sb.toString().isEmpty()
+          && token.get(CoreAnnotations.NamedEntityTagAnnotation.class) != null
+          && !"O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))
+          && !type.equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))) {
+        final int index = stanfordSentence.get(
+            CoreAnnotations.TokensAnnotation.class).indexOf(token);
+        final int end = stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).get(
+            index - 1).get(CoreAnnotations.CharacterOffsetEndAnnotation.class);
+  
+        sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start, end));
+        sentence.addEntity(new Entity(token.get(CoreAnnotations.TextAnnotation.class),
+            token.get(CoreAnnotations.NamedEntityTagAnnotation.class), sentence, context,
+            token.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class),
+            token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
+  
+        sb = new StringBuilder();
+        type = "";
       } else if (!sb.toString().isEmpty()) {
         final int index = stanfordSentence.get(
             CoreAnnotations.TokensAnnotation.class).indexOf(token);

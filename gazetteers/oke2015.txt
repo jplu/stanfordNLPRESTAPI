@@ -1,1 +1,345 @@
-guy	ROLE
+guy	PERSON
+government	ORGANIZATION
+district	ORGANIZATION
+company	ORGANIZATION
+university	ORGANIZATION
+high school	ORGANIZATION
+patrician Yankee	ORGANIZATION
+hon	ORGANIZATION
+family	ORGANIZATION
+royal engineers	ORGANIZATION
+real estate companies	ORGANIZATION
+faculty	ORGANIZATION
+faculty of engineering	ORGANIZATION
+commedia dell'arte	ORGANIZATION
+council	ORGANIZATION
+elementary school	ORGANIZATION
+gymnasium	ORGANIZATION
+plant	ORGANIZATION
+grammar school	ORGANIZATION
+candidate	ORGANIZATION
+guy	ORGANIZATION
+man	ORGANIZATION
+notables	ORGANIZATION
+person	ORGANIZATION
+church	PLACE
+hospital	PLACE
+country	PLACE
+house	PLACE
+mountain pass	PLACE
+street	PLACE
+accountant	ROLE
+activist	ROLE
+actor	ROLE
+actors	ROLE
+actress	ROLE
+advertising agent	ROLE
+adviser	ROLE
+airman	ROLE
+analyst	ROLE
+archaeologist	ROLE
+architect	ROLE
+art director	ROLE
+artist	ROLE
+assistant	ROLE
+assistant manager	ROLE
+assistant professor	ROLE
+associate professor	ROLE
+astronomer	ROLE
+attorney	ROLE
+auditor	ROLE
+author	ROLE
+authors	ROLE
+bank officer	ROLE
+banker	ROLE
+barber	ROLE
+barman	ROLE
+bartender	ROLE
+beautician	ROLE
+biochemist	ROLE
+biologist	ROLE
+bishop	ROLE
+bodyguard	ROLE
+bookkeeper	ROLE
+boy scout	ROLE
+bricklayer	ROLE
+brother	ROLE
+builder	ROLE
+bus driver	ROLE
+buyer	ROLE
+cameraman	ROLE
+campaign manager	ROLE
+captain	ROLE
+car mechanic	ROLE
+cardiologist	ROLE
+carpenter	ROLE
+cashier	ROLE
+cashier	ROLE
+cavendish professor of physics	ROLE
+chairman	ROLE
+chancellor	ROLE
+chef	ROLE
+chemist	ROLE
+chief	ROLE
+chief judge	ROLE
+choirmaster	ROLE
+christian minister	ROLE
+citizen	ROLE
+civil engineering	ROLE
+cleaning lady	ROLE
+cleaning woman	ROLE
+clergyman	ROLE
+clerk	ROLE
+club promoter	ROLE
+college teacher	ROLE
+commissioner	ROLE
+composer	ROLE
+computer operator	ROLE
+computer programmer	ROLE
+construction worker	ROLE
+consultant	ROLE
+cook	ROLE
+correspondent	ROLE
+cosmetologist	ROLE
+cultural critic	ROLE
+dancer	ROLE
+dean	ROLE
+dentist	ROLE
+deputy	ROLE
+deputy director	ROLE
+deputy solicitor general	ROLE
+designer	ROLE
+detective	ROLE
+dietician	ROLE
+diplomatic positions	ROLE
+director	ROLE
+distributor	ROLE
+distinguished professor	ROLE
+doctor	ROLE
+dr.	ROLE
+dramatist	ROLE
+dress designer	ROLE
+driver	ROLE
+ear specialist	ROLE
+ecclesiastical artist	ROLE
+economist	ROLE
+editor	ROLE
+editor-in-chief	ROLE
+educator	ROLE
+education minister	ROLE
+electrical engineer	ROLE
+engineer	ROLE
+engineers	ROLE
+english teacher	ROLE
+entrepreneur	ROLE
+executive head	ROLE
+executive officer	ROLE
+executive official	ROLE
+expert	ROLE
+explorer	ROLE
+eye specialist	ROLE
+eye surgeon	ROLE
+faculty member	ROLE
+family doctor	ROLE
+farmer	ROLE
+fashion designer	ROLE
+fashion illustrator	ROLE
+father	ROLE
+fellow	ROLE
+fellow students	ROLE
+fellowship	ROLE
+film director	ROLE
+financial director	ROLE
+firefighter	ROLE
+flight attendant	ROLE
+flight engineer	ROLE
+flight navigator	ROLE
+foreign associate	ROLE
+foreign member	ROLE
+founder	ROLE
+founders	ROLE
+frederick sessions beebe professor	ROLE
+friend	ROLE
+full professor	ROLE
+furniture designer	ROLE
+general	ROLE
+general manager	ROLE
+general practitioner	ROLE
+governor	ROLE
+graduate student	ROLE
+graphic designer	ROLE
+guard	ROLE
+hairdresser	ROLE
+hairstylist	ROLE
+head cook	ROLE
+heads of state	ROLE
+head teacher	ROLE
+headmaster	ROLE
+headwaiter	ROLE
+heart specialist	ROLE
+historian	ROLE
+history teacher	ROLE
+illustrator	ROLE
+impressionist painter	ROLE
+independent contractor	ROLE
+inspector	ROLE
+interior designer	ROLE
+janitor	ROLE
+journalist	ROLE
+judge	ROLE
+knight bachelor	ROLE
+laureate	ROLE
+law clerk	ROLE
+lawyer	ROLE
+leader	ROLE
+leaders	ROLE
+lecteur	ROLE
+lecturer	ROLE
+legal scholar	ROLE
+legal adviser	ROLE
+librarian	ROLE
+liberal	ROLE
+m.d.	ROLE
+manager	ROLE
+managing director	ROLE
+marketing director	ROLE
+marketing manager	ROLE
+mason	ROLE
+math teacher	ROLE
+mathematician	ROLE
+maths teacher	ROLE
+mayor	ROLE
+mechanic	ROLE
+member	ROLE
+membership	ROLE
+methodist episcopal	ROLE
+minister of education	ROLE
+model	ROLE
+mother	ROLE
+music teacher	ROLE
+musician	ROLE
+mr.	ROLE
+nobel laureate	ROLE
+novelist	ROLE
+nurse	ROLE
+officer	ROLE
+office clerk	ROLE
+organizer	ROLE
+originators	ROLE
+painter	ROLE
+paramedic	ROLE
+parents	ROLE
+pediatrician	ROLE
+personnel manager	ROLE
+pharmacist	ROLE
+philosopher	ROLE
+photographer	ROLE
+physician	ROLE
+physicist	ROLE
+pilot	ROLE
+playwright	ROLE
+plumber	ROLE
+poet	ROLE
+poet-in-residence	ROLE
+police officer	ROLE
+policeman	ROLE
+political adviser	ROLE
+politician	ROLE
+postdoctoral student	ROLE
+preacher	ROLE
+president	ROLE
+presiding officer	ROLE
+priest	ROLE
+prime minister	ROLE
+principal	ROLE
+private secretary	ROLE
+producer	ROLE
+production manager	ROLE
+professor	ROLE
+professors	ROLE
+professorship	ROLE
+professorships	ROLE
+project manager	ROLE
+promoter	ROLE
+protesters	ROLE
+psychiatrist	ROLE
+psychologist	ROLE
+pupil	ROLE
+quarterback	ROLE
+queen	ROLE
+receptionist	ROLE
+recipient	ROLE
+rector	ROLE
+regius professor	ROLE
+repairer	ROLE
+reporter	ROLE
+research assistant	ROLE
+research associate	ROLE
+researcher	ROLE
+researchers	ROLE
+resident	ROLE
+resident playwright	ROLE
+retailer	ROLE
+reverend	ROLE
+roommates	ROLE
+sales manager	ROLE
+sales representative	ROLE
+salesclerk	ROLE
+salesgirl	ROLE
+salesman	ROLE
+salesperson	ROLE
+saleswoman	ROLE
+scenarist	ROLE
+scholar	ROLE
+schoolteacher	ROLE
+science master	ROLE
+scientific member	ROLE
+scientist	ROLE
+sculptor	ROLE
+secretary	ROLE
+seller	ROLE
+senator	ROLE
+senator for life	ROLE
+senior researcher	ROLE
+senior teacher	ROLE
+sheriff	ROLE
+singer	ROLE
+sniper	ROLE
+software specialist	ROLE
+solicitor	ROLE
+son	ROLE
+specialist	ROLE
+state's attorney	ROLE
+stenographer	ROLE
+stewardess	ROLE
+student	ROLE
+students	ROLE
+supervisor	ROLE
+surgeon	ROLE
+systems analyst	ROLE
+tailor	ROLE
+taxi driver	ROLE
+teacher	ROLE
+technician	ROLE
+teller	ROLE
+theatre administrator	ROLE
+throat specialist	ROLE
+traffic officer	ROLE
+travel agent	ROLE
+truck driver	ROLE
+tutor	ROLE
+typist	ROLE
+university teacher	ROLE
+veterinarian	ROLE
+vice-chancellor	ROLE
+vice-president	ROLE
+waiter	ROLE
+waitress	ROLE
+web designer	ROLE
+web developer	ROLE
+web programmer	ROLE
+webmaster	ROLE
+welder	ROLE
+wholesale buyer	ROLE
+wholesaler	ROLE
+writer	ROLE
