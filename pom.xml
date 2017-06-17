@@ -329,6 +329,7 @@
                     </properties>
                     <excludes>
                         <exclude>gazetteers/**</exclude>
+                        <exclude>setupenv.py</exclude>
                     </excludes>
                     <skipExistingHeaders>true</skipExistingHeaders>
                 </configuration>
@@ -437,7 +438,7 @@
                                         <volume>${project.basedir}/conf:/maven/conf</volume>
                                         <volume>${project.basedir}/models:/maven/models</volume>
                                         <volume>${project.basedir}/properties:/maven/properties</volume>
-                                        <volume>${project.basedir}/properties:/maven/gazetteers</volume>
+                                        <volume>${project.basedir}/gazetteers:/maven/gazetteers</volume>
                                     </bind>
                                 </volumes>
                                 <wait>
