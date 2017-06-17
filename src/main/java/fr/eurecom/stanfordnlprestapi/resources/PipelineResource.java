@@ -532,23 +532,23 @@ public class PipelineResource {
   
   private void loadAllProperties() {
     try {
-      Files.list(Paths.get("properties")).forEach(file -> {
-        final StanfordNlp pipeline = new StanfordNlp(file.toString(), this.stanford);
-        
-        this.pipelines.put(file.getFileName().toString().split("\\.")[0], pipeline);
-  
-        try (FileInputStream fileInputStream = new FileInputStream(file.toString())) {
-          final Properties props = new Properties();
-          
-          props.load(fileInputStream);
-  
-          this.profiles.put(file.getFileName().toString().split("\\.")[0], props);
-        } catch (final IOException ex) {
-          throw new WebApplicationException("Failed to read the profile " + file, ex,
-              Response.Status.PRECONDITION_FAILED);
-        }
-        
-      });
+      Files.list(Paths.get("properties")).filter(file -> !file.getName(1).toString().startsWith(
+          ".")).forEach(file -> {
+            final StanfordNlp pipeline = new StanfordNlp(file.toString(), this.stanford);
+            
+            this.pipelines.put(file.getFileName().toString().split("\\.")[0], pipeline);
+      
+            try (FileInputStream fileInputStream = new FileInputStream(file.toString())) {
+              final Properties props = new Properties();
+              
+              props.load(fileInputStream);
+      
+              this.profiles.put(file.getFileName().toString().split("\\.")[0], props);
+            } catch (final IOException ex) {
+              throw new WebApplicationException("Failed to read the profile " + file, ex,
+                  Response.Status.PRECONDITION_FAILED);
+            }
+          });
     } catch (final IOException ex) {
       throw new WebApplicationException("Failed to read the directory properties", ex,
           Response.Status.PRECONDITION_FAILED);
