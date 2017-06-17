@@ -21,6 +21,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -31,7 +32,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.riot.RDFFormat;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -47,7 +47,9 @@ public class PipelineResourceGazetteerTest {
   @ClassRule
   public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
       .setTestContainerFactory(new GrizzlyWebTestContainerFactory()).addResource(
-          new PipelineResource("stanfordnlp", "gazetteer_en_oke2015")).build();
+          new PipelineResource("stanfordnlp", Paths.get(
+              PipelineResourceGazetteerTest.class.getClassLoader().getResource(
+                  "gazetteer_en_test.properties").getFile()))).build();
   
   public PipelineResourceGazetteerTest() {
   }
@@ -59,9 +61,8 @@ public class PipelineResourceGazetteerTest {
   @Test
   public final void testGazetteerResponseWithContent() {
     final Response response = PipelineResourceGazetteerTest.RESOURCES.getJerseyTest().target(
-        "/v4/gazetteer").queryParam("setting", "oke2015").request("text/turtle;charset=utf-8").post(
-            Entity.entity("{\"content\":\"This guy is cool.\"}",
-                MediaType.APPLICATION_JSON_TYPE));
+        "/v4/gazetteer").queryParam("setting", "test").request("text/turtle;charset=utf-8").post(
+            Entity.entity("{\"content\":\"This guy is cool.\"}", MediaType.APPLICATION_JSON_TYPE));
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model testModel = ModelFactory.createDefaultModel();
     

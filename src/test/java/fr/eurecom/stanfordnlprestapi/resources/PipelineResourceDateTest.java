@@ -21,6 +21,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -46,7 +47,9 @@ public class PipelineResourceDateTest {
   @ClassRule
   public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
       .setTestContainerFactory(new GrizzlyWebTestContainerFactory()).addResource(
-          new PipelineResource("stanfordnlp", "date_en_none")).build();
+          new PipelineResource("stanfordnlp", Paths.get(
+              PipelineResourceGazetteerTest.class.getClassLoader().getResource(
+                  "date_en_test.properties").getFile()))).build();
   
   public PipelineResourceDateTest() {
   }
@@ -58,8 +61,8 @@ public class PipelineResourceDateTest {
   @Test
   public final void testDateResponseWithContent() {
     final Response response = PipelineResourceDateTest.RESOURCES.getJerseyTest().target(
-        "/v4/date").request("text/turtle;charset=utf-8").post(Entity.entity("{\"content\":\"I was"
-            + " born in 1987\"}", MediaType.APPLICATION_JSON_TYPE));
+        "/v4/date").queryParam("setting", "test").request("text/turtle;charset=utf-8").post(
+            Entity.entity("{\"content\":\"I was born in 1987\"}", MediaType.APPLICATION_JSON_TYPE));
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model testModel = ModelFactory.createDefaultModel();
     
