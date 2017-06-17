@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 public class StanfordNlpTest {
   static final Logger LOGGER = LoggerFactory.getLogger(StanfordNlpTest.class);
   private static StanfordNlp stanfordNlp;
-  private StanfordNlp stanfordNlp2;
+  private static StanfordNlp stanfordNlp2;
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -58,8 +58,12 @@ public class StanfordNlpTest {
   
   @BeforeClass
   public static void setUpBeforeClass() {
-    StanfordNlpTest.stanfordNlp = new StanfordNlp("properties"
-        + FileSystems.getDefault().getSeparator() + "ner_en_none.properties", "stanfordnlp");
+    StanfordNlpTest.stanfordNlp = new StanfordNlp(
+        StanfordNlpTest.class.getClassLoader().getResource("ner_en_test.properties").getFile(),
+        "stanfordnlp");
+    StanfordNlpTest.stanfordNlp2 = new StanfordNlp(
+        StanfordNlpTest.class.getClassLoader().getResource(
+            "gazetteer_en_test.properties").getFile(), "stanfordnlp");
   }
 
   /**
@@ -76,8 +80,7 @@ public class StanfordNlpTest {
     final Token token1 = new TokenImpl("I", "PRP", 0, 1, NullToken.getInstance(), context,
         sentence, 1);
     final Token token2 = new TokenImpl("like", "VBP", 2, 6, token1, context, sentence, 2);
-    final Token token3 = new TokenImpl("Paris", "NNP", 7, 12, token2, context, sentence,
-        3);
+    final Token token3 = new TokenImpl("Paris", "NNP", 7, 12, token2, context, sentence, 3);
 
     token1.nextToken(token2);
     token2.nextToken(token3);
@@ -259,18 +262,15 @@ public class StanfordNlpTest {
    */
   @Test
   public final void buildEntitiesFollowingDifferentEntities() throws Exception {
-    this.stanfordNlp2 = new StanfordNlp(this.getClass().getResource(
-        FileSystems.getDefault().getSeparator() + "gazetteer_en_test.properties").getFile(),
-        "stanfordnlp");
-    final Context contextTest = this.stanfordNlp2.run("This album.");
-    final Context context = new Context("This album.", 0, 11);
+    final Context contextTest = StanfordNlpTest.stanfordNlp2.run("That album.");
+    final Context context = new Context("That album.", 0, 11);
     final Sentence sentence = new SentenceImpl("This album.", context, 0, 11, 0,
         NullSentence.getInstance());
-    final Entity entity = new Entity("This", "http://purl.org/ontology/mo/MusicArtist", sentence,
+    final Entity entity = new Entity("That", "http://purl.org/ontology/mo/MusicArtist", sentence,
         context, 0, 4);
     final Entity entity2 = new Entity("album", "http://purl.org/ontology/mo/SignalGroup", sentence,
         context, 5, 10);
-    final Token token1 = new TokenImpl("This", "PRP", 0, 4, NullToken.getInstance(), context,
+    final Token token1 = new TokenImpl("That", "PRP", 0, 4, NullToken.getInstance(), context,
         sentence, 1);
     final Token token2 = new TokenImpl("album", "NN", 5, 10, token1, context, sentence,
         2);

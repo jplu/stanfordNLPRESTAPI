@@ -21,6 +21,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.Entity;
@@ -47,7 +48,9 @@ public class PipelineResourceCorefTest {
   @ClassRule
   public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
       .setTestContainerFactory(new GrizzlyWebTestContainerFactory()).addResource(
-          new PipelineResource("stanfordnlp", "coref_en_none")).build();
+          new PipelineResource("stanfordnlp", Paths.get(
+              PipelineResourceGazetteerTest.class.getClassLoader().getResource(
+                  "coref_en_test.properties").getFile()))).build();
   
   public PipelineResourceCorefTest() {
   }
@@ -59,8 +62,9 @@ public class PipelineResourceCorefTest {
   @Test
   public final void testCorefResponseWithContent() {
     final Response response = PipelineResourceCorefTest.RESOURCES.getJerseyTest().target(
-        "/v4/coref").request("text/turtle;charset=utf-8").post(Entity.entity("{\"content\":\"My "
-            + "favorite actress is: Natalie Portman. She is very stunning.\"}",
+        "/v4/coref").queryParam("setting", "test").request("text/turtle;charset=utf-8").post(
+            Entity.entity("{\"content\":\"My favorite actress is: Natalie Portman. She is very "
+                    + "stunning.\"}",
         MediaType.APPLICATION_JSON_TYPE));
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model testModel = ModelFactory.createDefaultModel();
