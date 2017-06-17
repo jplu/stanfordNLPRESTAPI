@@ -21,6 +21,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.Entity;
@@ -47,7 +48,9 @@ public class PipelineResourceNumberTest {
   @ClassRule
   public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
       .setTestContainerFactory(new GrizzlyWebTestContainerFactory()).addResource(
-          new PipelineResource("stanfordnlp", "number_en_none")).build();
+          new PipelineResource("stanfordnlp", Paths.get(
+              PipelineResourceGazetteerTest.class.getClassLoader().getResource(
+                  "number_en_test.properties").getFile()))).build();
   
   public PipelineResourceNumberTest() {
   }
@@ -59,8 +62,9 @@ public class PipelineResourceNumberTest {
   @Test
   public final void testNumberResponseWithContent() {
     final Response response = PipelineResourceNumberTest.RESOURCES.getJerseyTest().target(
-        "/v4/number").request("text/turtle;charset=utf-8").post(Entity.entity("{\"content\":\"Last"
-            + " year I had one dog.\"}", MediaType.APPLICATION_JSON_TYPE));
+        "/v4/number").queryParam("setting", "test").request("text/turtle;charset=utf-8").post(
+            Entity.entity("{\"content\":\"Last year I had one dog.\"}",
+                MediaType.APPLICATION_JSON_TYPE));
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model testModel = ModelFactory.createDefaultModel();
     

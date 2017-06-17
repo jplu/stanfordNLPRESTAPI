@@ -21,6 +21,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,7 +51,9 @@ public class PipelineResourceNerTest {
   @ClassRule
   public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
       .setTestContainerFactory(new GrizzlyWebTestContainerFactory()).addResource(
-          new PipelineResource("stanfordnlp", "ner_en_none")).build();
+          new PipelineResource("stanfordnlp", Paths.get(
+              PipelineResourceGazetteerTest.class.getClassLoader().getResource(
+                  "ner_en_test.properties").getFile()))).build();
 
   public PipelineResourceNerTest() {
   }
@@ -62,9 +65,9 @@ public class PipelineResourceNerTest {
   @Test
   public final void testNerResponseWithContent() {
     final Response response = PipelineResourceNerTest.RESOURCES.getJerseyTest().target(
-        "/v4/ner").request("text/turtle;charset=utf-8").post(Entity.entity("{\"content\":\"My "
-        + "favorite actress is: Natalie Portman. She is very stunning.\"}",
-        MediaType.APPLICATION_JSON_TYPE));
+        "/v4/ner").queryParam("setting", "test").request("text/turtle;charset=utf-8").post(
+            Entity.entity("{\"content\":\"My favorite actress is: Natalie Portman. She is very "
+                    + "stunning.\"}", MediaType.APPLICATION_JSON_TYPE));
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model testModel = ModelFactory.createDefaultModel();
     
@@ -84,9 +87,9 @@ public class PipelineResourceNerTest {
   @Test
   public final void testNerResponseWithUrl() {
     final Response response = PipelineResourceNerTest.RESOURCES.getJerseyTest().target(
-        "/v4/ner").request("text/turtle;charset=utf-8").post(Entity.entity("{\"url\":"
-            + "\"http://adel.eurecom.fr/unit_test_api_with_url.html\"}",
-        MediaType.APPLICATION_JSON_TYPE));
+        "/v4/ner").queryParam("setting", "test").request("text/turtle;charset=utf-8").post(
+            Entity.entity("{\"url\":\"http://adel.eurecom.fr/unit_test_api_with_url.html\"}",
+                MediaType.APPLICATION_JSON_TYPE));
     final Model fileModel = ModelFactory.createDefaultModel();
     final Model testModel = ModelFactory.createDefaultModel();
     

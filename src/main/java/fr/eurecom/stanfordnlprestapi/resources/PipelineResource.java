@@ -88,6 +88,24 @@ public class PipelineResource {
     
     this.stanford = name;
   }
+  
+  /**
+   * PipelineResource constructor.
+   *
+   * @param name a name.
+   * @param propertyFile Stanford property file to load.
+   *
+   */
+  public PipelineResource(final String name, final java.nio.file.Path propertyFile) {
+    this.pipelines = new HashMap<>();
+    
+    this.pipelines.put(propertyFile.toString().split(
+        FileSystems.getDefault().getSeparator())[propertyFile.toString().split(
+        FileSystems.getDefault().getSeparator()).length - 1].split("\\.")[0],
+        new StanfordNlp(propertyFile.toString(), name));
+    
+    this.stanford = name;
+  }
 
   /**
    * PipelineResource constructor.
