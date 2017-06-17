@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #
 # StanfordNLPRESTAPI - Offering a REST API over Stanford CoreNLP to get results in NIF format.
 # Copyright © 2017 Julien Plu (julien.plu@redaction-developpez.com)
@@ -15,8 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-
-# -*- coding: utf-8 -*-
 
 import urllib2
 import zipfile
@@ -49,6 +49,6 @@ number_files = len(zip_ref.infolist())
 bar.update(0)
 
 for i in bar(range(number_files)):
-    zip_ref.extract(zip_ref.infolist()[i], "/tmp")
+    zip_ref.extract(zip_ref.infolist()[i])
 
 zip_ref.close()
