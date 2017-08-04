@@ -130,7 +130,7 @@ public class GazetteerCommand<T extends PipelineConfiguration> extends Configure
     } else {
       text = newNamespace.getString("text");
     }
-  
+    
     GazetteerCommand.LOGGER.info("Gazetteer analysis on \"{}\" :", newNamespace.getString("text"));
     
     final String result = this.pipeline.run(text).rdfString(newT.getName(), NlpProcess.GAZETTEER,

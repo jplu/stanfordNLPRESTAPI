@@ -342,7 +342,7 @@ public class StanfordNlp {
           && sb.toString().isEmpty()) {
         start = token.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class);
         type = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
-
+        
         sb.append(token.get(CoreAnnotations.TextAnnotation.class));
         
         if (Pattern.compile("@|#").matcher(sb.toString()).find()
@@ -386,7 +386,9 @@ public class StanfordNlp {
         type = "";
       } else if (!sb.toString().isEmpty()) {
         if (Pattern.compile("@|#").matcher(token.get(
-            CoreAnnotations.TextAnnotation.class)).find()) {
+            CoreAnnotations.TextAnnotation.class)).find()
+            && token.get(CoreAnnotations.NamedEntityTagAnnotation.class) != null
+            && !"O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))) {
           sentence.addEntity(new Entity(token.get(CoreAnnotations.TextAnnotation.class),
               token.get(CoreAnnotations.NamedEntityTagAnnotation.class), sentence, context,
               token.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class),
