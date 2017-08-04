@@ -111,6 +111,7 @@ public class Entity {
         ResourceFactory.createProperty(nif + "referenceContext"),
         ResourceFactory.createResource(base + "/context#char=" + this.context.start() + ','
             + this.context.end()));
+    System.out.println(this.text + " " + this.type);
     model.add(ResourceFactory.createResource(base + "/entity#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(local + "type"),
         ResourceFactory.createPlainLiteral(this.type));
