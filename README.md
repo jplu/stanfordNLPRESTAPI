@@ -20,7 +20,7 @@ The system can handle multiple languages:
 
 * Stanford CoreNLP 3.8.0
 * Dropwizard 1.1.1
-* Jena 3.3.0
+* Jena 3.4.0
 
 # Requirements
 

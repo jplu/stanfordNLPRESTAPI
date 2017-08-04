@@ -356,7 +356,9 @@ public class StanfordNlp {
         }
       } else if (token.get(CoreAnnotations.NamedEntityTagAnnotation.class) != null
           && !"O".equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))
-          && type.equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))) {
+          && type.equals(token.get(CoreAnnotations.NamedEntityTagAnnotation.class))
+          && !Pattern.compile("@|#").matcher(token.get(
+              CoreAnnotations.TextAnnotation.class)).find()) {
         sb.append(' ');
         sb.append(token.get(CoreAnnotations.TextAnnotation.class));
 
@@ -383,13 +385,21 @@ public class StanfordNlp {
         sb = new StringBuilder();
         type = "";
       } else if (!sb.toString().isEmpty()) {
+        if (Pattern.compile("@|#").matcher(token.get(
+            CoreAnnotations.TextAnnotation.class)).find()) {
+          sentence.addEntity(new Entity(token.get(CoreAnnotations.TextAnnotation.class),
+              token.get(CoreAnnotations.NamedEntityTagAnnotation.class), sentence, context,
+              token.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class),
+              token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
+        }
+        
         final int index = stanfordSentence.get(
             CoreAnnotations.TokensAnnotation.class).indexOf(token);
         final int end = stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).get(
             index - 1).get(CoreAnnotations.CharacterOffsetEndAnnotation.class);
-
+  
         sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start, end));
-        
+  
         sb = new StringBuilder();
         type = "";
       }
