@@ -375,15 +375,23 @@ public class StanfordNlp {
             CoreAnnotations.TokensAnnotation.class).indexOf(token);
         final int end = stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).get(
             index - 1).get(CoreAnnotations.CharacterOffsetEndAnnotation.class);
+        
+        if (stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).indexOf(token)
+            == stanfordSentence.get(CoreAnnotations.TokensAnnotation.class).size() - 1) {
+          sentence.addEntity(new Entity(token.get(CoreAnnotations.TextAnnotation.class),
+              token.get(CoreAnnotations.NamedEntityTagAnnotation.class), sentence, context,
+              token.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class),
+              token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
+          
+          sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start, end));
+        } else {
+          sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start, end));
+        }
   
-        sentence.addEntity(new Entity(sb.toString(), type, sentence, context, start, end));
-        sentence.addEntity(new Entity(token.get(CoreAnnotations.TextAnnotation.class),
-            token.get(CoreAnnotations.NamedEntityTagAnnotation.class), sentence, context,
-            token.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class),
-            token.get(CoreAnnotations.CharacterOffsetEndAnnotation.class)));
-  
-        sb = new StringBuilder();
-        type = "";
+        sb = new StringBuilder(token.get(CoreAnnotations.TextAnnotation.class));
+        
+        type = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
+        start = token.get(CoreAnnotations.CharacterOffsetBeginAnnotation.class);
       } else if (!sb.toString().isEmpty()) {
         if (Pattern.compile("@|#").matcher(token.get(
             CoreAnnotations.TextAnnotation.class)).find()

@@ -23,7 +23,7 @@
     <groupId>fr.eurecom</groupId>
     <artifactId>stanfordNLPRESTAPI</artifactId>
     <name>StanfordNLPRESTAPI</name>
-    <version>4.0.8</version>
+    <version>4.0.9</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
