@@ -288,7 +288,7 @@ public class StanfordNlpTest {
     
     context.addSentence(sentence);
     
-    Assert.assertTrue("Issue to build a one token entity in the middle of a sentence",
+    Assert.assertTrue("Issue to build multiple following entities",
         contextTest.sentences().get(0).entities().contains(entity)
             && contextTest.sentences().get(0).entities().contains(entity2));
   }
