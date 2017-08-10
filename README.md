@@ -1,7 +1,7 @@
 # StanfordNLPRESTAPI
 
-[![Build status](https://travis-ci.org/jplu/stanfordNLPRESTAPI.svg?branch=develop)](https://travis-ci.org/jplu/stanfordNLPRESTAPI)
-[![Coverage Status](https://coveralls.io/repos/github/jplu/stanfordNLPRESTAPI/badge.svg?branch=develop)](https://coveralls.io/github/jplu/stanfordNLPRESTAPI?branch=develop)
+[![Build status](https://travis-ci.org/jplu/stanfordNLPRESTAPI.svg?branch=master)](https://travis-ci.org/jplu/stanfordNLPRESTAPI)
+[![Coverage Status](https://coveralls.io/repos/github/jplu/stanfordNLPRESTAPI/badge.svg?branch=master)](https://coveralls.io/github/jplu/stanfordNLPRESTAPI?branch=master)
 [![License (GPL version 3)](https://img.shields.io/badge/license-GNU%20GPL%20version%203-blue.svg?style=flat-square)](http://opensource.org/licenses/GPL-3.0)
 
 # Introduction
@@ -61,7 +61,7 @@ mvn clean test
 # Usage
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.9-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.9.jar
        [-h] [-v] {server,check,pos,ner,tokenize,coref,date,number,gazetteer} ...
 
 positional arguments:
@@ -86,7 +86,7 @@ The first way is via CLI with six possible sub-commands, **ner**, **pos**, **tok
 To use the **ner** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.9-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.9.jar
        ner [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 NER command on text
@@ -114,7 +114,7 @@ inputs:
 To use the **pos** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.9-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.9.jar
        pos [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 POS command on text
@@ -142,7 +142,7 @@ inputs:
 To use the **tokenize** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.9-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.9.jar
        tokenize [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Tokenize command on text
@@ -170,7 +170,7 @@ inputs:
 To use the **coref** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.9-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.9.jar
        coref [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Coref command on text
@@ -198,7 +198,7 @@ inputs:
 To use the **date** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.9-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.9.jar
        date [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Date command on text
@@ -226,7 +226,7 @@ inputs:
 To use the **number** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.9-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.9.jar
        number [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Number command on text
@@ -254,7 +254,7 @@ inputs:
 To use the **gazetteer** CLI:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.9-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.9.jar
        gazetteer [-s] [-o OFILE] [-l] [-h] (-t TEXT | -i IFILE | -u URL) [file]
 
 Gazetteer command on text
@@ -282,7 +282,7 @@ inputs:
 The second way is via a Web service:
 
 ```
-usage: java -jar stanfordNLPRESTAPI-4.0.9-SNAPSHOT.jar
+usage: java -jar stanfordNLPRESTAPI-4.0.9.jar
        server [-h] [file]
 
 Runs the Dropwizard application as an HTTP server
@@ -312,7 +312,7 @@ mvn docker:build
 Once the image is built, it is possible to run it with:
 
 ```
-docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/gazetteers:/maven/gazetteers -v $PWD/models:/maven/models -v $PWD/properties:/maven/properties -v $PWD/conf:/maven/conf --name stanfordapi jplu/stanford-nlp-rest-api:4.0.9-SNAPSHOT
+docker run -d -p 7000:7000 -p 7001:7001 -v $PWD/gazetteers:/maven/gazetteers -v $PWD/models:/maven/models -v $PWD/properties:/maven/properties -v $PWD/conf:/maven/conf --name stanfordapi jplu/stanford-nlp-rest-api:4.0.9
 ```
 
 Or with:
@@ -326,12 +326,12 @@ the loading of all the models of Stanford CoreNLP.
 
 ## Configuration
 
-The CLI commands and the Web service use the same [configuration file](https://github.com/jplu/stanfordNLPRESTAPI/blob/develop/conf/config.yaml).
+The CLI commands and the Web service use the same [configuration file](https://github.com/jplu/stanfordNLPRESTAPI/blob/master/conf/config.yaml).
 
 ## Create a New Profile
 
 In order to create your own Stanford CoreNLP settings you need to put your properties file into
-the folder [properties](https://github.com/jplu/stanfordNLPRESTAPI/tree/develop/properties) and you
+the folder [properties](https://github.com/jplu/stanfordNLPRESTAPI/tree/master/properties) and you
 must respect the following naming **extractor_language_name**. Where **extractor** is one among:
 *pos*, *ner*, *tokenize*, *coref*, *date*, *number* or *gazetteer*. Next, **language** must be the
 language for which Stanford CoreNLP will be set, and **name** is the name you want to give to this
@@ -356,7 +356,7 @@ download the jar files provided by Stanford with models for other languages. To 
 
 # How to contribute
 
-In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/develop/CONTRIBUTING.md) file.
+In case you want to contribute, please read the [CONTRIBUTING](https://github.com/jplu/stanfordNLPRESTAPI/blob/master/CONTRIBUTING.md) file.
 
 # Opening an issue
 
