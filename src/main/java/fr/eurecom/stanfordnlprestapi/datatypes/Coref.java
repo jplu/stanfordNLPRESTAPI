@@ -32,8 +32,10 @@ import org.slf4j.LoggerFactory;
  */
 public class Coref {
   static final Logger LOGGER = LoggerFactory.getLogger(Coref.class);
-  private final String coref;
+  private final String coreference;
   private final String head;
+  private final int startHead;
+  private final int endHead;
   private final int start;
   private final int end;
   private final Sentence sentence;
@@ -42,21 +44,26 @@ public class Coref {
   /**
    * Coref constructor.
    *
-   * @param newCoref    Text of the coref.
-   * @param newHead     Text of the head.
-   * @param newStart    The start offset of the coref.
-   * @param newEnd      The end offset of the coref.
-   * @param newSentence The sentence where the coref is.
-   * @param newContext  The context where the coref is.
+   * @param newCoreference    Text of the coreference.
+   * @param newHead           Text of the head.
+   * @param newStart          The start offset of the coreference.
+   * @param newEnd            The end offset of the coreference.
+   * @param newStartHead      The start offset of the head of the coreference.
+   * @param newEndHead        The end offset of the head of the coreference.
+   * @param newSentence       The sentence where the coreference is.
+   * @param newContext        The context where the coreference is.
    */
-  public Coref(final String newCoref, final String newHead, final int newStart, final int newEnd,
+  public Coref(final String newCoreference, final String newHead, final int newStart,
+               final int newEnd, final int newStartHead, final int newEndHead,
                final Sentence newSentence, final Context newContext) {
-    this.coref = newCoref;
+    this.coreference = newCoreference;
     this.head = newHead;
     this.start = newStart;
     this.end = newEnd;
     this.sentence = newSentence;
     this.context = newContext;
+    this.startHead = newStartHead;
+    this.endHead = newEndHead;
   }
   
   /**
@@ -70,8 +77,31 @@ public class Coref {
   public final Model rdfModel(final String tool, final String host) {
     final String nif = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#";
     final String base = host + '/' + tool;
-    final String local = base + "/ontology/";
     final Model model = ModelFactory.createDefaultModel();
+  
+    model.add(ResourceFactory.createResource(base + "/head#char=" + this.startHead + ','
+            + this.endHead),
+        RDF.type, ResourceFactory.createResource(nif + "String"));
+    model.add(ResourceFactory.createResource(base + "/head#char=" + this.startHead + ','
+            + this.endHead),
+        RDF.type, ResourceFactory.createResource(nif + "RFC5147String"));
+    model.add(ResourceFactory.createResource(base + "/head#char=" + this.startHead + ','
+            + this.endHead),
+        RDF.type, ResourceFactory.createResource(nif + "Phrase"));
+    model.add(ResourceFactory.createResource(base + "/head#char=" + this.startHead + ','
+            + this.endHead),
+        ResourceFactory.createProperty(nif + "beginIndex"),
+        ResourceFactory.createTypedLiteral(Integer.toString(this.startHead),
+            XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/head#char=" + this.startHead + ','
+            + this.endHead),
+        ResourceFactory.createProperty(nif + "endIndex"),
+        ResourceFactory.createTypedLiteral(Integer.toString(this.endHead),
+            XSDDatatype.XSDnonNegativeInteger));
+    model.add(ResourceFactory.createResource(base + "/head#char=" + this.startHead + ','
+            + this.endHead),
+        ResourceFactory.createProperty(nif + "anchorOf"),
+        ResourceFactory.createPlainLiteral(this.head));
     
     model.add(ResourceFactory.createResource(base + "/coref#char=" + this.start + ',' + this.end),
         RDF.type, ResourceFactory.createResource(nif + "String"));
@@ -89,7 +119,7 @@ public class Coref {
             XSDDatatype.XSDnonNegativeInteger));
     model.add(ResourceFactory.createResource(base + "/coref#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "anchorOf"),
-        ResourceFactory.createPlainLiteral(this.coref));
+        ResourceFactory.createPlainLiteral(this.coreference));
     model.add(ResourceFactory.createResource(base + "/coref#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(nif + "sentence"), ResourceFactory.createResource(base
             + "/sentence#char=" + this.sentence.start() + ',' + this.sentence.end()));
@@ -97,9 +127,13 @@ public class Coref {
         ResourceFactory.createProperty(nif + "referenceContext"),
         ResourceFactory.createResource(base + "/coref#char=" + this.context.start() + ','
             + this.context.end()));
+    
+    final String local = base + "/ontology/";
+    
     model.add(ResourceFactory.createResource(base + "/coref#char=" + this.start + ',' + this.end),
         ResourceFactory.createProperty(local + "head"),
-        ResourceFactory.createPlainLiteral(this.head));
+        ResourceFactory.createResource(base + "/head#char=" + this.startHead + ','
+            + this.endHead));
     
     return model;
   }
@@ -127,12 +161,20 @@ public class Coref {
     if (this.start != coref1.start) {
       return false;
     }
-    
+  
     if (this.end != coref1.end) {
       return false;
     }
+  
+    if (this.startHead != coref1.startHead) {
+      return false;
+    }
+  
+    if (this.endHead != coref1.endHead) {
+      return false;
+    }
     
-    if (!this.coref.equals(coref1.coref)) {
+    if (!this.coreference.equals(coref1.coreference)) {
       return false;
     }
     
@@ -149,11 +191,13 @@ public class Coref {
   
   @Override
   public final int hashCode() {
-    int result = this.coref.hashCode();
+    int result = this.coreference.hashCode();
   
     result = 31 * (result + this.head.hashCode());
     result = 31 * (result + this.start);
     result = 31 * (result + this.end);
+    result = 31 * (result + this.startHead);
+    result = 31 * (result + this.endHead);
     result = 31 * (result + this.sentence.hashCode());
     result = 31 * (result + this.context.hashCode());
     
@@ -163,10 +207,12 @@ public class Coref {
   @Override
   public final String toString() {
     return "Coref{"
-        + "coref='" + this.coref + '\''
+        + "coreference='" + this.coreference + '\''
         + ", head='" + this.head + '\''
         + ", start=" + this.start
         + ", end=" + this.end
+        + ", startHead=" + this.startHead
+        + ", endHead=" + this.endHead
         + ", sentence=" + this.sentence.index()
         + ", context=[" + this.context.start() + ',' + this.context.end() + ']'
         + '}';

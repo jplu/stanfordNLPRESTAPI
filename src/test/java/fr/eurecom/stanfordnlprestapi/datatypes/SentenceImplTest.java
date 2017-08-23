@@ -363,7 +363,7 @@ public class SentenceImplTest {
     sentence5.addEntity(new Entity("Natalie Portman", "PERSON", sentence, context, 7, 22));
     sentence6.nextSentence(new SentenceImpl("Paris is a nice city.", context, 0, 21, 0,
         NullSentence.getInstance()));
-    sentence11.addCoref(new Coref("", "", 0, 0, sentence11, context));
+    sentence11.addCoref(new Coref("", "", 0, 0, 0, 0, sentence11, context));
 
     Assert.assertFalse("Issue with equals on the property text", sentence.equals(sentence2));
     Assert.assertFalse("Issue with equals on the property context", sentence.equals(sentence3));

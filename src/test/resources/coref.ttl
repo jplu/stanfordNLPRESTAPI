@@ -19,12 +19,18 @@
 
 <http://localhost:9998/stanfordnlp/coref#char=41,44>
         a                     nif:Phrase , nif:RFC5147String , nif:String ;
-        local:head            "Natalie Portman" ;
+        local:head            <http://localhost:9998/stanfordnlp/head#char=24,39> ;
         nif:anchorOf          "She" ;
         nif:beginIndex        "41"^^xsd:nonNegativeInteger ;
         nif:endIndex          "44"^^xsd:nonNegativeInteger ;
         nif:referenceContext  <http://localhost:9998/stanfordnlp/coref#char=0,62> ;
         nif:sentence          <http://localhost:9998/stanfordnlp/sentence#char=41,62> .
+
+<http://localhost:9998/stanfordnlp/head#char=24,39>
+        a               nif:Phrase , nif:RFC5147String , nif:String ;
+        nif:anchorOf    "Natalie Portman" ;
+        nif:beginIndex  "24"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "39"^^xsd:nonNegativeInteger .
 
 <http://localhost:9998/stanfordnlp/sentence#char=0,40>
         a                     nif:String , nif:RFC5147String , nif:Sentence ;

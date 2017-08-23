@@ -23,7 +23,7 @@
     <groupId>fr.eurecom</groupId>
     <artifactId>stanfordNLPRESTAPI</artifactId>
     <name>StanfordNLPRESTAPI</name>
-    <version>4.0.10-SNAPSHOT</version>
+    <version>4.1.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,11 +39,11 @@
             <url>https://www.gnu.org/licenses/gpl.txt</url>
         </license>
     </licenses>
-    <!--
+
     <prerequisites>
         <maven>3.0.5</maven>
     </prerequisites>
-    -->
+
     <developers>
         <developer>
             <id>jplu</id>
@@ -646,7 +646,7 @@
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-testing</artifactId>
-            <version>1.2.0-rc1</version>
+            <version>1.2.0-rc2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -695,7 +695,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>23.0-rc1-android</version>
+            <version>23.0-android</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.code.findbugs</groupId>

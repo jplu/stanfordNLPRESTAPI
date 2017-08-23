@@ -40,13 +40,13 @@ public class CorefTest {
         0, 40, 1, NullSentence.getInstance());
     final Sentence sentence2 = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 2, NullSentence.getInstance());
-    final Coref coref = new Coref("She", "Natalie Portman", 41, 44, sentence, context);
-    final Coref coref2 = new Coref("She", "Natalie Portman", 41, 44, sentence2, context);
-    final Coref coref3 = new Coref("She", "Natalie Portman", 41, 44, sentence, context2);
-    final Coref coref4 = new Coref("Se", "Natalie Portman", 41, 44, sentence, context);
-    final Coref coref5 = new Coref("She", "Natalie Porman", 41, 44, sentence, context);
-    final Coref coref6 = new Coref("She", "Natalie Portman", 40, 44, sentence, context);
-    final Coref coref7 = new Coref("She", "Natalie Portman", 41, 43, sentence, context);
+    final Coref coref = new Coref("She", "Natalie Portman", 41, 44, 24, 39, sentence, context);
+    final Coref coref2 = new Coref("She", "Natalie Portman", 41, 44, 24, 39, sentence2, context);
+    final Coref coref3 = new Coref("She", "Natalie Portman", 41, 44, 24, 39, sentence, context2);
+    final Coref coref4 = new Coref("Se", "Natalie Portman", 41, 44, 24, 39, sentence, context);
+    final Coref coref5 = new Coref("She", "Natalie Porman", 41, 44, 24, 39, sentence, context);
+    final Coref coref6 = new Coref("She", "Natalie Portman", 40, 44, 24, 39, sentence, context);
+    final Coref coref7 = new Coref("She", "Natalie Portman", 41, 43, 24, 39, sentence, context);
     
     Assert.assertFalse("Issue with equals on the property sentence", coref.equals(coref2));
     Assert.assertFalse("Issue with equals on the property context", coref.equals(coref3));
@@ -68,8 +68,8 @@ public class CorefTest {
         + "stunning.", 0, 62);
     final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
-    final Coref coref = new Coref("She", "Natalie Portman", 41, 44, sentence, context);
-    final Coref coref2 = new Coref("She", "Natalie Portman", 41, 44, sentence, context);
+    final Coref coref = new Coref("She", "Natalie Portman", 41, 44, 24, 39, sentence, context);
+    final Coref coref2 = new Coref("She", "Natalie Portman", 41, 44, 24, 39, sentence, context);
     
     Assert.assertNotSame("The two coref are the same", coref, coref2);
     Assert.assertEquals("Issue to compute the hascode of an entity", (long) coref.hashCode(),
@@ -85,9 +85,10 @@ public class CorefTest {
         + "stunning.", 0, 62);
     final Sentence sentence = new SentenceImpl("My favorite actress is: Natalie Portman.", context,
         0, 40, 1, NullSentence.getInstance());
-    final Coref coref = new Coref("She", "Natalie Portman", 41, 44, sentence, context);
+    final Coref coref = new Coref("She", "Natalie Portman", 41, 44, 24, 39, sentence, context);
     
-    Assert.assertEquals("Issue to get the proper toString value", "Coref{coref='She', head='Natalie"
-            + " Portman', start=41, end=44, sentence=1, context=[0,62]}", coref.toString());
+    Assert.assertEquals("Issue to get the proper toString value", "Coref{coreference='She', "
+        + "head='Natalie Portman', start=41, end=44, startHead=24, endHead=39, sentence=1, "
+        + "context=[0,62]}", coref.toString());
   }
 }
