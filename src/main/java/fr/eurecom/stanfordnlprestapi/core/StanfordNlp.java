@@ -189,8 +189,13 @@ public class StanfordNlp {
               .beginPosition();
           final int end = tokens.get(mention.sentNum - 1).get(mention.endIndex - 2)
               .endPosition();
+          final int startHead = tokens.get(representative.sentNum - 1).get(
+              representative.startIndex - 1).beginPosition();
+          final int endHead = tokens.get(representative.sentNum - 1).get(
+              representative.endIndex - 2).endPosition();
+          
           final Coref coref = new Coref(mention.mentionSpan, representative.mentionSpan, start,
-              end, tmpContext.sentences().get(mention.sentNum - 1), tmpContext);
+              end, startHead, endHead, tmpContext.sentences().get(mention.sentNum - 1), tmpContext);
 
           tmpContext.sentences().get(mention.sentNum - 1).addCoref(coref);
         }
