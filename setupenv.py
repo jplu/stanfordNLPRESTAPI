@@ -18,14 +18,17 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import urllib2
+try:
+    from urllib2 import urlopen
+except ImportError: # Python 3
+    from urllib.request import urlopen
 import zipfile
 import progressbar
 
 url = "http://adel.eurecom.fr/data/models-gazetteers-properties.zip"
 bar = progressbar.ProgressBar()
 file_name = url.split('/')[-1]
-u = urllib2.urlopen(url)
+u = urlopen(url)
 
 with open(file_name, 'wb') as f:
     meta = u.info()
