@@ -24,6 +24,7 @@ except ImportError: # Python 3
     from urllib.request import urlopen
 import zipfile
 import progressbar
+import requests
 
 url = "http://adel.eurecom.fr/data/models-gazetteers-properties.zip"
 bar = progressbar.ProgressBar()
@@ -32,7 +33,7 @@ u = urlopen(url)
 
 with open(file_name, 'wb') as f:
     meta = u.info()
-    file_size = int(meta.getheaders("Content-Length")[0])
+    file_size = int(meta["Content-Length"])
 
     print ("Downloading: %s Bytes: %s" % (file_name, file_size))
 
